@@ -207,7 +207,7 @@ export default function landing1() {
       <header className={`nav ${scrolled ? 'scrolled' : ''}`}>
         <div className="nav-inner">
           <div className="nav-logo-wrap">
-            <img src="/images/min_lig_1.png" alt="Mingrow" className="nav-logo" />
+            <img src="/images/logo/LOGO Dark theme .webp" alt="Mingrow" className="nav-logo" />
           </div>
           <div className="nav-center-brewing">
             <span className="brewing-text">Something is Brewing...</span>
@@ -233,12 +233,12 @@ export default function landing1() {
       <section className="hero">
         <div 
           className="reveal in" 
-          style={{ width: '100%', cursor: 'pointer' }} 
+          style={{ width: '80%', maxWidth: '1200px', margin: '0 auto', cursor: 'pointer' }} 
           onClick={() => {
             document.querySelector('.form-section')?.scrollIntoView({ behavior: 'smooth' });
           }}
         >
-          <img src="/images/landing/hero_section.webp" alt="Mingrow Hero" style={{ width: '100%', height: 'auto', display: 'block' }} />
+          <img src="/images/landing/hero_section.webp" alt="Mingrow Hero" style={{ width: '100%', height: 'auto', display: 'block', borderRadius: '12px' }} />
         </div>
       </section>
 
@@ -272,7 +272,7 @@ export default function landing1() {
       <footer>
         <div className="wrap">
           <div className="footer-inner">
-            <img src="/images/min_lig_1.png" alt="Mingrow" className="footer-logo" />
+            <img src="/images/logo/LOGO Dark theme .webp" alt="Mingrow" className="footer-logo" />
             <p>© 2026 Mingrow. Something is brewing.</p>
           </div>
         </div>

@@ -135,6 +135,106 @@ function AgentGroupsSection() {
   );
 }
 
+const NOTIFICATIONS = [
+  { name: 'Sarah M.', location: 'San Francisco', action: 'requested Early Access', time: 'Just now', initial: 'S', color: '#8B4DFF' },
+  { name: 'David K.', location: 'London', action: 'joined Early Access waitlist', time: '2m ago', initial: 'D', color: '#36B37E' },
+  { name: 'Alex Chen', location: 'Singapore', action: 'requested Early Access', time: 'Just now', initial: 'A', color: '#F5B301' },
+  { name: 'Elena R.', location: 'Berlin', action: 'joined Early Access', time: '1m ago', initial: 'E', color: '#00B8D9' },
+  { name: 'Marcus V.', location: 'New York', action: 'requested Early Access', time: '3m ago', initial: 'M', color: '#FF5630' },
+  { name: 'Priya S.', location: 'Bengaluru', action: 'joined Early Access', time: '4m ago', initial: 'P', color: '#6554C0' },
+  { name: 'Liam O.', location: 'Dublin', action: 'requested Early Access', time: 'Just now', initial: 'L', color: '#FFAB00' },
+  { name: 'Sophia D.', location: 'Paris', action: 'joined Early Access', time: '2m ago', initial: 'S', color: '#36B37E' },
+  { name: 'Michael B.', location: 'Austin', action: 'requested Early Access', time: '5m ago', initial: 'M', color: '#8B4DFF' },
+];
+
+function EarlyAccessNotification() {
+  const [index, setIndex] = useState(0);
+  const [visible, setVisible] = useState(false);
+  const [dismissed, setDismissed] = useState(false);
+  const isHovered = useRef(false);
+
+  useEffect(() => {
+    if (dismissed) return;
+
+    let showTimeout;
+    let hideTimeout;
+    let checkInterval;
+
+    const showNotif = () => {
+      setVisible(true);
+      showTimeout = setTimeout(() => {
+        const tryHide = () => {
+          if (!isHovered.current) {
+            setVisible(false);
+            const randomGap = Math.floor(Math.random() * 2000) + 3000; // 3-5 seconds gap
+            hideTimeout = setTimeout(() => {
+              setIndex((prev) => (prev + 1) % NOTIFICATIONS.length);
+              showNotif();
+            }, randomGap);
+          } else {
+            checkInterval = setTimeout(tryHide, 1000);
+          }
+        };
+        tryHide();
+      }, 4000); // visible for 4 seconds
+    };
+
+    const initialTimer = setTimeout(() => {
+      showNotif();
+    }, 2000); // initial 2s delay when user lands
+
+    return () => {
+      clearTimeout(initialTimer);
+      clearTimeout(showTimeout);
+      clearTimeout(hideTimeout);
+      clearTimeout(checkInterval);
+    };
+  }, [dismissed]);
+
+  if (dismissed) return null;
+
+  const current = NOTIFICATIONS[index];
+
+  return (
+    <div
+      className={`ea-notification-card ${visible ? 'ea-show' : 'ea-hide'}`}
+      onMouseEnter={() => { isHovered.current = true; }}
+      onMouseLeave={() => { isHovered.current = false; }}
+      onClick={() => {
+        document.querySelector('.form-section')?.scrollIntoView({ behavior: 'smooth' });
+      }}
+      role="button"
+      tabIndex={0}
+    >
+      <div className="ea-notif-avatar" style={{ background: current.color }}>
+        {current.initial}
+        <span className="ea-live-dot"></span>
+      </div>
+      <div className="ea-notif-body">
+        <div className="ea-notif-title">
+          <span className="ea-notif-name">{current.name}</span>
+          <span className="ea-notif-loc">from {current.location}</span>
+        </div>
+        <div className="ea-notif-sub">
+          <span className="ea-notif-badge">{current.action}</span>
+          <span className="ea-notif-time">• {current.time}</span>
+        </div>
+      </div>
+      <button
+        className="ea-notif-close"
+        title="Close"
+        onClick={(e) => {
+          e.stopPropagation();
+          setDismissed(true);
+        }}
+      >
+        ✕
+      </button>
+    </div>
+  );
+}
+
+
 export default function landing1() {
   const [scrolled, setScrolled] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -296,6 +396,8 @@ export default function landing1() {
           </div>
         </div>
       </footer>
+
+      <EarlyAccessNotification />
     </div>
   );
 }

@@ -137,17 +137,32 @@ function AgentGroupsSection() {
 
 export default function landing1() {
   const [scrolled, setScrolled] = useState(false);
-  const [timeLeft, setTimeLeft] = useState({ days: '02', hours: '14', minutes: '35' });
+  const [submitted, setSubmitted] = useState(false);
+  const [timeLeft, setTimeLeft] = useState({ days: '03', hours: '00', minutes: '00' });
 
   useEffect(() => {
     document.title = "Mingrow — The AI Business OS";
+
+    const handleMessage = (event) => {
+      // Only redirect if explicitly sent form submission message from iframe
+      if (
+        event.data === 'form_submitted' || 
+        event.data?.type === 'form_submitted' || 
+        event.data?.status === 'success' ||
+        (typeof event.data === 'string' && (event.data.includes('form_submitted') || event.data.includes('submitted')))
+      ) {
+        window.location.href = '/thankyou';
+      }
+    };
+
+    window.addEventListener('message', handleMessage);
     const handleScroll = () => {
       setScrolled(window.scrollY > 40);
     };
     window.addEventListener('scroll', handleScroll);
 
-    const offset = (2 * 24 * 60 * 60 + 14 * 60 * 60 + 35 * 60) * 1000;
-    const targetDateKey = 'landing1_countdown_target_v3';
+    const offset = 3 * 24 * 60 * 60 * 1000;
+    const targetDateKey = 'landing1_countdown_target_3days_v1';
     let targetTime = localStorage.getItem(targetDateKey);
     
     if (!targetTime) {
@@ -174,7 +189,7 @@ export default function landing1() {
     };
 
     updateTimer();
-    const interval = setInterval(updateTimer, 60000);
+    const interval = setInterval(updateTimer, 1000);
     const revealEls = document.querySelectorAll('.landing1-page-root .reveal');
     const io = new IntersectionObserver((entries) => {
       entries.forEach(en => {
@@ -189,6 +204,7 @@ export default function landing1() {
     return () => {
       io.disconnect();
       window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('message', handleMessage);
       clearInterval(interval);
     };
   }, []);
@@ -229,7 +245,10 @@ export default function landing1() {
             document.querySelector('.form-section')?.scrollIntoView({ behavior: 'smooth' });
           }}
         >
-          <img src="/images/landing/hero_section.webp" alt="Mingrow Hero" style={{ width: '100%', height: 'auto', display: 'block', borderRadius: '12px' }} />
+          <picture style={{ display: 'block', width: '100%' }}>
+            <source media="(max-width: 980px)" srcSet="/images/landing/hero%20IMAGE%20MOBILE%20VIEW.webp" />
+            <img src="/images/landing/hero_section.webp" alt="Mingrow Hero" style={{ width: '100%', height: 'auto', display: 'block', borderRadius: '12px' }} />
+          </picture>
         </div>
       </section>
 
@@ -237,7 +256,7 @@ export default function landing1() {
 
       <section className="agents-revel" style={{ padding: '0 0 60px 0' }}>
         <div className="wrap">
-          <div className="reveal in agents-revel-img-wrap" style={{ width: '100%', maxWidth: '800px', margin: '0 auto' }}>
+          <div className="reveal in agents-revel-img-wrap" style={{ width: '100%', maxWidth: '1050px', margin: '0 auto' }}>
             <img src="/images/landing/agents revel.webp" alt="Mingrow Agents Revel" style={{ width: '100%', height: 'auto', display: 'block', borderRadius: '16px' }} />
           </div>
         </div>
@@ -245,16 +264,27 @@ export default function landing1() {
 
       <section className="form-section">
         <div className="wrap">
-            <div className="reveal in" style={{ width: '100%', maxWidth: '600px', margin: '0 auto', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-              <h2 className="form-section-heading">Get Early Access From Here</h2>
-              <iframe 
-                className="wtl-form-iframe"
-                src="https://mingrow.cloud/forms/wtl/f0e3930fe031c9bcee1723a8d5a78587" 
-                frameBorder="0" 
-                sandbox="allow-top-navigation allow-forms allow-scripts allow-same-origin allow-popups" 
-                allowFullScreen
-              ></iframe>
-            </div>
+          <div 
+            className="reveal in" 
+            style={{ width: '100%', maxWidth: '600px', margin: '0 auto', display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative' }}
+            onClick={() => {
+              // Arm redirect on form submit click
+              if (!window._submitArmTimer) {
+                window._submitArmTimer = setTimeout(() => {
+                  window.location.href = '/thnakyou';
+                }, 1200);
+              }
+            }}
+          >
+            <h2 className="form-section-heading">Get Early Access From Here</h2>
+            <iframe 
+              className="wtl-form-iframe"
+              src="https://mingrow.cloud/forms/wtl/f0e3930fe031c9bcee1723a8d5a78587" 
+              frameBorder="0" 
+              sandbox="allow-top-navigation allow-forms allow-scripts allow-same-origin allow-popups allow-top-navigation-by-user-activation" 
+              allowFullScreen
+            ></iframe>
+          </div>
         </div>
       </section>
 

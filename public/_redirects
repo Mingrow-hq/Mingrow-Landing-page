@@ -1,0 +1,3 @@
+/* SPA routing redirect rules for Apache / CPanel / Netlify / Vercel / Nginx */
+# Netlify _redirects format
+/*    /index.html   200

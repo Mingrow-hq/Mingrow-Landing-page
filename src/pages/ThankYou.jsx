@@ -1,9 +1,52 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './landing1.css';
 
 export default function ThankYouPage() {
+  useEffect(() => {
+    document.title = "Thank You — Mingrow";
+
+    // Initialize dataLayer and push pageview event for GTM-KZNCHHFT
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      event: 'pageview',
+      page_title: 'Thank You',
+      page_location: window.location.href,
+      page_path: window.location.pathname
+    });
+
+    // Ensure Google Tag Manager script is loaded
+    if (!document.getElementById('gtm-script-thankyou')) {
+      (function(w,d,s,l,i){
+        w[l]=w[l]||[];
+        w[l].push({'gtm.start': new Date().getTime(), event:'gtm.js'});
+        var f=d.getElementsByTagName(s)[0],
+            j=d.createElement(s),
+            dl=l!='dataLayer'?'&l='+l:'';
+        j.id='gtm-script-thankyou';
+        j.async=true;
+        j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
+        if (f && f.parentNode) {
+          f.parentNode.insertBefore(j,f);
+        } else {
+          d.head.appendChild(j);
+        }
+      })(window,document,'script','dataLayer','GTM-KZNCHHFT');
+    }
+  }, []);
+
   return (
     <div className="landing1-page-root" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+      {/* Google Tag Manager (noscript) */}
+      <noscript>
+        <iframe 
+          src="https://www.googletagmanager.com/ns.html?id=GTM-KZNCHHFT"
+          height="0" 
+          width="0" 
+          style={{ display: 'none', visibility: 'hidden' }}
+        ></iframe>
+      </noscript>
+      {/* End Google Tag Manager (noscript) */}
+
       <header className="nav scrolled">
         <div className="nav-inner">
           <div className="nav-logo-wrap">

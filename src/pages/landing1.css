@@ -30,6 +30,17 @@
   min-height: 100vh;
 }
 
+@media (min-width: 1400px) {
+  .landing1-page-root {
+    font-size: 125%;
+  }
+  .landing1-page-root .wrap,
+  .landing1-page-root .nav-inner,
+  .landing1-page-root .footer-inner {
+    max-width: 1475px;
+  }
+}
+
 .landing1-page-root * {
   box-sizing: border-box;
 }

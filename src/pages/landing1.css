@@ -26,7 +26,7 @@
   background-image: radial-gradient(circle at top, #1A0D36 0%, #07020D 100%);
   color: var(--ink-soft);
   -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
+  overflow-x: clip;
   min-height: 100vh;
 }
 
@@ -110,7 +110,7 @@
   left: 0;
   right: 0;
   z-index: 100;
-  padding: 20px 0;
+  padding: 16px 0;
   background: rgba(7, 2, 13, 0.6);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
@@ -119,8 +119,8 @@
 }
 
 .landing1-page-root header.nav.scrolled {
-  background: rgba(7, 2, 13, 0.85);
-  padding: 12px 0;
+  background: rgba(7, 2, 13, 0.92);
+  padding: 10px 0;
   box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
   border-bottom-color: rgba(139, 77, 255, 0.2);
 }
@@ -135,10 +135,11 @@
 }
 
 .landing1-page-root .nav-logo {
-  height: 48px;
+  height: 44px;
   width: auto;
   object-fit: contain;
   display: block;
+  max-width: 160px;
 }
 
 .landing1-page-root .nav-center-brewing {
@@ -238,6 +239,15 @@
   .landing1-page-root .nav-center-brewing {
     display: none;
   }
+  /* Hero image — wider on mobile */
+  .landing1-page-root .hero .reveal.in {
+    width: 95% !important;
+  }
+  /* Agents revel — full width on mobile */
+  .landing1-page-root .agents-revel-img-wrap {
+    width: 95% !important;
+    max-width: 100% !important;
+  }
 }
 
 .landing1-page-root .nav-links {
@@ -326,7 +336,7 @@
 
 .landing1-page-root .hero {
   background: var(--paper);
-  padding: 130px 0 80px;
+  padding: 120px 0 32px;
   color: var(--ink-soft);
   overflow: hidden;
 }
@@ -1453,7 +1463,7 @@
 /* ---------- FOOTER ---------- */
 .landing1-page-root footer {
   background: var(--paper);
-  padding: 14px 0;
+  padding: 16px 0;
   border-top: 1px solid var(--line);
 }
 
@@ -1462,21 +1472,15 @@
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: 16px;
+  gap: 12px;
 }
 
 .landing1-page-root .footer-logo {
-  height: 55px;
+  height: 50px;
   width: auto;
   object-fit: contain;
   transform: scale(0.9);
   transform-origin: left center;
-}
-
-@media (max-width: 480px) {
-  .landing1-page-root .footer-logo {
-    transform: scale(0.6);
-  }
 }
 
 .landing1-page-root .footer-inner p {
@@ -1536,15 +1540,28 @@
   }
 }
 
-@media (max-width: 720px) {
-  .landing1-page-root .nav-links {
-    display: none;
+/* ---- TABLET / LARGE MOBILE (≤768px) ---- */
+@media (max-width: 768px) {
+  .landing1-page-root .nav-inner {
+    padding: 0 20px;
+  }
+  .landing1-page-root .nav-logo {
+    height: 38px;
+  }
+  .landing1-page-root .nav-right-countdown {
+    gap: 10px;
+  }
+  .landing1-page-root .countdown-num {
+    font-size: 17px;
+  }
+  .landing1-page-root .countdown-label {
+    font-size: 11px;
+  }
+  .landing1-page-root .hero {
+    padding: 96px 0 28px;
   }
   .landing1-page-root .wrap {
     padding: 0 20px;
-  }
-  .landing1-page-root .hero {
-    padding: 100px 0 60px;
   }
   .landing1-page-root .hero-sub {
     font-size: 15px;
@@ -1601,93 +1618,125 @@
   .landing1-page-root .hero-form-card {
     padding: 20px 16px 16px;
   }
-  /* Iframe responsive height */
-  .landing1-page-root iframe {
-    height: 480px !important;
-    min-height: 420px;
-  }
   .landing1-page-root .nav-badge-pill {
     font-size: 11px;
     padding: 5px 10px;
     white-space: normal;
     text-align: center;
   }
+  /* Form section */
+  .landing1-page-root .form-section {
+    padding: 40px 0;
+  }
+  .landing1-page-root .form-section-heading {
+    font-size: clamp(22px, 6vw, 32px);
+    margin-bottom: 16px;
+    padding: 0 8px;
+  }
+  .landing1-page-root .wtl-form-iframe {
+    width: 100% !important;
+    height: 520px !important;
+  }
+  /* Agents revel */
+  .landing1-page-root .agents-revel-img-wrap {
+    max-width: 100% !important;
+    width: 95% !important;
+  }
 }
 
 /* ---------- SMALL MOBILE (≤480px) ---------- */
 @media (max-width: 480px) {
   .landing1-page-root .wrap {
-    padding: 0 16px;
+    padding: 0 14px;
+  }
+  .landing1-page-root .nav-inner {
+    padding: 0 14px;
+  }
+  .landing1-page-root .nav-logo {
+    height: 34px;
+    max-width: 130px;
+  }
+  .landing1-page-root .nav-badge-pill {
+    display: none;
+  }
+  .landing1-page-root .nav-right-countdown {
+    gap: 8px;
+  }
+  .landing1-page-root .countdown-num {
+    font-size: 15px;
+  }
+  .landing1-page-root .countdown-label {
+    font-size: 10px;
   }
   .landing1-page-root .hero {
-    padding: 90px 0 50px;
+    padding: 86px 0 20px;
   }
   .landing1-page-root .hero h1 {
-    font-size: clamp(26px, 7vw, 34px);
+    font-size: clamp(24px, 7.5vw, 32px);
     line-height: 1.15;
   }
   .landing1-page-root .hero-sub {
-    font-size: 14.5px;
-    margin-top: 14px;
+    font-size: 14px;
+    margin-top: 12px;
   }
   .landing1-page-root .hero-topbar {
     gap: 10px;
-    margin-bottom: 16px;
+    margin-bottom: 14px;
   }
   .landing1-page-root .avatar-stack span {
-    width: 28px;
-    height: 28px;
-    font-size: 10px;
+    width: 26px;
+    height: 26px;
+    font-size: 9px;
   }
   .landing1-page-root .hero-trust-text {
     font-size: 12px;
   }
   .landing1-page-root .pain-grid {
     grid-template-columns: 1fr;
-    gap: 12px;
+    gap: 10px;
   }
   .landing1-page-root .pain-card {
-    padding: 18px 16px;
+    padding: 16px 14px;
   }
   .landing1-page-root .sol-grid {
     grid-template-columns: 1fr;
-    gap: 12px;
+    gap: 10px;
   }
   .landing1-page-root .sol-card {
-    padding: 20px 18px;
+    padding: 18px 16px;
   }
   .landing1-page-root .steps {
-    gap: 28px;
+    gap: 24px;
   }
   .landing1-page-root .step-num {
-    width: 44px;
-    height: 44px;
+    width: 42px;
+    height: 42px;
     font-size: 13px;
     border-radius: 12px;
   }
   .landing1-page-root .step h4 {
-    font-size: 17px;
+    font-size: 16px;
   }
   .landing1-page-root .trust-card {
-    padding: 20px 18px;
+    padding: 18px 16px;
   }
   .landing1-page-root .trust-grid {
-    gap: 14px;
+    gap: 12px;
   }
   .landing1-page-root .section-head h2 {
-    font-size: clamp(22px, 6vw, 32px);
+    font-size: clamp(20px, 6.5vw, 30px);
   }
   .landing1-page-root .problem,
   .landing1-page-root .how,
   .landing1-page-root .trust,
   .landing1-page-root .solution {
-    padding: 52px 0;
+    padding: 48px 0;
   }
   .landing1-page-root .final-cta {
-    padding: 60px 0 48px;
+    padding: 56px 0 44px;
   }
   .landing1-page-root .final-cta h2 {
-    font-size: clamp(24px, 7vw, 34px);
+    font-size: clamp(22px, 7.5vw, 32px);
   }
   .landing1-page-root .final-cta .sub {
     font-size: 14px;
@@ -1695,27 +1744,28 @@
   .landing1-page-root .final-form-wrap {
     max-width: 100%;
   }
-  .landing1-page-root iframe {
-    height: 440px !important;
-    min-height: 400px;
-  }
   .landing1-page-root .footer-inner {
     flex-direction: column;
     align-items: flex-start;
-    gap: 8px;
+    gap: 6px;
   }
-  .landing1-page-root .nav-inner {
-    padding: 0 16px;
-  }
-  .landing1-page-root .nav-badge-pill {
-    display: none;
-  }
-  .landing1-page-root .nav-logo {
+  .landing1-page-root .footer-logo {
     height: 38px;
-    max-width: 150px;
+    transform: none;
   }
   .landing1-page-root .problem-close {
-    font-size: clamp(17px, 5vw, 22px);
+    font-size: clamp(16px, 5.5vw, 22px);
+  }
+  /* Form section small */
+  .landing1-page-root .form-section {
+    padding: 32px 0;
+  }
+  .landing1-page-root .form-section-heading {
+    font-size: clamp(20px, 6.5vw, 28px);
+    margin-bottom: 14px;
+  }
+  .landing1-page-root .wtl-form-iframe {
+    height: 480px !important;
   }
 }
 
@@ -1727,29 +1777,24 @@ body:has(.landing1-page-root) .sales-floating-wrapper {
 
 /* WTL Form Section Styling */
 .landing1-page-root .form-section {
-  padding: 60px 0;
+  padding: 56px 0;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
 .landing1-page-root .wtl-form-iframe {
-  width: 600px;
+  width: 100%;
+  max-width: 600px;
   height: 520px;
-  max-width: 100%;
   border: none;
   border-radius: 12px;
   background: transparent;
-}
-
-@media (max-width: 768px) {
-  .landing1-page-root .wtl-form-iframe {
-    height: 520px !important;
-  }
+  display: block;
 }
 
 .landing1-page-root .form-section-heading {
-  font-size: clamp(28px, 3.4vw, 40px);
+  font-size: clamp(24px, 3.4vw, 40px);
   margin-bottom: 24px;
   text-align: center;
   color: var(--ink);
@@ -1757,20 +1802,18 @@ body:has(.landing1-page-root) .sales-floating-wrapper {
   font-weight: 700;
 }
 /* ================================================
-   AGENT GROUPS SECTION — Fixed-panel sticky scroll
-   (bypasses overflow-x:hidden sticky limitation)
+   AGENT GROUPS SECTION — CSS Sticky scroll
    ================================================ */
 
-/* Scroll spacer — its height = number of agents × 100vh */
-.ag-scroll-spacer {
-  display: block;
+/* Scroll container — height set inline */
+.ag-scroll-container {
+  position: relative;
   width: 100%;
-  /* height is set inline via style prop */
 }
 
-/* Fixed overlay panel — hidden by default */
-.ag-fixed-panel {
-  position: fixed;
+/* Sticky full-screen panel */
+.ag-sticky-panel {
+  position: sticky;
   top: 0;
   left: 0;
   width: 100%;
@@ -1779,16 +1822,8 @@ body:has(.landing1-page-root) .sales-floating-wrapper {
   align-items: center;
   background: var(--paper, #07020D);
   background-image: radial-gradient(circle at top, #1A0D36 0%, #07020D 100%);
-  opacity: 0;
-  pointer-events: none;
   z-index: 10;
-  transition: opacity 0.3s ease;
-}
-
-/* Show the panel while we're inside the scroll zone */
-.ag-fixed-panel.ag-panel-visible {
-  opacity: 1;
-  pointer-events: auto;
+  overflow: hidden;
 }
 
 /* Two-column inner layout */
@@ -1918,17 +1953,63 @@ body:has(.landing1-page-root) .sales-floating-wrapper {
 @media (max-width: 900px) {
   .ag-sticky-inner {
     grid-template-columns: 1fr;
-    gap: 28px;
+    gap: 20px;
     padding: 0 20px;
+    /* On tablet: show image first, then text */
+    grid-template-rows: auto auto;
   }
 
   .ag-img-wrap {
-    max-height: 45vw;
+    order: -1;
+    max-height: 50vw;
+    aspect-ratio: 4 / 3;
   }
 
   .ag-headline {
-    font-size: clamp(24px, 6vw, 34px);
-    margin-bottom: 20px;
+    font-size: clamp(22px, 5vw, 32px);
+    margin-bottom: 16px;
+  }
+
+  .ag-sticky-panel {
+    align-items: flex-start;
+    padding-top: 80px;
+    padding-bottom: 24px;
+  }
+}
+
+@media (max-width: 600px) {
+  .ag-sticky-inner {
+    gap: 14px;
+    padding: 0 14px;
+  }
+
+  .ag-sticky-panel {
+    padding-top: 72px;
+    padding-bottom: 16px;
+    height: 100svh;
+  }
+
+  .ag-img-wrap {
+    max-height: 44vw;
+  }
+
+  .ag-label {
+    font-size: 9.5px;
+    margin-bottom: 8px;
+  }
+
+  .ag-category {
+    font-size: 11px;
+    margin-bottom: 12px;
+  }
+
+  .ag-headline {
+    font-size: clamp(19px, 5.5vw, 26px);
+    margin-bottom: 12px;
+  }
+
+  .ag-line-track {
+    margin-bottom: 16px;
   }
 }
 

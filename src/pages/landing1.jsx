@@ -65,22 +65,17 @@ const AGENT_GROUPS = [
 ];
 
 function AgentGroupsSection() {
-  const spacerRef = useRef(null);
+  const containerRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(0);
-  const [panelVisible, setPanelVisible] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      if (!spacerRef.current) return;
-      const rect = spacerRef.current.getBoundingClientRect();
+      if (!containerRef.current) return;
+      const rect = containerRef.current.getBoundingClientRect();
+      const scrollable = containerRef.current.offsetHeight - window.innerHeight;
 
-      // Panel is visible while we are inside the scroll spacer
-      const inView = rect.top <= 0 && rect.bottom >= window.innerHeight;
-      setPanelVisible(inView);
-
-      if (inView) {
+      if (scrollable > 0) {
         const scrolled = -rect.top;
-        const scrollable = spacerRef.current.offsetHeight - window.innerHeight;
         const progress = Math.max(0, Math.min(0.9999, scrolled / scrollable));
         const idx = Math.min(
           AGENT_GROUPS.length - 1,
@@ -96,19 +91,15 @@ function AgentGroupsSection() {
   }, []);
 
   const active = AGENT_GROUPS[activeIndex];
-  const linePercent = 8 + (activeIndex / (AGENT_GROUPS.length - 1)) * 42;
+  const linePercent = 8 + (activeIndex / (AGENT_GROUPS.length - 1)) * 92;
 
   return (
-    <>
-      {/* ---- Scroll spacer: creates the scroll distance ---- */}
-      <div
-        ref={spacerRef}
-        className="ag-scroll-spacer"
-        style={{ height: `${AGENT_GROUPS.length * 100}vh` }}
-      />
-
-      {/* ---- Fixed full-screen panel, visible only while spacer is active ---- */}
-      <div className={`ag-fixed-panel${panelVisible ? ' ag-panel-visible' : ''}`}>
+    <section
+      ref={containerRef}
+      className="ag-scroll-container"
+      style={{ height: `${AGENT_GROUPS.length * 30}vh` }}
+    >
+      <div className="ag-sticky-panel">
         <div className="ag-sticky-inner">
 
           {/* LEFT: Description — React key trick re-triggers CSS fade animation */}
@@ -140,7 +131,7 @@ function AgentGroupsSection() {
 
         </div>
       </div>
-    </>
+    </section>
   );
 }
 
@@ -233,7 +224,7 @@ export default function landing1() {
       <section className="hero">
         <div 
           className="reveal in" 
-          style={{ width: '80%', maxWidth: '1200px', margin: '0 auto', cursor: 'pointer' }} 
+          style={{ width: '90%', maxWidth: '1200px', margin: '0 auto', cursor: 'pointer' }} 
           onClick={() => {
             document.querySelector('.form-section')?.scrollIntoView({ behavior: 'smooth' });
           }}
@@ -246,7 +237,7 @@ export default function landing1() {
 
       <section className="agents-revel" style={{ padding: '0 0 60px 0' }}>
         <div className="wrap">
-          <div className="reveal in" style={{ width: '100%', maxWidth: '800px', margin: '0 auto' }}>
+          <div className="reveal in agents-revel-img-wrap" style={{ width: '100%', maxWidth: '800px', margin: '0 auto' }}>
             <img src="/images/landing/agents revel.webp" alt="Mingrow Agents Revel" style={{ width: '100%', height: 'auto', display: 'block', borderRadius: '16px' }} />
           </div>
         </div>
@@ -258,8 +249,6 @@ export default function landing1() {
               <h2 className="form-section-heading">Get Early Access From Here</h2>
               <iframe 
                 className="wtl-form-iframe"
-                width="600" 
-                height="520" 
                 src="https://mingrow.cloud/forms/wtl/f0e3930fe031c9bcee1723a8d5a78587" 
                 frameBorder="0" 
                 sandbox="allow-top-navigation allow-forms allow-scripts allow-same-origin allow-popups" 

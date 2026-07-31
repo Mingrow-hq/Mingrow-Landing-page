@@ -145,11 +145,12 @@
 .landing1-page-root .nav-center-brewing {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 15px;
+  gap: 12px;
+  font-size: 25px;
   font-weight: 500;
   color: #F1EDFA;
-  letter-spacing: -0.01em;
+  letter-spacing: 0.05em;
+  padding: 0 16px;
 }
 
 .landing1-page-root .purple-dot {
@@ -1955,61 +1956,65 @@ body:has(.landing1-page-root) .sales-floating-wrapper {
     grid-template-columns: 1fr;
     gap: 20px;
     padding: 0 20px;
-    /* On tablet: show image first, then text */
     grid-template-rows: auto auto;
   }
 
   .ag-img-wrap {
     order: -1;
-    max-height: 50vw;
-    aspect-ratio: 4 / 3;
+    height: 340px;
+    max-height: 68vw;
+    aspect-ratio: auto;
   }
 
   .ag-headline {
-    font-size: clamp(22px, 5vw, 32px);
-    margin-bottom: 16px;
+    font-size: clamp(20px, 4.5vw, 28px);
+    margin-bottom: 14px;
   }
 
   .ag-sticky-panel {
-    align-items: flex-start;
-    padding-top: 80px;
-    padding-bottom: 24px;
+    align-items: center;
+    justify-content: center;
+    padding-top: 60px;
+    padding-bottom: 20px;
+    height: 100vh;
   }
 }
 
 @media (max-width: 600px) {
   .ag-sticky-inner {
-    gap: 14px;
-    padding: 0 14px;
+    gap: 16px;
+    padding: 0 16px;
   }
 
   .ag-sticky-panel {
-    padding-top: 72px;
+    padding-top: 55px;
     padding-bottom: 16px;
+    height: 100vh;
     height: 100svh;
   }
 
   .ag-img-wrap {
-    max-height: 44vw;
+    height: 310px;
+    max-height: 78vw;
   }
 
   .ag-label {
     font-size: 9.5px;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
   }
 
   .ag-category {
     font-size: 11px;
-    margin-bottom: 12px;
+    margin-bottom: 8px;
   }
 
   .ag-headline {
-    font-size: clamp(19px, 5.5vw, 26px);
-    margin-bottom: 12px;
+    font-size: clamp(18px, 5vw, 24px);
+    margin-bottom: 10px;
   }
 
   .ag-line-track {
-    margin-bottom: 16px;
+    margin-bottom: 12px;
   }
 }
 

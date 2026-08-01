@@ -341,22 +341,13 @@ export default function landing1() {
         <div className="hero-bg-container">
           <picture className="hero-bg-picture">
             <source media="(max-width: 980px)" srcSet="/images/landing/hero%20IMAGE%20MOBILE%20VIEW.webp" />
-            <img src="/images/landing/hero_section.webp" alt="Mingrow Hero Background" className="hero-bg-img" />
+            <img src="/images/landing/hero_section.webp" alt="A New Era of Business Is Loading - Mingrow" className="hero-bg-img" />
           </picture>
           <div className="hero-overlay"></div>
           
           <div className="hero-content reveal in">
-            <h1 className="hero-title">
-              <span className="hero-title-line1">A New Era of</span>
-              <span className="hero-title-line2">
-                Business <span className="purple-gradient-text">Is Loading</span>
-              </span>
-            </h1>
-            <p className="hero-subtitle">
-              The next evolution of work isn't software.
-              <br />
-              It's something entirely different.
-            </p>
+            <h1 className="sr-only">A New Era of Business Is Loading</h1>
+            <p className="sr-only">The next evolution of work isn't software. It's something entirely different.</p>
             <button 
               className="hero-cta-button"
               onClick={() => {
@@ -374,14 +365,6 @@ export default function landing1() {
       <section className="agents-revel" style={{ padding: '0 0 60px 0' }}>
         <div className="wrap">
           <div className="reveal in agents-revel-img-wrap" style={{ width: '100%', maxWidth: '1050px', margin: '0 auto', position: 'relative', borderRadius: '16px', overflow: 'hidden' }}>
-            <div className="agents-revel-overlay">
-              <h2 className="agents-revel-title">
-                They're <span className="highlight-purple">almost here.</span>
-              </h2>
-              <p className="agents-revel-subtitle">
-                Your future AI workforce arrives soon.
-              </p>
-            </div>
             <img src="/images/landing/agents revel.webp" alt="They're almost here. Your future AI workforce arrives soon." style={{ width: '100%', height: 'auto', display: 'block' }} />
           </div>
         </div>

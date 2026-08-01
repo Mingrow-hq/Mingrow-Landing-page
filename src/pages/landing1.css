@@ -356,6 +356,18 @@
   color: var(--gold-soft);
 }
 
+.landing1-page-root .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
 .landing1-page-root .hero {
   background: var(--paper);
   padding: 80px 0 40px;
@@ -369,9 +381,9 @@
   width: 92%;
   max-width: 1300px;
   margin: 0 auto;
-  min-height: 82vh;
+  aspect-ratio: 1672 / 941;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
   border-radius: 20px;
   overflow: hidden;
@@ -401,9 +413,7 @@
   position: absolute;
   inset: 0;
   z-index: 2;
-  background: 
-    radial-gradient(ellipse at center, rgba(7, 2, 13, 0.15) 0%, rgba(7, 2, 13, 0.65) 65%, rgba(7, 2, 13, 0.95) 100%),
-    linear-gradient(to bottom, rgba(7, 2, 13, 0.5) 0%, transparent 25%, transparent 75%, rgba(7, 2, 13, 0.9) 100%);
+  background: transparent;
   pointer-events: none;
 }
 
@@ -411,12 +421,13 @@
   position: relative;
   z-index: 3;
   text-align: center;
-  max-width: 840px;
-  padding: 100px 24px 70px;
+  width: 100%;
+  padding: 0 24px 45px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
+  pointer-events: auto;
 }
 
 .landing1-page-root .hero-title {
@@ -1640,6 +1651,17 @@
 
 /* ---------- RESPONSIVE ---------- */
 @media (max-width: 980px) {
+  .landing1-page-root .hero-bg-container {
+    aspect-ratio: 864 / 1257;
+    width: 95%;
+  }
+  .landing1-page-root .hero-content {
+    padding-bottom: 24px;
+  }
+  .landing1-page-root .hero-cta-button {
+    padding: 12px 24px;
+    font-size: 14px;
+  }
   .landing1-page-root .hero-grid {
     grid-template-columns: 1fr;
     gap: 40px;

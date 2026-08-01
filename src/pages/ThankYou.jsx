@@ -42,10 +42,26 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
       <main className="thankyou-main">
         <div className="thankyou-card">
-          <h1 className="sr-only">THANK YOU! YOU’RE ALL SET!</h1>
-          <p className="sr-only">We’ve received your details and you’re officially on the list. Our team will reach out to you soon with exciting updates and early access.</p>
+          <h1 className="thankyou-title">THANK YOU!</h1>
+          
+          <div className="thankyou-subtitle-wrap">
+            <span className="thankyou-sub-line"></span>
+            <span className="thankyou-subtitle">YOU’RE ALL SET!</span>
+            <span className="thankyou-sub-line"></span>
+          </div>
 
-          {/* Join The Community Button with WhatsApp Icon */}
+          <div className="thankyou-body-text">
+            <p>We’ve received your details and</p>
+            <p>you’re officially on the list.</p>
+            <div className="thankyou-text-spacer"></div>
+            <p>Our team will reach out to you soon with</p>
+            <p><span className="thankyou-purple-text">exciting updates</span> and <span className="thankyou-purple-text">early access</span>.</p>
+          </div>
+
+          {/* Spacer to push button comfortably below the horizon arc */}
+          <div className="thankyou-bottom-spacer"></div>
+
+          {/* Join The Community Button with WhatsApp Icon & Right Arrow */}
           <div className="thankyou-btn-wrap">
             <a 
               href="https://whatsapp.com/channel/0029Va6DqhaH5JLwvPx90k39" 
@@ -63,6 +79,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <path d="M12.004 2C6.486 2 2 6.486 2 12.004c0 1.996.587 3.939 1.698 5.603L2 22l4.526-1.644a10.007 10.007 0 0 0 5.478 1.648c5.518 0 10.004-4.486 10.004-10.004C22.008 6.486 17.522 2 12.004 2zm0 18.286c-1.764 0-3.487-.478-4.98-1.382l-.357-.215-2.696.98.995-2.628-.236-.376A8.257 8.257 0 0 1 3.719 12.004C3.719 7.435 7.435 3.719 12.004 3.719c4.569 0 8.285 3.716 8.285 8.285 0 4.569-3.716 8.282-8.285 8.282z"/>
               </svg>
               <span>Join The Community</span>
+              <svg 
+                className="thankyou-btn-arrow" 
+                viewBox="0 0 24 24" 
+                aria-hidden="true"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+              </svg>
             </a>
           </div>
         </div>

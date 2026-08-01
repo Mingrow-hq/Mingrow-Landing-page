@@ -343,8 +343,28 @@ export default function landing1() {
             <source media="(max-width: 980px)" srcSet="/images/landing/hero%20IMAGE%20MOBILE%20VIEW.webp" />
             <img src="/images/landing/hero_section.webp" alt="A New Era of Business Is Loading - Mingrow" className="hero-bg-img" />
           </picture>
-          <h1 className="sr-only">A New Era of Business Is Loading</h1>
-          <p className="sr-only">The next evolution of work isn't software. It's something entirely different.</p>
+          <div className="hero-overlay"></div>
+          <div className="hero-content">
+            <h1 className="hero-title">
+              <span className="hero-title-line1">A New Era of</span>
+              <span className="hero-title-line2">
+                <span className="hero-title-word-business">Business </span>
+                <span className="purple-gradient-text">Is Loading</span>
+              </span>
+            </h1>
+            <p className="hero-subtitle">
+              <span className="hero-sub-block">The next evolution of work </span>
+              <span className="hero-sub-block">isn't software.</span>
+              <br className="hero-sub-desktop-br" />
+              <span className="hero-sub-block">It's something entirely different.</span>
+            </p>
+            <button 
+              className="hero-cta-button"
+              onClick={() => document.querySelector('.form-section')?.scrollIntoView({ behavior: 'smooth' })}
+            >
+              Request Early Access <span className="cta-arrow">→</span>
+            </button>
+          </div>
         </div>
       </section>
 

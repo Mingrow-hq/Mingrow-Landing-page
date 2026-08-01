@@ -413,7 +413,7 @@
   position: absolute;
   inset: 0;
   z-index: 2;
-  background: transparent;
+  background: linear-gradient(180deg, rgba(5, 1, 11, 0) 0%, rgba(5, 1, 11, 0.25) 35%, rgba(5, 1, 11, 0.82) 100%);
   pointer-events: none;
 }
 
@@ -422,7 +422,7 @@
   z-index: 3;
   text-align: center;
   width: 100%;
-  padding: 0 24px 45px;
+  padding: 0 24px 50px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -435,21 +435,21 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-bottom: 22px;
-  font-family: 'Space Grotesk', 'Inter', sans-serif;
+  margin-bottom: 20px;
+  font-family: 'Space Grotesk', 'Inter', system-ui, -apple-system, sans-serif;
   letter-spacing: -0.02em;
 }
 
 .landing1-page-root .hero-title-line1 {
-  font-size: clamp(30px, 4.5vw, 50px);
-  font-weight: 600;
-  color: #FFFFFF;
+  font-size: clamp(28px, 4.2vw, 54px);
+  font-weight: 500;
+  color: #D1D5DB;
   line-height: 1.15;
   letter-spacing: -0.01em;
 }
 
 .landing1-page-root .hero-title-line2 {
-  font-size: clamp(38px, 6.2vw, 68px);
+  font-size: clamp(36px, 6vw, 70px);
   font-weight: 700;
   color: #FFFFFF;
   line-height: 1.1;
@@ -457,21 +457,30 @@
 }
 
 .landing1-page-root .purple-gradient-text {
-  background: linear-gradient(135deg, #D8B4FE 0%, #A855F7 50%, #9333EA 100%);
+  color: #A855F7;
+  background: linear-gradient(135deg, #C084FC 0%, #A855F7 50%, #9333EA 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  text-shadow: 0 0 35px rgba(168, 85, 247, 0.45);
+  text-shadow: 0 0 30px rgba(168, 85, 247, 0.6);
   display: inline-block;
 }
 
 .landing1-page-root .hero-subtitle {
-  font-size: clamp(15px, 2vw, 19px);
+  font-size: clamp(14px, 1.8vw, 18px);
   font-weight: 400;
-  color: #B3A8CB;
-  line-height: 1.6;
-  max-width: 580px;
-  margin-bottom: 34px;
+  color: #9CA3AF;
+  line-height: 1.5;
+  max-width: 560px;
+  margin-bottom: 28px;
   text-align: center;
+}
+
+.landing1-page-root .hero-sub-block {
+  display: inline;
+}
+
+.landing1-page-root .hero-sub-desktop-br {
+  display: inline;
 }
 
 .landing1-page-root .hero-cta-button {
@@ -1658,8 +1667,37 @@
   .landing1-page-root .hero-content {
     padding-bottom: 24px;
   }
+  .landing1-page-root .hero-title-line1 {
+    font-size: clamp(24px, 6vw, 34px);
+    margin-bottom: 2px;
+  }
+  .landing1-page-root .hero-title-line2 {
+    font-size: clamp(30px, 8.5vw, 42px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1.1;
+  }
+  .landing1-page-root .hero-title-word-business {
+    display: block;
+  }
+  .landing1-page-root .purple-gradient-text {
+    display: block;
+  }
+  .landing1-page-root .hero-subtitle {
+    font-size: clamp(13px, 3.5vw, 15px);
+    line-height: 1.45;
+    margin-bottom: 22px;
+    max-width: 320px;
+  }
+  .landing1-page-root .hero-sub-block {
+    display: block;
+  }
+  .landing1-page-root .hero-sub-desktop-br {
+    display: none;
+  }
   .landing1-page-root .hero-cta-button {
-    padding: 12px 24px;
+    padding: 12px 26px;
     font-size: 14px;
   }
   .landing1-page-root .hero-grid {
@@ -2454,7 +2492,7 @@ body:has(.landing1-page-root) .sales-floating-wrapper {
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  padding: clamp(380px, 55vh, 540px) 20px 80px;
+  padding: clamp(340px, 38vh, 440px) 20px 60px;
   position: relative;
   overflow: hidden;
   z-index: 1;
@@ -2473,11 +2511,78 @@ body:has(.landing1-page-root) .sales-floating-wrapper {
   align-items: center;
 }
 
-/* Join Button with WhatsApp Icon */
+.thankyou-title {
+  font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: clamp(42px, 7vw, 84px);
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  line-height: 1.05;
+  margin: 0 0 16px 0;
+  background: linear-gradient(180deg, #FFFFFF 0%, #E9D5FF 35%, #C084FC 70%, #8B3DFF 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 25px rgba(168, 85, 247, 0.65)) drop-shadow(0 0 50px rgba(139, 61, 255, 0.4));
+}
+
+.thankyou-subtitle-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 28px;
+  width: 100%;
+  max-width: 480px;
+}
+
+.thankyou-sub-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(192, 132, 252, 0.75) 50%, transparent 100%);
+}
+
+.thankyou-subtitle {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(12px, 1.8vw, 15px);
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  color: #C084FC;
+  text-transform: uppercase;
+  text-shadow: 0 0 16px rgba(192, 132, 252, 0.65);
+}
+
+.thankyou-body-text {
+  color: rgba(243, 238, 255, 0.92);
+  font-size: clamp(15px, 2.1vw, 18px);
+  line-height: 1.6;
+  font-weight: 400;
+  max-width: 600px;
+  margin: 0 auto;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.9);
+}
+
+.thankyou-body-text p {
+  margin: 0;
+}
+
+.thankyou-purple-text {
+  color: inherit;
+  font-weight: inherit;
+  text-shadow: none;
+}
+
+.thankyou-text-spacer {
+  height: 14px;
+}
+
+.thankyou-bottom-spacer {
+  height: clamp(60px, 12vh, 120px);
+}
+
+/* Join Button with WhatsApp Icon & Right Arrow */
 .thankyou-btn-wrap {
   position: relative;
   z-index: 5;
-  margin-top: 20px;
+  margin-top: 8px;
 }
 
 .thankyou-whatsapp-btn {
@@ -2518,8 +2623,23 @@ body:has(.landing1-page-root) .sales-floating-wrapper {
   transition: transform 0.3s ease;
 }
 
+.thankyou-btn-arrow {
+  width: 18px;
+  height: 18px;
+  stroke: #FFFFFF;
+  stroke-width: 2.2;
+  fill: none;
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+  margin-left: 2px;
+}
+
 .thankyou-whatsapp-btn:hover .thankyou-whatsapp-icon {
   transform: scale(1.18) rotate(-6deg);
+}
+
+.thankyou-whatsapp-btn:hover .thankyou-btn-arrow {
+  transform: translateX(4px);
 }
 
 @media (max-width: 980px) {
@@ -2541,12 +2661,42 @@ body:has(.landing1-page-root) .sales-floating-wrapper {
   }
 }
 
-@media (max-width: 980px) {
+@media (max-width: 768px) {
   .landing1-page-root.thankyou-page-wrapper {
     background: #06020c url('/images/landing/mobile%20thankyou.webp') center top / cover no-repeat;
   }
   .thankyou-main {
-    padding: clamp(340px, 52vh, 480px) 16px 60px;
+    padding: clamp(230px, 30vh, 280px) 16px 40px;
+  }
+  .thankyou-title {
+    font-size: clamp(32px, 8.5vw, 44px);
+    letter-spacing: 0.03em;
+    margin-bottom: 10px;
+  }
+  .thankyou-subtitle-wrap {
+    max-width: 280px;
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+  .thankyou-subtitle {
+    font-size: 11px;
+    letter-spacing: 0.22em;
+  }
+  .thankyou-body-text {
+    font-size: 14.5px;
+    line-height: 1.55;
+    padding: 0 12px;
+  }
+  .thankyou-purple-text {
+    color: #C084FC;
+    font-weight: 600;
+    text-shadow: 0 0 10px rgba(192, 132, 252, 0.5);
+  }
+  .thankyou-text-spacer {
+    height: 10px;
+  }
+  .thankyou-bottom-spacer {
+    height: clamp(30px, 6vh, 70px);
   }
   .thankyou-whatsapp-btn {
     padding: 13px 26px;

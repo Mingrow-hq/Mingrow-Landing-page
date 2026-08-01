@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import './landing1.css';
 
 const AGENT_GROUPS = [
@@ -145,49 +145,69 @@ const NOTIFICATIONS = [
   { name: 'Aditya V.', location: 'Kolkata', action: 'requested Early Access', time: 'Just now', initial: 'A', color: '#FFAB00' },
   { name: 'Kavya J.', location: 'Ahmedabad', action: 'joined Early Access', time: '2m ago', initial: 'K', color: '#36B37E' },
   { name: 'Rahul N.', location: 'Jaipur', action: 'requested Early Access', time: '5m ago', initial: 'R', color: '#8B4DFF' },
+  { name: 'Neha G.', location: 'Gurugram', action: 'requested Early Access', time: 'Just now', initial: 'N', color: '#EC4899' },
+  { name: 'Dev P.', location: 'Noida', action: 'joined Early Access', time: '1m ago', initial: 'D', color: '#10B981' },
+  { name: 'Tanvi M.', location: 'Chandigarh', action: 'requested Early Access', time: 'Just now', initial: 'T', color: '#6366F1' },
+  { name: 'Karan B.', location: 'Surat', action: 'joined Early Access waitlist', time: '3m ago', initial: 'K', color: '#F59E0B' },
+  { name: 'Isha L.', location: 'Indore', action: 'requested Early Access', time: 'Just now', initial: 'I', color: '#8B5CF6' },
+  { name: 'Siddharth T.', location: 'Kochi', action: 'joined Early Access', time: '2m ago', initial: 'S', color: '#06B6D4' },
+  { name: 'Meera K.', location: 'Lucknow', action: 'requested Early Access', time: 'Just now', initial: 'M', color: '#EF4444' },
+  { name: 'Arjun H.', location: 'Coimbatore', action: 'joined Early Access', time: '4m ago', initial: 'A', color: '#14B8A6' },
+  { name: 'Riya B.', location: 'Bhopal', action: 'requested Early Access', time: '1m ago', initial: 'R', color: '#F43F5E' },
+  { name: 'Yash V.', location: 'Nagpur', action: 'joined Early Access waitlist', time: 'Just now', initial: 'Y', color: '#3B82F6' },
+  { name: 'Pooja R.', location: 'Vadodara', action: 'requested Early Access', time: '2m ago', initial: 'P', color: '#8B4DFF' },
 ];
 
-function EarlyAccessNotification() {
+function EarlyAccessNotification({ onNotificationShown }) {
   const [index, setIndex] = useState(0);
   const [visible, setVisible] = useState(false);
   const [dismissed, setDismissed] = useState(false);
   const isHovered = useRef(false);
+  const onNotifRef = useRef(onNotificationShown);
+
+  useEffect(() => {
+    onNotifRef.current = onNotificationShown;
+  }, [onNotificationShown]);
 
   useEffect(() => {
     if (dismissed) return;
 
-    let showTimeout;
-    let hideTimeout;
-    let checkInterval;
+    let showTimer;
+    let hideTimer;
 
-    const showNotif = () => {
+    const runCycle = () => {
+      if (isHovered.current) {
+        showTimer = setTimeout(runCycle, 1000);
+        return;
+      }
+
       setVisible(true);
-      showTimeout = setTimeout(() => {
-        const tryHide = () => {
-          if (!isHovered.current) {
-            setVisible(false);
-            const randomGap = Math.floor(Math.random() * 2000) + 3000; // 3-5 seconds gap
-            hideTimeout = setTimeout(() => {
-              setIndex((prev) => (prev + 1) % NOTIFICATIONS.length);
-              showNotif();
-            }, randomGap);
-          } else {
-            checkInterval = setTimeout(tryHide, 1000);
-          }
-        };
-        tryHide();
-      }, 4000); // visible for 4 seconds
+      if (onNotifRef.current) {
+        onNotifRef.current();
+      }
+
+      // Display popup on screen for 3 seconds
+      showTimer = setTimeout(() => {
+        if (!isHovered.current) {
+          setVisible(false);
+        }
+        // Dynamic gap varying between 2 to 4 seconds (total cycle 3s to 5s)
+        const gap = Math.floor(Math.random() * 2000) + 1500;
+        hideTimer = setTimeout(() => {
+          setIndex((prev) => (prev + 1) % NOTIFICATIONS.length);
+          runCycle();
+        }, gap);
+      }, 3000);
     };
 
     const initialTimer = setTimeout(() => {
-      showNotif();
-    }, 2000); // initial 2s delay when user lands
+      runCycle();
+    }, 1500);
 
     return () => {
       clearTimeout(initialTimer);
-      clearTimeout(showTimeout);
-      clearTimeout(hideTimeout);
-      clearTimeout(checkInterval);
+      clearTimeout(showTimer);
+      clearTimeout(hideTimer);
     };
   }, [dismissed]);
 
@@ -238,7 +258,26 @@ function EarlyAccessNotification() {
 export default function landing1() {
   const [scrolled, setScrolled] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const [timeLeft, setTimeLeft] = useState({ days: '03', hours: '00', minutes: '00' });
+  const [timeLeft, setTimeLeft] = useState({ days: '30', hours: '00', minutes: '00', seconds: '00' });
+  const [seatsRemaining, setSeatsRemaining] = useState(() => {
+    const saved = localStorage.getItem('mingrow_seats_remaining_v2');
+    if (saved !== null) {
+      const parsed = parseInt(saved, 10);
+      if (!isNaN(parsed) && parsed >= 0 && parsed <= 100) {
+        return parsed;
+      }
+    }
+    localStorage.setItem('mingrow_seats_remaining_v2', '56');
+    return 56;
+  });
+
+  const handleNotificationShown = useCallback(() => {
+    setSeatsRemaining((prev) => {
+      const next = Math.max(0, prev - 1);
+      localStorage.setItem('mingrow_seats_remaining_v2', next.toString());
+      return next;
+    });
+  }, []);
 
   useEffect(() => {
     document.title = "Mingrow — The AI Business OS";
@@ -261,8 +300,8 @@ export default function landing1() {
     };
     window.addEventListener('scroll', handleScroll);
 
-    const offset = 3 * 24 * 60 * 60 * 1000;
-    const targetDateKey = 'landing1_countdown_target_3days_v1';
+    const offset = 30 * 24 * 60 * 60 * 1000; // 30 Days countdown calculation
+    const targetDateKey = 'landing1_countdown_target_30days_v4';
     let targetTime = localStorage.getItem(targetDateKey);
 
     if (!targetTime) {
@@ -275,15 +314,17 @@ export default function landing1() {
       const now = Date.now();
       const difference = target - now;
       if (difference <= 0) {
-        setTimeLeft({ days: '00', hours: '00', minutes: '00' });
+        setTimeLeft({ days: '00', hours: '00', minutes: '00', seconds: '00' });
       } else {
         const d = Math.floor(difference / (1000 * 60 * 60 * 24));
         const h = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         const m = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+        const s = Math.floor((difference % (1000 * 60)) / 1000);
         setTimeLeft({
           days: String(d).padStart(2, '0'),
           hours: String(h).padStart(2, '0'),
-          minutes: String(m).padStart(2, '0')
+          minutes: String(m).padStart(2, '0'),
+          seconds: String(s).padStart(2, '0')
         });
       }
     };
@@ -377,6 +418,181 @@ export default function landing1() {
         </div>
       </section>
 
+      {/* Launch Pricing & Founding Company Section */}
+      <section className="launch-pricing-section">
+        <div className="wrap">
+          <div className="lp-container reveal in">
+            
+            {/* LEFT COLUMN */}
+            <div className="lp-left-col">
+              <h2 className="lp-title">
+                Founder <span className="purple-gradient-text">Offer</span>
+              </h2>
+
+              <p className="lp-subtitle">
+                Be One of the <strong>First 100 Companies</strong> to Join <strong>Mingrow AI Business OS</strong> and Lock in Our <strong>Exclusive Launch Pricing Forever.</strong>
+              </p>
+
+              <div className="lp-features-grid">
+                <div className="lp-feature-card">
+                  <div className="lp-icon-box">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#A855F7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/>
+                      <path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-3.05 11a22.35 22.35 0 0 1-3.95 2z"/>
+                      <path d="M9 12l-1.5-1.5"/>
+                      <path d="M15 6l1.5 1.5"/>
+                    </svg>
+                  </div>
+                  <div className="lp-feature-text">
+                    <h4>Launch First.<br />Lead Always.</h4>
+                    <p>Exclusive. Limited.<br />Priceless.</p>
+                  </div>
+                </div>
+
+                <div className="lp-feature-card">
+                  <div className="lp-icon-box">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#A855F7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M12 2a9 9 0 0 1 9 9c0 3.6-2.1 6.7-5.2 8.1l-.8.4v2.5H9v-2.5l-.8-.4C5.1 17.7 3 14.6 3 11a9 9 0 0 1 9-9z"/>
+                      <path d="M9 22h6"/>
+                      <circle cx="12" cy="11" r="3"/>
+                    </svg>
+                  </div>
+                  <div className="lp-feature-text">
+                    <h4>Tomorrow&apos;s<br />Advantage.</h4>
+                    <p>Built for Early<br />Adopters.</p>
+                  </div>
+                </div>
+
+                <div className="lp-feature-card">
+                  <div className="lp-icon-box">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#A855F7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                      <circle cx="9" cy="7" r="4"/>
+                      <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                      <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                    </svg>
+                  </div>
+                  <div className="lp-feature-text">
+                    <h4>Join the 100.<br />Shape the Future.</h4>
+                    <p>Your Business.<br />Powered by AI.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="lp-cta-row">
+                <button
+                  className="lp-cta-btn"
+                  onClick={() => document.querySelector('.form-section')?.scrollIntoView({ behavior: 'smooth' })}
+                >
+                  Become a Founding Company <span className="arrow">→</span>
+                </button>
+                <div className="lp-cta-divider"></div>
+                <span className="lp-cta-subtext">Secure your lifetime pricing before the offer closes.</span>
+              </div>
+            </div>
+
+            {/* RIGHT COLUMN */}
+            <div className="lp-right-col">
+              <div className="lp-image-wrapper">
+                <img
+                  src="/images/landing/with box image.webp"
+                  alt="12 AI Agents. One Business OS."
+                  className="lp-box-bg-img"
+                />
+                
+                {/* Top-Right FOUNDER OFFER Badge */}
+                <div className="lp-top-right-founder-badge">
+                  <span className="crown-icon">👑</span>
+                  <span className="founder-text">FOUNDER OFFER</span>
+                </div>
+
+                {/* Center Sphere Tag on Image */}
+                <div className="lp-center-globe-tag">
+                  <span className="lp-agent-tag-count">12 AI Agents.</span>
+                  <span className="lp-agent-tag-sub">One Business OS.</span>
+                </div>
+
+                {/* Content inside the glowing box overlay */}
+                <div className="lp-box-content-overlay">
+                  
+                  {/* Self-Destruct Header Pill */}
+                  <div className="lp-self-destruct-header">
+                    <div className="lp-self-destruct-pill">
+                      <span className="lp-flame-icon">🔥</span>
+                      <span className="lp-self-destruct-text">THIS PRICE WILL SELF-DESTRUCT</span>
+                    </div>
+                  </div>
+
+                  <div className="lp-users-divider">
+                    <span>Only for <strong className="gold-text">First 100 Users</strong></span>
+                  </div>
+
+                  {/* Price Row */}
+                  <div className="lp-price-main-row">
+                    <div className="lp-price-left">
+                      <span className="lp-currency">₹</span>
+                      <span className="lp-amount">4,999</span>
+                      <span className="lp-period">/month</span>
+                    </div>
+                    <div className="lp-price-v-divider"></div>
+                    <div className="lp-price-right">
+                      <span className="lp-strike-price">Then ₹10,000/month</span>
+                      <span className="lp-after-users">After 100 Users</span>
+                    </div>
+                  </div>
+
+                  {/* Timeline Progress Bar */}
+                  <div className="lp-timeline-container">
+                    <div className="lp-timeline-line">
+                      <div className="lp-timeline-node node-left active">
+                        <div className="lp-node-dot"></div>
+                      </div>
+                      <div className="lp-timeline-node node-right">
+                        <div className="lp-node-dot"></div>
+                      </div>
+                    </div>
+                    <div className="lp-timeline-labels">
+                      <div className="lp-timeline-step left">
+                        <span className="step-range">1–100 Users</span>
+                        <span className="step-price gold-text">₹4,999/month</span>
+                        <span className="step-note">(Lifetime Launch)</span>
+                      </div>
+                      <div className="lp-timeline-step right">
+                        <span className="step-range">101+ Users</span>
+                        <span className="step-price">₹10,000/month</span>
+                        <span className="step-note">(Standard Pricing)</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Footer Bar: Seats & Countdown */}
+                  <div className="lp-footer-status-bar">
+                    <div className="lp-status-item seats">
+                      <span className="lp-status-icon">👥</span>
+                      <span className="lp-status-label">Seats Remaining:</span>
+                      <span className="lp-status-value gold-text">{seatsRemaining} / 100</span>
+                    </div>
+                    <div className="lp-status-divider"></div>
+                    <div className="lp-status-item timer">
+                      <span className="lp-status-icon">⌛</span>
+                      <div className="lp-timer-group">
+                        <span className="lp-status-label">Offer Ends In:</span>
+                        <span className="lp-timer-digits gold-text">
+                          {timeLeft.days} : {timeLeft.hours} : {timeLeft.minutes} : {timeLeft.seconds || '00'}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
       <section className="form-section">
         <div className="wrap">
           <div
@@ -412,7 +628,7 @@ export default function landing1() {
         </div>
       </footer>
 
-      <EarlyAccessNotification />
+      <EarlyAccessNotification onNotificationShown={handleNotificationShown} />
     </div>
   );
 }

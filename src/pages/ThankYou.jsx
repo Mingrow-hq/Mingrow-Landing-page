@@ -41,10 +41,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       </header>
 
       <main className="thankyou-main">
-        {/* Background Glow & Silhouettes */}
-        <div className="thankyou-bg-glow"></div>
-        <div className="thankyou-bg-silhouettes"></div>
-
         <div className="thankyou-card">
           <h1 className="thankyou-title">THANK YOU!</h1>
           
@@ -59,31 +55,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <p>you’re officially on the list.</p>
             <div className="thankyou-text-spacer"></div>
             <p>Our team will reach out to you soon with</p>
-            <p>exciting updates and early access.</p>
+            <p><span className="thankyou-purple-text">exciting updates</span> and <span className="thankyou-purple-text">early access</span>.</p>
           </div>
 
-          {/* Glowing Horizon Curve Arc */}
-          <div className="thankyou-horizon-container">
-            <svg className="thankyou-horizon-svg" viewBox="0 0 1000 120" preserveAspectRatio="none">
-              <defs>
-                <linearGradient id="horizonGlow" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="#8B4DFF" stopOpacity="0.05" />
-                  <stop offset="35%" stopColor="#A855F7" stopOpacity="0.7" />
-                  <stop offset="50%" stopColor="#E9D5FF" stopOpacity="1" />
-                  <stop offset="65%" stopColor="#A855F7" stopOpacity="0.7" />
-                  <stop offset="100%" stopColor="#8B4DFF" stopOpacity="0.05" />
-                </linearGradient>
-                <radialGradient id="centerBurst" cx="50%" cy="0%" r="50%">
-                  <stop offset="0%" stopColor="#F0ABFC" stopOpacity="0.9" />
-                  <stop offset="40%" stopColor="#9333EA" stopOpacity="0.4" />
-                  <stop offset="100%" stopColor="#000000" stopOpacity="0" />
-                </radialGradient>
-              </defs>
-              <ellipse cx="500" cy="-600" rx="900" ry="715" fill="url(#centerBurst)" />
-              <path d="M 0,110 Q 500,10 1000,110" fill="none" stroke="url(#horizonGlow)" strokeWidth="3.5" />
-            </svg>
-            <div className="thankyou-horizon-flare"></div>
-          </div>
+          {/* Spacer to push button comfortably below the horizon arc */}
+          <div className="thankyou-bottom-spacer"></div>
 
           {/* Join The Community Button with WhatsApp Icon */}
           <div className="thankyou-btn-wrap">

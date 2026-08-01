@@ -136,15 +136,15 @@ function AgentGroupsSection() {
 }
 
 const NOTIFICATIONS = [
-  { name: 'Sarah M.', location: 'San Francisco', action: 'requested Early Access', time: 'Just now', initial: 'S', color: '#8B4DFF' },
-  { name: 'David K.', location: 'London', action: 'joined Early Access waitlist', time: '2m ago', initial: 'D', color: '#36B37E' },
-  { name: 'Alex Chen', location: 'Singapore', action: 'requested Early Access', time: 'Just now', initial: 'A', color: '#F5B301' },
-  { name: 'Elena R.', location: 'Berlin', action: 'joined Early Access', time: '1m ago', initial: 'E', color: '#00B8D9' },
-  { name: 'Marcus V.', location: 'New York', action: 'requested Early Access', time: '3m ago', initial: 'M', color: '#FF5630' },
-  { name: 'Priya S.', location: 'Bengaluru', action: 'joined Early Access', time: '4m ago', initial: 'P', color: '#6554C0' },
-  { name: 'Liam O.', location: 'Dublin', action: 'requested Early Access', time: 'Just now', initial: 'L', color: '#FFAB00' },
-  { name: 'Sophia D.', location: 'Paris', action: 'joined Early Access', time: '2m ago', initial: 'S', color: '#36B37E' },
-  { name: 'Michael B.', location: 'Austin', action: 'requested Early Access', time: '5m ago', initial: 'M', color: '#8B4DFF' },
+  { name: 'Priya S.', location: 'Bengaluru', action: 'requested Early Access', time: 'Just now', initial: 'P', color: '#8B4DFF' },
+  { name: 'Aarav M.', location: 'Mumbai', action: 'joined Early Access waitlist', time: '2m ago', initial: 'A', color: '#36B37E' },
+  { name: 'Rohan S.', location: 'Delhi NCR', action: 'requested Early Access', time: 'Just now', initial: 'R', color: '#F5B301' },
+  { name: 'Ananya R.', location: 'Hyderabad', action: 'joined Early Access', time: '1m ago', initial: 'A', color: '#00B8D9' },
+  { name: 'Vikram P.', location: 'Pune', action: 'requested Early Access', time: '3m ago', initial: 'V', color: '#FF5630' },
+  { name: 'Sneha K.', location: 'Chennai', action: 'joined Early Access', time: '4m ago', initial: 'S', color: '#6554C0' },
+  { name: 'Aditya V.', location: 'Kolkata', action: 'requested Early Access', time: 'Just now', initial: 'A', color: '#FFAB00' },
+  { name: 'Kavya J.', location: 'Ahmedabad', action: 'joined Early Access', time: '2m ago', initial: 'K', color: '#36B37E' },
+  { name: 'Rahul N.', location: 'Jaipur', action: 'requested Early Access', time: '5m ago', initial: 'R', color: '#8B4DFF' },
 ];
 
 function EarlyAccessNotification() {
@@ -338,17 +338,34 @@ export default function landing1() {
       </header>
 
       <section className="hero">
-        <div 
-          className="reveal in" 
-          style={{ width: '90%', maxWidth: '1200px', margin: '0 auto', cursor: 'pointer' }} 
-          onClick={() => {
-            document.querySelector('.form-section')?.scrollIntoView({ behavior: 'smooth' });
-          }}
-        >
-          <picture style={{ display: 'block', width: '100%' }}>
+        <div className="hero-bg-container">
+          <picture className="hero-bg-picture">
             <source media="(max-width: 980px)" srcSet="/images/landing/hero%20IMAGE%20MOBILE%20VIEW.webp" />
-            <img src="/images/landing/hero_section.webp" alt="Mingrow Hero" style={{ width: '100%', height: 'auto', display: 'block', borderRadius: '12px' }} />
+            <img src="/images/landing/hero_section.webp" alt="Mingrow Hero Background" className="hero-bg-img" />
           </picture>
+          <div className="hero-overlay"></div>
+          
+          <div className="hero-content reveal in">
+            <h1 className="hero-title">
+              <span className="hero-title-line1">A New Era of</span>
+              <span className="hero-title-line2">
+                Business <span className="purple-gradient-text">Is Loading</span>
+              </span>
+            </h1>
+            <p className="hero-subtitle">
+              The next evolution of work isn't software.
+              <br />
+              It's something entirely different.
+            </p>
+            <button 
+              className="hero-cta-button"
+              onClick={() => {
+                document.querySelector('.form-section')?.scrollIntoView({ behavior: 'smooth' });
+              }}
+            >
+              Request Early Access <span className="cta-arrow">→</span>
+            </button>
+          </div>
         </div>
       </section>
 
@@ -356,8 +373,16 @@ export default function landing1() {
 
       <section className="agents-revel" style={{ padding: '0 0 60px 0' }}>
         <div className="wrap">
-          <div className="reveal in agents-revel-img-wrap" style={{ width: '100%', maxWidth: '1050px', margin: '0 auto' }}>
-            <img src="/images/landing/agents revel.webp" alt="Mingrow Agents Revel" style={{ width: '100%', height: 'auto', display: 'block', borderRadius: '16px' }} />
+          <div className="reveal in agents-revel-img-wrap" style={{ width: '100%', maxWidth: '1050px', margin: '0 auto', position: 'relative', borderRadius: '16px', overflow: 'hidden' }}>
+            <div className="agents-revel-overlay">
+              <h2 className="agents-revel-title">
+                They're <span className="highlight-purple">almost here.</span>
+              </h2>
+              <p className="agents-revel-subtitle">
+                Your future AI workforce arrives soon.
+              </p>
+            </div>
+            <img src="/images/landing/agents revel.webp" alt="They're almost here. Your future AI workforce arrives soon." style={{ width: '100%', height: 'auto', display: 'block' }} />
           </div>
         </div>
       </section>

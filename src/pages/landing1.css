@@ -3325,20 +3325,104 @@ body:has(.landing1-page-root) .sales-floating-wrapper {
     max-width: 100%;
   }
 
-  /* Fix status bar cut off on mobile */
+  /* Responsive overlay positioning for cropped MOBILE VIEW WITH BOX .png */
+  .landing1-page-root .lp-top-right-founder-badge {
+    top: 3.5%;
+    right: 4.5%;
+    padding: 4px 10px;
+    font-size: clamp(0.62rem, 2.2vw, 0.78rem);
+  }
+
+  .landing1-page-root .lp-center-globe-tag {
+    top: 15.5%;
+  }
+
+  .landing1-page-root .lp-agent-tag-count {
+    font-size: clamp(1rem, 3.8vw, 1.35rem);
+  }
+
+  .landing1-page-root .lp-agent-tag-sub {
+    font-size: clamp(0.75rem, 2.8vw, 1rem);
+  }
+
+  /* Overlay container over the purple glowing box on mobile */
+  .landing1-page-root .lp-box-content-overlay {
+    top: 32.5%;
+    left: 12.0%;
+    width: 76.0%;
+    bottom: 3.5%;
+    padding: clamp(6px, 2vw, 14px);
+    gap: 4px;
+  }
+
+  .landing1-page-root .lp-self-destruct-pill {
+    padding: 3px 10px;
+  }
+
+  .landing1-page-root .lp-self-destruct-text {
+    font-size: clamp(0.52rem, 2.2vw, 0.72rem) !important;
+    letter-spacing: 0.03em;
+  }
+
+  .landing1-page-root .lp-flame-icon {
+    font-size: clamp(0.7rem, 2.5vw, 0.9rem);
+  }
+
+  .landing1-page-root .lp-users-divider {
+    font-size: clamp(0.58rem, 2.3vw, 0.78rem) !important;
+  }
+
+  .landing1-page-root .lp-price-main-row {
+    padding: 0;
+  }
+
+  .landing1-page-root .lp-amount {
+    font-size: clamp(1.3rem, 5.5vw, 2.2rem) !important;
+  }
+
+  .landing1-page-root .lp-currency {
+    font-size: clamp(0.85rem, 3vw, 1.2rem) !important;
+  }
+
+  .landing1-page-root .lp-period {
+    font-size: clamp(0.6rem, 2.2vw, 0.8rem);
+  }
+
+  .landing1-page-root .lp-strike-price {
+    font-size: clamp(0.58rem, 2.2vw, 0.75rem);
+  }
+
+  .landing1-page-root .lp-after-users {
+    font-size: clamp(0.52rem, 2vw, 0.68rem);
+  }
+
+  .landing1-page-root .lp-timeline-step {
+    font-size: clamp(0.55rem, 2.2vw, 0.72rem) !important;
+  }
+
+  .landing1-page-root .step-note {
+    font-size: clamp(0.48rem, 1.8vw, 0.62rem) !important;
+  }
+
+  /* Status bar at bottom of glowing box */
   .landing1-page-root .lp-footer-status-bar {
-    flex-direction: column;
-    gap: 6px;
-    padding: 6px 10px;
-    align-items: flex-start;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 4px;
+    padding: clamp(4px, 1.5vw, 8px) clamp(6px, 2vw, 12px);
+    border-radius: 10px;
   }
 
   .landing1-page-root .lp-status-divider {
-    display: none;
+    display: block;
+    width: 1px;
+    height: 14px;
+    background: rgba(255, 255, 255, 0.25);
   }
 
   .landing1-page-root .lp-status-item {
-    gap: 4px;
+    gap: 3px;
     flex-wrap: nowrap;
   }
 
@@ -3346,46 +3430,22 @@ body:has(.landing1-page-root) .sales-floating-wrapper {
   .landing1-page-root .lp-status-value,
   .landing1-page-root .lp-timer-digits,
   .landing1-page-root .lp-status-icon {
-    font-size: 0.65rem !important;
+    font-size: clamp(0.52rem, 2.1vw, 0.7rem) !important;
   }
 
   .landing1-page-root .lp-timer-group {
     flex-direction: row;
-    gap: 3px;
+    gap: 2px;
   }
+}
 
-  /* Adjust overlay to fit smaller image on mobile */
-  .landing1-page-root .lp-box-content-overlay {
-    top: 36%;
-    left: 10%;
-    width: 80%;
-    bottom: 2%;
-    padding: 6px;
+@media (max-width: 380px) {
+  .landing1-page-root .lp-footer-status-bar {
+    flex-direction: column;
+    align-items: flex-start;
     gap: 4px;
   }
-
-  .landing1-page-root .lp-self-destruct-text {
-    font-size: 0.55rem !important;
-    letter-spacing: 0.03em;
-  }
-
-  .landing1-page-root .lp-users-divider {
-    font-size: 0.6rem !important;
-  }
-
-  .landing1-page-root .lp-amount {
-    font-size: clamp(1.3rem, 6vw, 1.8rem) !important;
-  }
-
-  .landing1-page-root .lp-currency {
-    font-size: clamp(0.85rem, 3vw, 1.1rem) !important;
-  }
-
-  .landing1-page-root .lp-timeline-step {
-    font-size: 0.55rem !important;
-  }
-
-  .landing1-page-root .lp-step-note {
-    font-size: 0.5rem !important;
+  .landing1-page-root .lp-status-divider {
+    display: none;
   }
 }

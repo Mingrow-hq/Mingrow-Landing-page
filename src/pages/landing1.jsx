@@ -494,11 +494,14 @@ export default function landing1() {
             {/* RIGHT COLUMN */}
             <div className="lp-right-col">
               <div className="lp-image-wrapper">
-                <img
-                  src="/images/landing/with box image.webp"
-                  alt="12 AI Agents. One Business OS."
-                  className="lp-box-bg-img"
-                />
+                <picture>
+                  <source media="(max-width: 980px)" srcSet="/images/landing/MOBILE%20VIEW%20WITH%20BOX%20.png" />
+                  <img
+                    src="/images/landing/with box image.webp"
+                    alt="12 AI Agents. One Business OS."
+                    className="lp-box-bg-img"
+                  />
+                </picture>
                 
                 {/* Top-Right FOUNDER OFFER Badge */}
                 <div className="lp-top-right-founder-badge">

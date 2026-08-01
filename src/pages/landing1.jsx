@@ -343,20 +343,8 @@ export default function landing1() {
             <source media="(max-width: 980px)" srcSet="/images/landing/hero%20IMAGE%20MOBILE%20VIEW.webp" />
             <img src="/images/landing/hero_section.webp" alt="A New Era of Business Is Loading - Mingrow" className="hero-bg-img" />
           </picture>
-          <div className="hero-overlay"></div>
-          
-          <div className="hero-content reveal in">
-            <h1 className="sr-only">A New Era of Business Is Loading</h1>
-            <p className="sr-only">The next evolution of work isn't software. It's something entirely different.</p>
-            <button 
-              className="hero-cta-button"
-              onClick={() => {
-                document.querySelector('.form-section')?.scrollIntoView({ behavior: 'smooth' });
-              }}
-            >
-              Request Early Access <span className="cta-arrow">→</span>
-            </button>
-          </div>
+          <h1 className="sr-only">A New Era of Business Is Loading</h1>
+          <p className="sr-only">The next evolution of work isn't software. It's something entirely different.</p>
         </div>
       </section>
 

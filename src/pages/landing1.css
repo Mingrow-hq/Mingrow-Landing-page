@@ -2453,8 +2453,8 @@ body:has(.landing1-page-root) .sales-floating-wrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-end;
-  padding: 140px 20px clamp(60px, 12vh, 120px);
+  justify-content: flex-start;
+  padding: clamp(380px, 55vh, 540px) 20px 80px;
   position: relative;
   overflow: hidden;
   z-index: 1;
@@ -2473,78 +2473,11 @@ body:has(.landing1-page-root) .sales-floating-wrapper {
   align-items: center;
 }
 
-.thankyou-title {
-  font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
-  font-size: clamp(42px, 7vw, 84px);
-  font-weight: 800;
-  letter-spacing: 0.03em;
-  line-height: 1.05;
-  margin: 0 0 16px 0;
-  background: linear-gradient(180deg, #FFFFFF 0%, #E9D5FF 35%, #C084FC 70%, #8B3DFF 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 0 25px rgba(168, 85, 247, 0.65)) drop-shadow(0 0 50px rgba(139, 61, 255, 0.4));
-}
-
-.thankyou-subtitle-wrap {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-  margin-bottom: 28px;
-  width: 100%;
-  max-width: 480px;
-}
-
-.thankyou-sub-line {
-  flex: 1;
-  height: 1px;
-  background: linear-gradient(90deg, transparent 0%, rgba(192, 132, 252, 0.75) 50%, transparent 100%);
-}
-
-.thankyou-subtitle {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: clamp(12px, 1.8vw, 15px);
-  font-weight: 700;
-  letter-spacing: 0.28em;
-  color: #C084FC;
-  text-transform: uppercase;
-  text-shadow: 0 0 16px rgba(192, 132, 252, 0.65);
-}
-
-.thankyou-body-text {
-  color: rgba(243, 238, 255, 0.92);
-  font-size: clamp(15px, 2.1vw, 18px);
-  line-height: 1.6;
-  font-weight: 400;
-  max-width: 600px;
-  margin: 0 auto;
-  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.9);
-}
-
-.thankyou-body-text p {
-  margin: 0;
-}
-
-.thankyou-purple-text {
-  color: #C084FC;
-  font-weight: 600;
-  text-shadow: 0 0 10px rgba(192, 132, 252, 0.5);
-}
-
-.thankyou-text-spacer {
-  height: 14px;
-}
-
-.thankyou-bottom-spacer {
-  height: clamp(30px, 5vh, 60px);
-}
-
 /* Join Button with WhatsApp Icon */
 .thankyou-btn-wrap {
   position: relative;
   z-index: 5;
-  margin-top: 8px;
+  margin-top: 20px;
 }
 
 .thankyou-whatsapp-btn {
@@ -2613,32 +2546,7 @@ body:has(.landing1-page-root) .sales-floating-wrapper {
     background: #06020c url('/images/landing/mobile%20thankyou.webp') center top / cover no-repeat;
   }
   .thankyou-main {
-    padding: 120px 16px clamp(50px, 10vh, 100px);
-  }
-  .thankyou-title {
-    font-size: clamp(32px, 8.5vw, 44px);
-    letter-spacing: 0.03em;
-    margin-bottom: 10px;
-  }
-  .thankyou-subtitle-wrap {
-    max-width: 280px;
-    gap: 8px;
-    margin-bottom: 24px;
-  }
-  .thankyou-subtitle {
-    font-size: 11px;
-    letter-spacing: 0.22em;
-  }
-  .thankyou-body-text {
-    font-size: 14.5px;
-    line-height: 1.55;
-    padding: 0 12px;
-  }
-  .thankyou-text-spacer {
-    height: 10px;
-  }
-  .thankyou-bottom-spacer {
-    height: clamp(30px, 6vh, 70px);
+    padding: clamp(340px, 52vh, 480px) 16px 60px;
   }
   .thankyou-whatsapp-btn {
     padding: 13px 26px;

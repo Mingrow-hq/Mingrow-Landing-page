@@ -568,8 +568,8 @@ export default function landing1() {
                     </div>
                   </div>
 
-                  {/* Footer Bar: Seats & Countdown */}
-                  <div className="lp-footer-status-bar">
+                  {/* Footer Bar: Seats & Countdown — hidden on mobile, shown on desktop */}
+                  <div className="lp-footer-status-bar lp-footer-status-bar-desktop">
                     <div className="lp-status-item seats">
                       <span className="lp-status-icon">👥</span>
                       <span className="lp-status-label">Seats Remaining:</span>
@@ -590,6 +590,26 @@ export default function landing1() {
                 </div>
 
               </div>
+
+              {/* Footer Bar: Seats & Countdown — mobile only, outside image wrapper to avoid clipping */}
+              <div className="lp-footer-status-bar lp-footer-status-bar-mobile">
+                <div className="lp-status-item seats">
+                  <span className="lp-status-icon">👥</span>
+                  <span className="lp-status-label">Seats Remaining:</span>
+                  <span className="lp-status-value gold-text">{seatsRemaining} / 100</span>
+                </div>
+                <div className="lp-status-divider"></div>
+                <div className="lp-status-item timer">
+                  <span className="lp-status-icon">⌛</span>
+                  <div className="lp-timer-group">
+                    <span className="lp-status-label">Offer Ends In:</span>
+                    <span className="lp-timer-digits gold-text">
+                      {timeLeft.days} : {timeLeft.hours} : {timeLeft.minutes} : {timeLeft.seconds || '00'}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
             </div>
 
           </div>

@@ -2807,6 +2807,13 @@ body:has(.landing1-page-root) .sales-floating-wrapper {
   margin-bottom: 18px;
   color: #ffffff;
   white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  border: 2px solid #FACC15;
+  border-radius: 9999px;
+  padding: 8px 28px;
+  box-shadow: 0 0 20px rgba(250, 204, 21, 0.35);
 }
 
 .landing1-page-root .lp-subtitle {
@@ -3194,6 +3201,11 @@ body:has(.landing1-page-root) .sales-floating-wrapper {
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
 }
 
+/* By default, hide the mobile-only bar; show the desktop one */
+.landing1-page-root .lp-footer-status-bar-mobile {
+  display: none;
+}
+
 .landing1-page-root .lp-status-item {
   display: flex;
   align-items: center;
@@ -3257,15 +3269,30 @@ body:has(.landing1-page-root) .sales-floating-wrapper {
 
 @media (max-width: 640px) {
   .landing1-page-root .lp-title {
-    font-size: clamp(1.4rem, 7vw, 1.85rem);
+    font-size: clamp(1.4rem, 6.5vw, 2rem);
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
     white-space: nowrap !important;
     text-align: center;
-    width: 100%;
-    display: block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: 2px solid #FACC15;
+    border-radius: 9999px;
+    padding: 6px 22px;
+    margin: 0 auto 20px auto;
+    box-shadow: 0 0 20px rgba(250, 204, 21, 0.4);
   }
 
   .landing1-page-root .lp-title .purple-gradient-text {
     display: inline !important;
+    font-weight: 800;
+    background: linear-gradient(135deg, #C084FC 0%, #A855F7 50%, #9333EA 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 25px rgba(168, 85, 247, 0.5);
   }
 
   .landing1-page-root .lp-left-col {
@@ -3404,14 +3431,24 @@ body:has(.landing1-page-root) .sales-floating-wrapper {
     font-size: clamp(0.48rem, 1.8vw, 0.62rem) !important;
   }
 
-  /* Status bar at bottom of glowing box */
-  .landing1-page-root .lp-footer-status-bar {
+  /* On mobile: hide the in-overlay desktop bar, show the external mobile bar below image */
+  .landing1-page-root .lp-footer-status-bar-desktop {
+    display: none !important;
+  }
+
+  .landing1-page-root .lp-footer-status-bar-mobile {
+    display: flex !important;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
     gap: 4px;
-    padding: clamp(4px, 1.5vw, 8px) clamp(6px, 2vw, 12px);
+    padding: clamp(6px, 2vw, 10px) clamp(8px, 3vw, 14px);
     border-radius: 10px;
+    margin-top: 10px;
+    background: rgba(13, 6, 26, 0.92);
+    border: 1px solid rgba(139, 77, 255, 0.4);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+    width: 100%;
   }
 
   .landing1-page-root .lp-status-divider {

@@ -42,24 +42,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
       <main className="thankyou-main">
         <div className="thankyou-card">
-          <h1 className="thankyou-title">THANK YOU!</h1>
-          
-          <div className="thankyou-subtitle-wrap">
-            <span className="thankyou-sub-line"></span>
-            <span className="thankyou-subtitle">YOU’RE ALL SET!</span>
-            <span className="thankyou-sub-line"></span>
-          </div>
-
-          <div className="thankyou-body-text">
-            <p>We’ve received your details and</p>
-            <p>you’re officially on the list.</p>
-            <div className="thankyou-text-spacer"></div>
-            <p>Our team will reach out to you soon with</p>
-            <p><span className="thankyou-purple-text">exciting updates</span> and <span className="thankyou-purple-text">early access</span>.</p>
-          </div>
-
-          {/* Spacer to push button comfortably below the horizon arc */}
-          <div className="thankyou-bottom-spacer"></div>
+          <h1 className="sr-only">THANK YOU! YOU’RE ALL SET!</h1>
+          <p className="sr-only">We’ve received your details and you’re officially on the list. Our team will reach out to you soon with exciting updates and early access.</p>
 
           {/* Join The Community Button with WhatsApp Icon */}
           <div className="thankyou-btn-wrap">

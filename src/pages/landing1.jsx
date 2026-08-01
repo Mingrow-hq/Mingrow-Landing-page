@@ -246,8 +246,8 @@ export default function landing1() {
     const handleMessage = (event) => {
       // Only redirect if explicitly sent form submission message from iframe
       if (
-        event.data === 'form_submitted' || 
-        event.data?.type === 'form_submitted' || 
+        event.data === 'form_submitted' ||
+        event.data?.type === 'form_submitted' ||
         event.data?.status === 'success' ||
         (typeof event.data === 'string' && (event.data.includes('form_submitted') || event.data.includes('submitted')))
       ) {
@@ -264,7 +264,7 @@ export default function landing1() {
     const offset = 3 * 24 * 60 * 60 * 1000;
     const targetDateKey = 'landing1_countdown_target_3days_v1';
     let targetTime = localStorage.getItem(targetDateKey);
-    
+
     if (!targetTime) {
       targetTime = (Date.now() + offset).toString();
       localStorage.setItem(targetDateKey, targetTime);
@@ -353,12 +353,11 @@ export default function landing1() {
               </span>
             </h1>
             <p className="hero-subtitle">
-              <span className="hero-sub-block">The next evolution of work </span>
-              <span className="hero-sub-block">isn't software.</span>
+              <span className="hero-sub-line1">The next evolution of work isn&apos;t software.</span>
               <br className="hero-sub-desktop-br" />
-              <span className="hero-sub-block">It's something entirely different.</span>
+              <span className="hero-sub-line2">It&apos;s something entirely different.</span>
             </p>
-            <button 
+            <button
               className="hero-cta-button"
               onClick={() => document.querySelector('.form-section')?.scrollIntoView({ behavior: 'smooth' })}
             >
@@ -380,8 +379,8 @@ export default function landing1() {
 
       <section className="form-section">
         <div className="wrap">
-          <div 
-            className="reveal in" 
+          <div
+            className="reveal in"
             style={{ width: '100%', maxWidth: '600px', margin: '0 auto', display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative' }}
             onClick={() => {
               // Arm redirect on form submit click
@@ -393,11 +392,11 @@ export default function landing1() {
             }}
           >
             <h2 className="form-section-heading">Get Early Access From Here</h2>
-            <iframe 
+            <iframe
               className="wtl-form-iframe"
-              src="https://mingrow.cloud/forms/wtl/f0e3930fe031c9bcee1723a8d5a78587" 
-              frameBorder="0" 
-              sandbox="allow-top-navigation allow-forms allow-scripts allow-same-origin allow-popups allow-top-navigation-by-user-activation" 
+              src="https://mingrow.cloud/forms/wtl/f0e3930fe031c9bcee1723a8d5a78587"
+              frameBorder="0"
+              sandbox="allow-top-navigation allow-forms allow-scripts allow-same-origin allow-popups allow-top-navigation-by-user-activation"
               allowFullScreen
             ></iframe>
           </div>

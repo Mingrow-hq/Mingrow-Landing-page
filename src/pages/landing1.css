@@ -446,6 +446,7 @@
   color: #D1D5DB;
   line-height: 1.15;
   letter-spacing: -0.01em;
+  display: block;
 }
 
 .landing1-page-root .hero-title-line2 {
@@ -454,6 +455,11 @@
   color: #FFFFFF;
   line-height: 1.1;
   margin-top: 2px;
+  display: block;
+}
+
+.landing1-page-root .hero-title-word-business {
+  display: inline;
 }
 
 .landing1-page-root .purple-gradient-text {
@@ -475,12 +481,13 @@
   text-align: center;
 }
 
-.landing1-page-root .hero-sub-block {
-  display: inline;
+.landing1-page-root .hero-sub-line1,
+.landing1-page-root .hero-sub-line2 {
+  display: block;
 }
 
 .landing1-page-root .hero-sub-desktop-br {
-  display: inline;
+  display: none;
 }
 
 .landing1-page-root .hero-cta-button {
@@ -1690,7 +1697,8 @@
     margin-bottom: 22px;
     max-width: 320px;
   }
-  .landing1-page-root .hero-sub-block {
+  .landing1-page-root .hero-sub-line1,
+  .landing1-page-root .hero-sub-line2 {
     display: block;
   }
   .landing1-page-root .hero-sub-desktop-br {

@@ -3324,5 +3324,68 @@ body:has(.landing1-page-root) .sales-floating-wrapper {
   .landing1-page-root .lp-cta-subtext {
     max-width: 100%;
   }
-}
 
+  /* Fix status bar cut off on mobile */
+  .landing1-page-root .lp-footer-status-bar {
+    flex-direction: column;
+    gap: 6px;
+    padding: 6px 10px;
+    align-items: flex-start;
+  }
+
+  .landing1-page-root .lp-status-divider {
+    display: none;
+  }
+
+  .landing1-page-root .lp-status-item {
+    gap: 4px;
+    flex-wrap: nowrap;
+  }
+
+  .landing1-page-root .lp-status-label,
+  .landing1-page-root .lp-status-value,
+  .landing1-page-root .lp-timer-digits,
+  .landing1-page-root .lp-status-icon {
+    font-size: 0.65rem !important;
+  }
+
+  .landing1-page-root .lp-timer-group {
+    flex-direction: row;
+    gap: 3px;
+  }
+
+  /* Adjust overlay to fit smaller image on mobile */
+  .landing1-page-root .lp-box-content-overlay {
+    top: 36%;
+    left: 10%;
+    width: 80%;
+    bottom: 2%;
+    padding: 6px;
+    gap: 4px;
+  }
+
+  .landing1-page-root .lp-self-destruct-text {
+    font-size: 0.55rem !important;
+    letter-spacing: 0.03em;
+  }
+
+  .landing1-page-root .lp-users-divider {
+    font-size: 0.6rem !important;
+  }
+
+  .landing1-page-root .lp-amount {
+    font-size: clamp(1.3rem, 6vw, 1.8rem) !important;
+  }
+
+  .landing1-page-root .lp-currency {
+    font-size: clamp(0.85rem, 3vw, 1.1rem) !important;
+  }
+
+  .landing1-page-root .lp-timeline-step {
+    font-size: 0.55rem !important;
+  }
+
+  .landing1-page-root .lp-step-note {
+    font-size: 0.5rem !important;
+  }
+}

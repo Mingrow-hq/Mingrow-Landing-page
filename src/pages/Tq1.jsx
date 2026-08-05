@@ -22,6 +22,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       gtmNoscript.innerHTML = `<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KZNCHHFT" height="0" width="0" style="display:none;visibility:hidden"></iframe>`;
       document.body.appendChild(gtmNoscript);
     }
+
+    // Inject Google Ads conversion event script in <head>
+    if (!document.getElementById('gtag-ads-conversion')) {
+      const gtagScript = document.createElement('script');
+      gtagScript.id = 'gtag-ads-conversion';
+      gtagScript.text = `if (typeof gtag === 'function') {
+  gtag('event', 'ads_conversion_submit_lead_form', {});
+}`;
+      document.head.appendChild(gtagScript);
+    }
   }, []);
 
   return (

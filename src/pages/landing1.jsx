@@ -221,7 +221,7 @@ function EarlyAccessNotification({ onNotificationShown }) {
       onMouseEnter={() => { isHovered.current = true; }}
       onMouseLeave={() => { isHovered.current = false; }}
       onClick={() => {
-        document.querySelector('.form-section')?.scrollIntoView({ behavior: 'smooth' });
+        document.getElementById('founder-qualification-form')?.scrollIntoView({ behavior: 'smooth' });
       }}
       role="button"
       tabIndex={0}
@@ -258,6 +258,13 @@ function EarlyAccessNotification({ onNotificationShown }) {
 export default function landing1() {
   const [scrolled, setScrolled] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [qualStep, setQualStep] = useState(1);
+  const [qualAnswers, setQualAnswers] = useState({
+    step1: '',
+    step2: '',
+    step3: '',
+    step4: ''
+  });
   const [timeLeft, setTimeLeft] = useState({ days: '30', hours: '00', minutes: '00', seconds: '00' });
   const [seatsRemaining, setSeatsRemaining] = useState(() => {
     const saved = localStorage.getItem('mingrow_seats_remaining_v2');
@@ -379,31 +386,86 @@ export default function landing1() {
       </header>
 
       <section className="hero">
-        <div className="hero-bg-container">
-          <picture className="hero-bg-picture">
-            <source media="(max-width: 980px)" srcSet="/images/landing/hero%20IMAGE%20MOBILE%20VIEW.webp" />
-            <img src="/images/landing/hero_section.webp" alt="A New Era of Business Is Loading - Mingrow" className="hero-bg-img" />
-          </picture>
-          <div className="hero-overlay"></div>
-          <div className="hero-content">
-            <h1 className="hero-title">
-              <span className="hero-title-line1">A New Era of</span>
-              <span className="hero-title-line2">
-                <span className="hero-title-word-business">Business </span>
-                <span className="purple-gradient-text">Is Loading</span>
-              </span>
-            </h1>
-            <p className="hero-subtitle">
-              <span className="hero-sub-line1">The next evolution of work isn&apos;t software.</span>
-              <br className="hero-sub-desktop-br" />
-              <span className="hero-sub-line2">It&apos;s something entirely different.</span>
-            </p>
-            <button
-              className="hero-cta-button"
-              onClick={() => document.querySelector('.form-section')?.scrollIntoView({ behavior: 'smooth' })}
-            >
-              Request Early Access <span className="cta-arrow">→</span>
-            </button>
+        <div className="hero-container">
+          {/* Full-width centered heading at top */}
+          <h1 className="hero-heading">
+            Your Entire Business.<br />
+            Powered by One <span className="hero-purple-gradient">AI Workforce.</span>
+          </h1>
+
+          <div className="hero-grid">
+            {/* Left Column: Image */}
+            <div className="hero-left">
+              <img
+                src="/images/landing1/hero section_new.webp"
+                alt="Mingrow AI Workforce"
+                className="hero-image"
+              />
+            </div>
+
+            {/* Right Column: Feature List & CTA */}
+            <div className="hero-right">
+
+              <div className="hero-features-list">
+                <div className="hero-feature-item">
+                  <div className="hero-feature-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                      <circle cx="12" cy="12" r="10"/>
+                      <polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                  </div>
+                  <span className="hero-feature-text">
+                    Works <strong className="highlight-yellow">24/7</strong> without breaks
+                  </span>
+                </div>
+
+                <div className="hero-feature-item">
+                  <div className="hero-feature-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                      <line x1="12" y1="1" x2="12" y2="23"/>
+                      <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                    </svg>
+                  </div>
+                  <span className="hero-feature-text">
+                    Costs <strong className="highlight-yellow">less</strong> than hiring one employee
+                  </span>
+                </div>
+
+                <div className="hero-feature-item">
+                  <div className="hero-feature-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                      <line x1="18" y1="20" x2="18" y2="10"/>
+                      <line x1="12" y1="20" x2="12" y2="4"/>
+                      <line x1="6" y1="20" x2="6" y2="14"/>
+                      <polyline points="18 10 12 4 6 14"/>
+                    </svg>
+                  </div>
+                  <span className="hero-feature-text">
+                    Scales with your business <strong className="highlight-yellow">instantly</strong>
+                  </span>
+                </div>
+
+                <div className="hero-feature-item">
+                  <div className="hero-feature-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                      <path d="M2 17l10 5 10-5"/>
+                      <path d="M2 12l10 5 10-5"/>
+                    </svg>
+                  </div>
+                  <span className="hero-feature-text">
+                    One platform. <strong className="highlight-yellow">Every department.</strong>
+                  </span>
+                </div>
+              </div>
+
+              <button
+                className="hero-hire-cta"
+                onClick={() => document.getElementById('founder-qualification-form')?.scrollIntoView({ behavior: 'smooth' })}
+              >
+                Hire My AI Workforce <span className="cta-arrow">→</span>
+              </button>
+            </div>
           </div>
         </div>
       </section>
@@ -482,7 +544,7 @@ export default function landing1() {
               <div className="lp-cta-row">
                 <button
                   className="lp-cta-btn"
-                  onClick={() => document.querySelector('.form-section')?.scrollIntoView({ behavior: 'smooth' })}
+                  onClick={() => document.getElementById('founder-qualification-form')?.scrollIntoView({ behavior: 'smooth' })}
                 >
                   Become a Founding Company <span className="arrow">→</span>
                 </button>
@@ -613,6 +675,237 @@ export default function landing1() {
             </div>
 
           </div>
+        </div>
+      </section>
+
+      {/* FOUNDER QUALIFICATION SECTION */}
+      <section id="founder-qualification-form" className="lp1-qualification-section">
+        <div className="lp1-qual-container">
+          
+          {/* Badge */}
+          <div className="lp1-qual-badge-wrap">
+            <div className="lp1-qual-badge">
+              <span className="lp1-qual-badge-icon">⚡</span>
+              <span>FOUNDER QUALIFICATION</span>
+            </div>
+          </div>
+
+          {/* Heading */}
+          <h2 className="lp1-qual-title" style={{ whiteSpace: 'nowrap' }}>
+            Check Your Eligibility for <span className="lp1-gold-gradient">Founder Offer</span>
+          </h2>
+
+          {/* Qualification Card */}
+          <div className="lp1-qual-card">
+            
+            {/* Header: Step Info & Progress Bar */}
+            <div className="lp1-qual-header">
+              <div className="lp1-qual-step-info">
+                <span className="lp1-qual-step-text">
+                  {typeof qualStep === 'number' ? `STEP ${qualStep} OF 5` : 'QUALIFICATION'}
+                </span>
+                <span className="lp1-qual-percentage">
+                  {typeof qualStep === 'number' ? `${(qualStep / 5) * 100}%` : '0%'}
+                </span>
+              </div>
+              <div className="lp1-qual-progress-track">
+                <div 
+                  className="lp1-qual-progress-fill" 
+                  style={{ width: typeof qualStep === 'number' ? `${(qualStep / 5) * 100}%` : '0%' }}
+                ></div>
+              </div>
+            </div>
+
+            {/* Step Content */}
+            <div className="lp1-qual-body">
+              {qualStep === 'not_eligible' && (
+                <div className="lp1-qual-step-content" style={{ textAlign: 'center', padding: '20px 0' }}>
+                  <div className="lp1-qual-cat-label">STATUS</div>
+                  <h3 className="lp1-qual-question" style={{ marginBottom: '16px' }}>
+                    Thank you for your time.
+                  </h3>
+                  <p style={{ color: 'rgba(255,255,255,0.75)', fontSize: '1.05rem', marginBottom: '0px' }}>
+                    You are not eligible for this offer.
+                  </p>
+                </div>
+              )}
+
+              {qualStep === 1 && (
+                <div className="lp1-qual-step-content">
+                  <div className="lp1-qual-cat-label">BUDGET</div>
+                  <h3 className="lp1-qual-question">Are you ready for 7 day free trial?</h3>
+                  <div className="lp1-qual-options">
+                    <button 
+                      className={`lp1-qual-option ${qualAnswers.step1 === 'yes' ? 'selected' : ''}`}
+                      onClick={() => {
+                        setQualAnswers(prev => ({ ...prev, step1: 'yes' }));
+                        setQualStep(2);
+                      }}
+                    >
+                      <span>Yes</span>
+                      {qualAnswers.step1 === 'yes' && (
+                        <span className="lp1-qual-check-icon">
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="M9 12l2 2 4-4"></path>
+                          </svg>
+                        </span>
+                      )}
+                    </button>
+                    <button 
+                      className={`lp1-qual-option ${qualAnswers.step1 === 'no' ? 'selected' : ''}`}
+                      onClick={() => {
+                        setQualAnswers(prev => ({ ...prev, step1: 'no' }));
+                        setQualStep('not_eligible');
+                      }}
+                    >
+                      <span>No</span>
+                      {qualAnswers.step1 === 'no' && (
+                        <span className="lp1-qual-check-icon">
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="M9 12l2 2 4-4"></path>
+                          </svg>
+                        </span>
+                      )}
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {qualStep === 2 && (
+                <div className="lp1-qual-step-content">
+                  <div className="lp1-qual-cat-label">AUTHORITY</div>
+                  <h3 className="lp1-qual-question">Are you the decision maker?</h3>
+                  <div className="lp1-qual-options">
+                    {['Yes', 'Need Approval'].map((opt) => (
+                      <button 
+                        key={opt}
+                        className={`lp1-qual-option ${qualAnswers.step2 === opt ? 'selected' : ''}`}
+                        onClick={() => {
+                          setQualAnswers(prev => ({ ...prev, step2: opt }));
+                          setQualStep(3);
+                        }}
+                      >
+                        <span>{opt}</span>
+                        {qualAnswers.step2 === opt && (
+                          <span className="lp1-qual-check-icon">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                              <circle cx="12" cy="12" r="10"></circle>
+                              <path d="M9 12l2 2 4-4"></path>
+                            </svg>
+                          </span>
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                  <button className="lp1-qual-back-btn" onClick={() => setQualStep(1)}>
+                    ← Back
+                  </button>
+                </div>
+              )}
+
+              {qualStep === 3 && (
+                <div className="lp1-qual-step-content">
+                  <div className="lp1-qual-cat-label">NEED</div>
+                  <h3 className="lp1-qual-question">What is your biggest challenge?</h3>
+                  <div className="lp1-qual-grid-2x2">
+                    {['More Leads', 'Save Time', 'Reduce Costs', 'Automation', 'Growth'].map((opt) => (
+                      <button 
+                        key={opt}
+                        className={`lp1-qual-option ${qualAnswers.step3 === opt ? 'selected' : ''}`}
+                        onClick={() => {
+                          setQualAnswers(prev => ({ ...prev, step3: opt }));
+                          setQualStep(4);
+                        }}
+                      >
+                        <span>{opt}</span>
+                        {qualAnswers.step3 === opt && (
+                          <span className="lp1-qual-check-icon">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                              <circle cx="12" cy="12" r="10"></circle>
+                              <path d="M9 12l2 2 4-4"></path>
+                            </svg>
+                          </span>
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                  <button className="lp1-qual-back-btn" onClick={() => setQualStep(2)}>
+                    ← Back
+                  </button>
+                </div>
+              )}
+
+              {qualStep === 4 && (
+                <div className="lp1-qual-step-content">
+                  <div className="lp1-qual-cat-label">TIMELINE</div>
+                  <h3 className="lp1-qual-question">When are you planning to start?</h3>
+                  <div className="lp1-qual-grid-2x2">
+                    {['Immediately', 'Just Exploring'].map((opt) => (
+                      <button 
+                        key={opt}
+                        className={`lp1-qual-option ${qualAnswers.step4 === opt ? 'selected' : ''}`}
+                        onClick={() => {
+                          setQualAnswers(prev => ({ ...prev, step4: opt }));
+                          if (opt === 'Just Exploring') {
+                            setQualStep('not_eligible');
+                          } else {
+                            setQualStep(5);
+                          }
+                        }}
+                      >
+                        <span>{opt}</span>
+                        {qualAnswers.step4 === opt && (
+                          <span className="lp1-qual-check-icon">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                              <circle cx="12" cy="12" r="10"></circle>
+                              <path d="M9 12l2 2 4-4"></path>
+                            </svg>
+                          </span>
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                  <button className="lp1-qual-back-btn" onClick={() => setQualStep(3)}>
+                    ← Back
+                  </button>
+                </div>
+              )}
+
+              {qualStep === 5 && (
+                <div className="lp1-qual-step-content">
+                  <div className="lp1-qual-cat-label">YOUR DETAILS</div>
+                  <h3 className="lp1-qual-question" style={{ marginBottom: '20px' }}>Where should we send your result?</h3>
+                  <div 
+                    style={{ width: '100%', maxWidth: '600px', margin: '0 auto', position: 'relative' }}
+                    onClick={() => {
+                      if (!window._submitArmTimer) {
+                        window._submitArmTimer = setTimeout(() => {
+                          window.location.href = '/thnakyou';
+                        }, 1200);
+                      }
+                    }}
+                  >
+                    <iframe 
+                      width="100%" 
+                      height="520" 
+                      src="https://mingrow.cloud/forms/wtl/8701f87cf904b05e1191857c3f0f94bd" 
+                      frameBorder="0" 
+                      sandbox="allow-top-navigation allow-forms allow-scripts allow-same-origin allow-popups" 
+                      allowFullScreen
+                      style={{ border: 'none', borderRadius: '12px', display: 'block', maxWidth: '100%' }}
+                    ></iframe>
+                  </div>
+                  <button className="lp1-qual-back-btn" style={{ marginTop: '20px' }} onClick={() => setQualStep(4)}>
+                    ← Back
+                  </button>
+                </div>
+              )}
+            </div>
+
+          </div>
+
         </div>
       </section>
 

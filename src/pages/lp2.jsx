@@ -375,24 +375,21 @@ export default function Lp2() {
             {/* Left Hero Content Section */}
             <div className="lp1-hero-left">
 
-              {/* Top Image with overlaid Title */}
+              {/* Top Image */}
               <div className="lp1-hero-img-wrapper">
                 <img
                   src="/images/landing1/lp2 hero.webp"
                   alt="Mingrow AI Workforce"
                   className="lp1-hero-img"
                 />
-                <div className="lp1-hero-img-gradient-overlay" />
-                <h1 className="lp1-hero-title-overlay">
-                  Hire an AI Workforce<br />
-                  for Just <span className="lp1-gold-highlight">$99/Month</span>
-                </h1>
               </div>
 
-              {/* Description */}
-              <p className="lp1-hero-desc">
-                Meet <span className="lp1-brand-highlight">Mingrow</span> — the AI-powered Business Operating System where your AI workforce automates Sales, CRM, HR, Finance, Projects and Operations while you focus on growing your business.
-              </p>
+              {/* Title Below Image */}
+              <h1 className="lp1-hero-title">
+                Hire an AI Workforce<br />
+                for Just <span className="lp1-gold-highlight">$99/Month</span>
+              </h1>
+
 
               {/* CTA Action Buttons */}
               <div className="lp1-cta-buttons">

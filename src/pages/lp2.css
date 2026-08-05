@@ -182,6 +182,15 @@
   text-shadow: 0 4px 20px rgba(0, 0, 0, 0.95);
 }
 
+.lp1-hero-title {
+  font-size: 3.2rem;
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+  margin: 28px 0 28px 0;
+}
+
 @media (max-width: 768px) {
   .lp1-hero-left {
     text-align: center;
@@ -194,13 +203,28 @@
     right: 16px;
     text-align: center;
   }
+  .lp1-hero-title {
+    font-size: 2.1rem;
+    text-align: center;
+    margin: 24px 0 16px 0;
+    line-height: 1.2;
+  }
   .lp1-hero-desc {
     text-align: center;
     margin: 24px auto 0 auto;
   }
   .lp1-cta-buttons {
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
     width: 100%;
+    gap: 12px;
+  }
+  .lp1-cta-buttons .lp1-primary-btn,
+  .lp1-cta-buttons .lp1-secondary-btn {
+    width: 100%;
+    max-width: 320px;
+    justify-content: center;
   }
 }
 

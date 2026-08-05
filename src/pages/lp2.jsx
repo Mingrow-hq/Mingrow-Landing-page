@@ -538,13 +538,13 @@ export default function Lp2() {
             {/* Left Video Container */}
             <div className="lp1-video-card">
               <div className="lp1-video-placeholder">
-                <button className="lp1-play-btn" aria-label="Play video">
-                  <div className="lp1-play-icon-inner">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M8 5V19L19 12L8 5Z" fill="currentColor"/>
-                    </svg>
-                  </div>
-                </button>
+                <video
+                  className="lp1-demo-video"
+                  src="/Landing.mp4"
+                  controls
+                  playsInline
+                  preload="metadata"
+                />
               </div>
             </div>
 

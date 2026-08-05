@@ -945,7 +945,7 @@ export default function Lp2() {
           </p>
 
           {/* Comparison Table Card */}
-          <div className="lp1-pcard" style={{ maxWidth: '850px', margin: '0 auto 40px auto', padding: '36px 44px' }}>
+          <div className="lp1-pcard lp1-compare-table-card">
             <table className="lp1-compare-table">
               <thead>
                 <tr>
@@ -1373,7 +1373,7 @@ export default function Lp2() {
               {qualStep === 1 && (
                 <div className="lp1-qual-step-content">
                   <div className="lp1-qual-cat-label">BUDGET</div>
-                  <h3 className="lp1-qual-question">Are you ready for 7 day free trial?</h3>
+                  <h3 className="lp1-qual-question">Are you ready to pay $99 ?</h3>
                   <div className="lp1-qual-options">
                     <button 
                       className={`lp1-qual-option ${qualAnswers.step1 === 'yes' ? 'selected' : ''}`}

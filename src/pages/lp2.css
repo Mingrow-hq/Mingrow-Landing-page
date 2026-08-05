@@ -1444,6 +1444,12 @@
 }
 
 /* Comparison Table Card */
+.lp1-compare-table-card {
+  max-width: 850px;
+  margin: 0 auto 40px auto;
+  padding: 36px 44px;
+}
+
 .lp1-compare-table {
   width: 100%;
   border-collapse: collapse;
@@ -2691,29 +2697,41 @@
     max-width: 100%;
   }
 
-  /* Comparison Table — horizontal scroll on small screens */
-  .lp1-table-card {
+  /* Comparison Table — mobile optimized */
+  .lp1-compare-table-card {
+    padding: 16px 8px;
+    margin: 0 auto 30px auto;
+    border-radius: 16px;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
-    padding: 16px;
   }
 
   .lp1-compare-table {
     font-size: 0.78rem;
-    min-width: 340px;
+    width: 100%;
   }
 
   .lp1-compare-table th {
-    font-size: 0.68rem;
-    padding: 10px 8px;
+    font-size: 0.66rem;
+    padding: 8px 4px;
+    letter-spacing: -0.01em;
   }
 
   .lp1-compare-table td {
-    padding: 8px;
+    padding: 8px 4px;
+    font-size: 0.76rem;
   }
 
   .td-feature {
-    font-size: 0.78rem;
+    font-size: 0.76rem;
+  }
+
+  .td-feature .icon {
+    margin-right: 4px;
+  }
+
+  .td-other, .td-mingrow {
+    font-size: 0.76rem;
   }
 
   /* Main Price Card */

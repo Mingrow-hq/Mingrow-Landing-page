@@ -486,15 +486,6 @@ export default function landing1() {
                 <span className="lp1-stat-label">Workflow<br />Accuracy</span>
               </div>
             </div>
-
-            <div className="lp1-stat-item">
-              <div className="lp1-stat-icon-wrap">🌐</div>
-              <div className="lp1-stat-info">
-                <span className="lp1-stat-label" style={{ fontSize: '0.74rem' }}>Trusted by</span>
-                <span className="lp1-stat-number" style={{ fontSize: '0.98rem' }}>Growing Businesses</span>
-                <span className="lp1-stat-label">Worldwide</span>
-              </div>
-            </div>
           </div>
         </div>
       </section>

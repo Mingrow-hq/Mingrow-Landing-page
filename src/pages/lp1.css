@@ -361,7 +361,7 @@
   padding: 24px 32px;
   backdrop-filter: blur(12px);
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 20px;
   align-items: center;
 }
@@ -374,7 +374,7 @@
 
 @media (max-width: 580px) {
   .lp1-stats-banner {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 

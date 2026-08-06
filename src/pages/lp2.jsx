@@ -257,6 +257,27 @@ function EarlyAccessNotification({ onNotificationShown }) {
 
 
 export default function Lp2() {
+  useEffect(() => {
+    // Inject Google tag (gtag.js) in <head>
+    if (!document.getElementById('gtag-g-fkf4fbwqg1-src')) {
+      const gtagSrc = document.createElement('script');
+      gtagSrc.id = 'gtag-g-fkf4fbwqg1-src';
+      gtagSrc.async = true;
+      gtagSrc.src = 'https://www.googletagmanager.com/gtag/js?id=G-FKF4FBWQG1';
+      document.head.appendChild(gtagSrc);
+    }
+
+    if (!document.getElementById('gtag-g-fkf4fbwqg1-inline')) {
+      const gtagInline = document.createElement('script');
+      gtagInline.id = 'gtag-g-fkf4fbwqg1-inline';
+      gtagInline.text = `window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-FKF4FBWQG1');`;
+      document.head.appendChild(gtagInline);
+    }
+  }, []);
+
   const [scrolled, setScrolled] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [qualStep, setQualStep] = useState(1);

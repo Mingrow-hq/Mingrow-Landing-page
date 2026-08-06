@@ -3,6 +3,25 @@ import './tq1.css';
 
 export default function Tq1Page() {
   useEffect(() => {
+    // Inject Google tag (gtag.js) in <head>
+    if (!document.getElementById('gtag-g-fkf4fbwqg1-src')) {
+      const gtagSrc = document.createElement('script');
+      gtagSrc.id = 'gtag-g-fkf4fbwqg1-src';
+      gtagSrc.async = true;
+      gtagSrc.src = 'https://www.googletagmanager.com/gtag/js?id=G-FKF4FBWQG1';
+      document.head.appendChild(gtagSrc);
+    }
+
+    if (!document.getElementById('gtag-g-fkf4fbwqg1-inline')) {
+      const gtagInline = document.createElement('script');
+      gtagInline.id = 'gtag-g-fkf4fbwqg1-inline';
+      gtagInline.text = `window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-FKF4FBWQG1');`;
+      document.head.appendChild(gtagInline);
+    }
+
     // Inject Google Tag Manager (GTM-KZNCHHFT) in <head>
     if (!document.getElementById('gtm-kznchhft')) {
       const gtmScript = document.createElement('script');

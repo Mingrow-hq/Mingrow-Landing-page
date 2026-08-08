@@ -4,10 +4,21 @@ import Lp2 from './pages/lp2';
 import ThankYou from './pages/ThankYou';
 import Tq1 from './pages/Tq1';
 import Tq2 from './pages/Tq2';
+import Affiliate from './pages/Affiliate';
 
 function App() {
   const host = window.location.hostname.toLowerCase();
   const path = window.location.pathname.toLowerCase();
+
+  const isAffiliate = 
+    path.includes('/affiliate') || 
+    path.includes('/affilate') ||
+    host.startsWith('affiliate') ||
+    host.startsWith('affilate');
+
+  if (isAffiliate) {
+    return <Affiliate />;
+  }
 
   if (path.includes('/tq2')) {
     return <Tq2 />;

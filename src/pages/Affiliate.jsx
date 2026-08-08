@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './affiliate.css';
 
 const AVATARS = [
@@ -59,18 +59,53 @@ export default function Affiliate() {
   const [showJoinModal, setShowJoinModal] = useState(false);
   const [showVideoModal, setShowVideoModal] = useState(false);
   const [openFaq, setOpenFaq] = useState(null);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 40) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    // Inject Google Tag Manager (GTM-KZNCHHFT) in <head>
+    if (!document.getElementById('gtm-kznchhft')) {
+      const gtmScript = document.createElement('script');
+      gtmScript.id = 'gtm-kznchhft';
+      gtmScript.text = `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-KZNCHHFT');`;
+      document.head.appendChild(gtmScript);
+    }
+
+    // Inject Google Tag Manager (noscript) in <body>
+    if (!document.getElementById('gtm-noscript-kznchhft')) {
+      const gtmNoscript = document.createElement('noscript');
+      gtmNoscript.id = 'gtm-noscript-kznchhft';
+      gtmNoscript.innerHTML = `<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KZNCHHFT" height="0" width="0" style="display:none;visibility:hidden"></iframe>`;
+      document.body.appendChild(gtmNoscript);
+    }
+  }, []);
 
   return (
     <div className="affiliate-page">
       {/* Top Navigation */}
-      <header className="aff-nav">
+      <header className={`aff-nav ${isScrolled ? 'scrolled' : ''}`}>
         <div className="aff-nav-container">
           <a href="/" className="aff-logo-link">
             <img src="/images/logo/LOGO light theme.webp" alt="Mingrow Logo" className="aff-logo-img" />
           </a>
-          <button className="aff-register-btn" onClick={() => setShowJoinModal(true)}>
+          <a href="https://partners.mingrow.com/become-partner" target="_blank" rel="noopener noreferrer" className="aff-register-btn">
             Join Now
-          </button>
+          </a>
         </div>
       </header>
 
@@ -78,168 +113,95 @@ export default function Affiliate() {
       <section className="aff-hero-section">
         <div className="aff-hero-container">
           
-          {/* Left Column */}
-          <div className="aff-hero-left">
-            <div className="aff-partner-pill">
-              <span className="sparkle">✦</span> PARTNER PROGRAM
-            </div>
-
-            <h1 className="aff-hero-title">
-              Join the <br />
-              <span className="aff-title-gradient">Mingrow Ecosystem</span>
-            </h1>
-
-            {/* 5 Feature Cards Row */}
-            <div className="aff-cards-grid">
-              <div className="aff-card">
-                <div className="aff-card-icon icon-pct">%</div>
-                <h3 className="aff-card-title">20% Recurring Commission</h3>
-                <p className="aff-card-desc">
-                  Earn 20% every month from your referred customers for as long as they stay with Mingrow.
-                </p>
-              </div>
-
-              <div className="aff-card">
-                <div className="aff-card-icon icon-cal">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-                    <line x1="16" y1="2" x2="16" y2="6"/>
-                    <line x1="8" y1="2" x2="8" y2="6"/>
-                    <line x1="3" y1="10" x2="21" y2="10"/>
-                  </svg>
-                </div>
-                <h3 className="aff-card-title">Monthly Payouts</h3>
-                <p className="aff-card-desc">
-                  Get paid automatically every month directly to your bank account.
-                </p>
-              </div>
-
-              <div className="aff-card">
-                <div className="aff-card-icon icon-gift">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <polyline points="20 12 20 22 4 22 4 12"/>
-                    <rect x="2" y="7" width="20" height="5"/>
-                    <line x1="12" y1="22" x2="12" y2="7"/>
-                    <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/>
-                    <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
-                  </svg>
-                </div>
-                <h3 className="aff-card-title">Marketing Resources</h3>
-                <p className="aff-card-desc">
-                  Access high-converting banners, landing pages, emails, and product videos.
-                </p>
-              </div>
-
-              <div className="aff-card">
-                <div className="aff-card-icon icon-users">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-                    <circle cx="9" cy="7" r="4"/>
-                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-                    <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-                  </svg>
-                </div>
-                <h3 className="aff-card-title">Dedicated Support</h3>
-                <p className="aff-card-desc">
-                  Get onboarding help and a dedicated partner success manager.
-                </p>
-              </div>
-
-              <div className="aff-card">
-                <div className="aff-card-icon icon-shield">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                  </svg>
-                </div>
-                <h3 className="aff-card-title">Long Cookie Duration</h3>
-                <p className="aff-card-desc">
-                  90-day cookie duration to ensure you get credit for your referrals.
-                </p>
-              </div>
-            </div>
-
-            {/* Action Buttons */}
-            <div className="aff-hero-ctas">
-              <button className="aff-btn-main" onClick={() => setShowJoinModal(true)}>
-                Join Now <span className="arr">→</span>
-              </button>
-
-            </div>
-
-            {/* Subtext */}
-            <div className="aff-hero-subtext">
-              <p>Partner with Mingrow and bring the power of AI workforce to businesses.</p>
-              <p>Grow your network. Grow your income. <strong className="text-purple">Grow together.</strong></p>
-            </div>
+          {/* Top Pill Badge */}
+          <div className="aff-partner-pill">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+            PARTNER PROGRAM
           </div>
 
-          {/* Right Column: Visual Ecosystem Hub */}
-          <div className="aff-hero-right">
-            <div className="aff-ecosystem-wrapper">
-              
-              <div className="aff-glow-backdrop"></div>
-              <div className="aff-ring ring-outer"></div>
-              <div className="aff-ring ring-inner"></div>
+          {/* Main Title */}
+          <h1 className="aff-hero-title">
+            Become Mingrow <br />
+            <span className="aff-title-gradient">Affiliate Partner</span>
+          </h1>
 
-              <svg className="aff-connecting-lines" viewBox="0 0 600 600">
-                <circle cx="300" cy="300" r="210" fill="none" stroke="rgba(147, 51, 234, 0.15)" strokeWidth="1.5" strokeDasharray="4 4" />
-                <circle cx="300" cy="300" r="140" fill="none" stroke="rgba(147, 51, 234, 0.25)" strokeWidth="1" />
-                {AVATARS.map((av, i) => {
-                  const rad = (av.angle * Math.PI) / 180;
-                  const x = 300 + 210 * Math.cos(rad);
-                  const y = 300 + 210 * Math.sin(rad);
-                  return (
-                    <line 
-                      key={i} 
-                      x1="300" 
-                      y1="300" 
-                      x2={x} 
-                      y2={y} 
-                      stroke="rgba(147, 51, 234, 0.12)" 
-                      strokeWidth="1" 
-                    />
-                  );
-                })}
-              </svg>
+          {/* Subtitle */}
+          <p className="aff-hero-subtitle">
+            Join the Mingrow Partner Program and earn recurring rewards while helping businesses grow smarter with AI.
+          </p>
 
-              <div className="aff-avatars-container">
-                {AVATARS.map((av, index) => {
-                  const radius = 43;
-                  const rad = (av.angle * Math.PI) / 180;
-                  const left = 50 + radius * Math.cos(rad);
-                  const top = 50 + radius * Math.sin(rad);
+          {/* CTA Buttons */}
+          <div className="aff-hero-ctas">
+            <a href="https://partners.mingrow.com/become-partner" target="_blank" rel="noopener noreferrer" className="aff-btn-primary">
+              Become a Partner <span className="arr">→</span>
+            </a>
+          </div>
 
-                  return (
-                    <div 
-                      key={index} 
-                      className="aff-avatar-node" 
-                      style={{ left: `${left}%`, top: `${top}%` }}
-                    >
-                      <div className="aff-avatar-card">
-                        <img src={av.img} alt={av.name} className="aff-avatar-img" />
-                        <div className="aff-avatar-info">
-                          <span className="aff-avatar-name">{av.name}</span>
-                          <span className="aff-avatar-role">{av.role}</span>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
+          {/* Floating Stats / Features Card */}
+          <div className="aff-hero-stats-card">
+            <div className="aff-stat-col">
+              <div className="aff-stat-icon-wrap icon-purple">
+                <span className="aff-stat-pct-symbol">%</span>
               </div>
-
-              <div className="aff-center-hub">
-                <div className="aff-hub-glow"></div>
-                <div className="aff-center-logo-badge">
-                  <img src="/images/logo/LOGO light theme.webp" alt="Mingrow" className="aff-hub-logo" />
-                </div>
-                
-                <img 
-                  src="/images/affilate/person.webp" 
-                  alt="Mingrow Partner Handshake" 
-                  className="aff-handshake-person-img" 
-                />
+              <div className="aff-stat-content">
+                <h4 className="aff-stat-val">20%</h4>
+                <p className="aff-stat-lbl">Recurring Commission</p>
               </div>
+            </div>
 
+            <div className="aff-stat-divider"></div>
+
+            <div className="aff-stat-col">
+              <div className="aff-stat-icon-wrap icon-purple">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="20 12 20 22 4 22 4 12"/>
+                  <rect x="2" y="7" width="20" height="5"/>
+                  <line x1="12" y1="22" x2="12" y2="7"/>
+                  <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/>
+                  <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
+                </svg>
+              </div>
+              <div className="aff-stat-content">
+                <h4 className="aff-stat-val">Marketing &amp; Sales</h4>
+                <p className="aff-stat-lbl">Resources</p>
+              </div>
+            </div>
+
+            <div className="aff-stat-divider"></div>
+
+            <div className="aff-stat-col">
+              <div className="aff-stat-icon-wrap icon-purple">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                  <circle cx="9" cy="7" r="4"/>
+                  <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                </svg>
+              </div>
+              <div className="aff-stat-content">
+                <h4 className="aff-stat-val">Long-term</h4>
+                <p className="aff-stat-lbl">Partnership</p>
+              </div>
+            </div>
+
+            <div className="aff-stat-divider"></div>
+
+            <div className="aff-stat-col">
+              <div className="aff-stat-icon-wrap icon-amber">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+                  <polyline points="17 6 23 6 23 12"/>
+                </svg>
+              </div>
+              <div className="aff-stat-content">
+                <h4 className="aff-stat-val">Grow Together</h4>
+                <p className="aff-stat-lbl">Win Together</p>
+              </div>
             </div>
           </div>
 

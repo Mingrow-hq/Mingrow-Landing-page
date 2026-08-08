@@ -121,7 +121,7 @@
 }
 
 .aff-register-btn {
-  background: linear-gradient(135deg, #5b46e0 0%, #635bff 100%);
+  background: linear-gradient(135deg, #5914b0 0%, #721ed9 100%);
   color: #ffffff;
   border: none;
   font-weight: 600;
@@ -129,7 +129,7 @@
   padding: 10px 24px;
   border-radius: 999px;
   cursor: pointer;
-  box-shadow: 0 4px 14px rgba(99, 91, 255, 0.35);
+  box-shadow: 0 4px 14px rgba(89, 20, 176, 0.35);
   transition: all 0.2s ease;
   text-decoration: none;
   display: inline-flex;
@@ -139,7 +139,8 @@
 
 .aff-register-btn:hover {
   transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(99, 91, 255, 0.45);
+  background: linear-gradient(135deg, #491094 0%, #5914b0 100%);
+  box-shadow: 0 6px 20px rgba(89, 20, 176, 0.45);
   color: #ffffff;
 }
 
@@ -158,7 +159,7 @@
 }
 
 .aff-hero-container {
-  max-width: 1080px;
+  max-width: 1240px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -186,26 +187,29 @@
 }
 
 .aff-hero-title {
-  font-size: 50px;
-  font-weight: 800;
-  line-height: 1.15;
-  letter-spacing: -1.2px;
+  font-size: 72px;
+  font-weight: 600;
+  line-height: 1.12;
+  letter-spacing: -0.5px;
   color: #111827;
-  margin: 0 0 14px 0;
+  margin: 0 0 18px 0;
+  max-width: 1200px;
+  width: 100%;
 }
 
 .aff-title-gradient {
+  font-weight: 800;
   background: linear-gradient(135deg, #6528f7 0%, #8b5cf6 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 .aff-hero-subtitle {
-  font-size: 16px;
-  line-height: 1.5;
+  font-size: 18px;
+  line-height: 1.55;
   color: #4b5563;
-  max-width: 620px;
-  margin: 0 0 20px 0;
+  max-width: 860px;
+  margin: 0 0 24px 0;
   font-weight: 500;
 }
 
@@ -214,11 +218,42 @@
   align-items: center;
   justify-content: center;
   gap: 16px;
-  margin-bottom: 240px;
+  margin-bottom: 36px;
+}
+
+.aff-hero-subfeatures {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 32px;
+  margin-bottom: 180px;
+}
+
+.aff-subfeature-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14.5px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.aff-subfeature-icon {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1.5px solid #8b5cf6;
+  background: #f5f3ff;
+  color: #7c3aed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
 .aff-btn-primary {
-  background: linear-gradient(135deg, #6528f7 0%, #7c3aed 100%);
+  background: linear-gradient(135deg, #5914b0 0%, #721ed9 100%);
   color: #ffffff;
   border: none;
   font-weight: 600;
@@ -226,7 +261,7 @@
   padding: 13px 32px;
   border-radius: 12px;
   cursor: pointer;
-  box-shadow: 0 6px 20px rgba(101, 40, 247, 0.35);
+  box-shadow: 0 6px 20px rgba(89, 20, 176, 0.35);
   transition: all 0.25s ease;
   display: inline-flex;
   align-items: center;
@@ -236,7 +271,8 @@
 
 .aff-btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 25px rgba(101, 40, 247, 0.45);
+  background: linear-gradient(135deg, #491094 0%, #5914b0 100%);
+  box-shadow: 0 10px 25px rgba(89, 20, 176, 0.45);
   color: #ffffff;
 }
 
@@ -1476,10 +1512,19 @@
   .aff-nav-menu {
     display: none;
   }
+  .aff-partner-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 0;
+    margin-bottom: 18px;
+    font-size: 11px;
+    padding: 6px 14px;
+  }
   .aff-hero-title {
-    font-size: 32px;
-    letter-spacing: -0.8px;
-    margin-bottom: 24px;
+    font-size: 38px;
+    letter-spacing: -1px;
+    margin-bottom: 20px;
   }
   .aff-cards-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -1878,10 +1923,182 @@
   color: #475569;
 }
 
+/* ==========================================================================
+   SECTION 6: PRE-FOOTER PURPLE CTA (MATCHING REFERENCE DESIGN)
+   ========================================================================== */
+.aff-sec-cta {
+  padding: 120px 24px 60px 24px;
+  background: #fbfbfe;
+  border-top: 1px solid #f1f5f9;
+}
+
+.aff-cta-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.aff-cta-card-ref {
+  position: relative;
+  background: linear-gradient(135deg, #180233 0%, #290554 50%, #1c023d 100%);
+  border-radius: 28px;
+  padding: 36px 56px 0px 56px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 40px;
+  overflow: visible;
+  box-shadow: 0 20px 50px -10px rgba(27, 3, 56, 0.5), 0 8px 24px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.aff-cta-ref-left {
+  flex: 1;
+  max-width: 520px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  padding-bottom: 36px;
+}
+
+.aff-cta-ref-title {
+  font-size: 34px;
+  font-weight: 800;
+  line-height: 1.2;
+  color: #ffffff;
+  margin: 0 0 12px 0;
+  letter-spacing: -0.02em;
+}
+
+.highlight-mingrow {
+  color: #facc15;
+  text-decoration: underline;
+  text-decoration-color: #facc15;
+  text-decoration-thickness: 3px;
+  text-underline-offset: 6px;
+}
+
+.aff-cta-ref-subtitle {
+  font-size: 14.5px;
+  line-height: 1.5;
+  color: #cbd5e1;
+  margin: 0 0 24px 0;
+  font-weight: 400;
+}
+
+.aff-cta-ref-buttons {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.aff-btn-white-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #ffffff;
+  color: #1c023d;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 12px 24px;
+  border-radius: 999px;
+  text-decoration: none;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+  transition: all 0.25s ease;
+}
+
+.aff-btn-white-pill:hover {
+  background: #f8fafc;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.25);
+  color: #1c023d;
+}
+
+.aff-btn-white-pill .arrow {
+  font-size: 16px;
+  transition: transform 0.2s ease;
+}
+
+.aff-btn-white-pill:hover .arrow {
+  transform: translateX(4px);
+}
+
+.aff-cta-ref-right {
+  flex-shrink: 0;
+  width: 520px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  margin-bottom: 0;
+  overflow: visible;
+  position: relative;
+}
+
+.aff-cta-handshake-img {
+  width: 100%;
+  max-width: 560px;
+  height: auto;
+  max-height: 380px;
+  object-fit: contain;
+  object-position: bottom;
+  display: block;
+  vertical-align: bottom;
+  margin-top: -100px;
+  margin-bottom: 0;
+  position: relative;
+  z-index: 10;
+  filter: 
+    drop-shadow(2px 0 0 #ffffff) 
+    drop-shadow(-2px 0 0 #ffffff) 
+    drop-shadow(0 -2px 0 #ffffff) 
+    drop-shadow(1.5px -1.5px 0 #ffffff) 
+    drop-shadow(-1.5px -1.5px 0 #ffffff) 
+    drop-shadow(0 18px 35px rgba(0, 0, 0, 0.4));
+  transition: transform 0.3s ease;
+}
+
+.aff-cta-handshake-img:hover {
+  transform: scale(1.02) translateY(-6px);
+}
+
+@media (max-width: 992px) {
+  .aff-cta-card-ref {
+    flex-direction: column;
+    padding: 36px 24px;
+    gap: 32px;
+  }
+  .aff-cta-ref-left {
+    max-width: 100%;
+    align-items: center;
+    text-align: center;
+  }
+  .aff-cta-ref-right {
+    width: 100%;
+  }
+  .aff-cta-ref-buttons {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 576px) {
+  .aff-cta-handshake-img {
+    max-width: 100%;
+  }
+  .aff-cta-ref-title {
+    font-size: 28px;
+  }
+  .aff-btn-white-pill,
+  .aff-btn-outline-pill {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
 /* RESPONSIVE STYLES FOR HERO SECTION */
 @media (max-width: 992px) {
   .aff-hero-title {
-    font-size: 42px;
+    font-size: 48px;
   }
   .aff-hero-stats-card {
     display: grid;
@@ -1899,18 +2116,28 @@
     background-image: url('/images/affilate/mobile_background banner.webp');
     background-size: cover;
     background-position: center top;
-    padding: 24px 16px 30px 16px;
+    padding: 85px 16px 30px 16px;
     min-height: auto;
   }
   .aff-partner-pill {
-    margin-top: 4px;
-    margin-bottom: 24px;
+    display: inline-flex !important;
+    align-items: center;
+    gap: 6px;
+    margin-top: 8px;
+    margin-bottom: 18px;
     font-size: 11px;
     padding: 6px 14px;
+    background: #f3e8ff;
+    color: #6b46e5;
+    border: 1px solid rgba(107, 70, 229, 0.25);
+    border-radius: 999px;
+    font-weight: 700;
+    letter-spacing: 0.6px;
+    box-shadow: 0 2px 8px rgba(107, 70, 229, 0.08);
   }
   .aff-hero-title {
-    font-size: 28px;
-    margin-bottom: 12px;
+    font-size: 32px;
+    margin-bottom: 14px;
   }
   .aff-hero-subtitle {
     font-size: 14px;
@@ -1919,7 +2146,11 @@
   .aff-hero-ctas {
     width: 100%;
     justify-content: center;
-    margin-bottom: 130px;
+    margin-bottom: 24px;
+  }
+  .aff-hero-subfeatures {
+    gap: 16px 20px;
+    margin-bottom: 400px;
   }
   .aff-btn-primary {
     width: auto;

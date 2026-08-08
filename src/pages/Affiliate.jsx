@@ -126,8 +126,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
           {/* Main Title */}
           <h1 className="aff-hero-title">
-            Become Mingrow <br />
-            <span className="aff-title-gradient">Affiliate Partner</span>
+            Want to earn <span className="aff-title-gradient">$100,000</span> <br />
+            in <span className="aff-title-gradient">annual commissions</span> just like our top affiliates?
           </h1>
 
           {/* Subtitle */}
@@ -140,6 +140,36 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <a href="https://partners.mingrow.com/become-partner" target="_blank" rel="noopener noreferrer" className="aff-btn-primary">
               Become a Partner <span className="arr">→</span>
             </a>
+          </div>
+
+          {/* Subfeatures / Trust Badges */}
+          <div className="aff-hero-subfeatures">
+            <div className="aff-subfeature-item">
+              <div className="aff-subfeature-icon">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+              </div>
+              <span>Quick Approval</span>
+            </div>
+
+            <div className="aff-subfeature-item">
+              <div className="aff-subfeature-icon">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+              </div>
+              <span>Dedicated Support</span>
+            </div>
+
+            <div className="aff-subfeature-item">
+              <div className="aff-subfeature-icon">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+              </div>
+              <span>Transparent Payouts</span>
+            </div>
           </div>
 
           {/* Floating Stats / Features Card */}
@@ -661,6 +691,47 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 </div>
               );
             })}
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION 6: PRE-FOOTER PURPLE CTA (MATCHING REFERENCE DESIGN) */}
+      <section className="aff-sec-cta">
+        <div className="aff-cta-container">
+          <div className="aff-cta-card-ref">
+            
+            {/* Left Column: Title, Subtitle & CTA Buttons */}
+            <div className="aff-cta-ref-left">
+              <h2 className="aff-cta-ref-title">
+                The Future of Business <br />
+                Runs on <span className="highlight-mingrow">Mingrow</span>
+              </h2>
+              
+              <p className="aff-cta-ref-subtitle">
+                Join thousands of businesses using the AI Business OS to automate, collaborate and grow faster than ever.
+              </p>
+
+              <div className="aff-cta-ref-buttons">
+                <a 
+                  href="https://partners.mingrow.com/become-partner" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="aff-btn-white-pill"
+                >
+                  Join Our Partners Program <span className="arrow">→</span>
+                </a>
+              </div>
+            </div>
+
+            {/* Right Column: Handshaking Image */}
+            <div className="aff-cta-ref-right">
+              <img 
+                src="/images/affilate/handhsaking.webp" 
+                alt="Partner Handshake" 
+                className="aff-cta-handshake-img" 
+              />
+            </div>
+
           </div>
         </div>
       </section>

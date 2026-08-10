@@ -145,7 +145,7 @@ html, body {
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  padding: 2.5rem 1.5rem 4rem;
+  padding: 8rem 1.5rem 4rem;
   background-image: url('/images/studio/hero imagee.webp');
   background-size: contain;
   background-position: center top;
@@ -2338,7 +2338,7 @@ html, body {
     background-position: center top;
     background-repeat: no-repeat;
     min-height: auto;
-    padding: 1.8rem 0.4rem 2.5rem;
+    padding: 4.5rem 0.4rem 2.5rem;
     position: relative;
   }
 

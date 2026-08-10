@@ -2065,28 +2065,45 @@
 @media (max-width: 992px) {
   .aff-cta-card-ref {
     flex-direction: column;
-    padding: 36px 24px;
-    gap: 32px;
+    padding: 36px 24px 0px 24px;
+    gap: 24px;
+    align-items: center;
   }
   .aff-cta-ref-left {
     max-width: 100%;
     align-items: center;
     text-align: center;
+    padding-bottom: 0;
   }
   .aff-cta-ref-right {
     width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
   }
   .aff-cta-ref-buttons {
     justify-content: center;
   }
+  .aff-cta-handshake-img {
+    margin-top: 0;
+    margin-bottom: 0;
+    max-width: 440px;
+    width: 100%;
+  }
 }
 
 @media (max-width: 576px) {
+  .aff-cta-card-ref {
+    padding: 28px 16px 0px 16px;
+    gap: 20px;
+  }
   .aff-cta-handshake-img {
     max-width: 100%;
+    margin-top: 0;
+    margin-bottom: 0;
   }
   .aff-cta-ref-title {
-    font-size: 28px;
+    font-size: 24px;
   }
   .aff-btn-white-pill,
   .aff-btn-outline-pill {

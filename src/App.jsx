@@ -7,10 +7,16 @@ import Tq2 from './pages/Tq2';
 import Studio from './pages/Studio';
 import Announcement from './pages/Announcement';
 import Affiliate from './pages/Affiliate';
+import AdminPage from './pages/AdminPage';
 
 function App() {
   const host = window.location.hostname.toLowerCase();
   const path = window.location.pathname.toLowerCase();
+
+  // Admin portal route
+  if (path.startsWith('/admin')) {
+    return <AdminPage />;
+  }
 
   if (path.includes('/announcement') || path.includes('/announcemtn') || host.startsWith('announcement')) {
     return <Announcement />;
@@ -65,4 +71,3 @@ function App() {
 }
 
 export default App;
-

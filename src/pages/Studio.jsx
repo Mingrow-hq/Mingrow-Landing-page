@@ -1,10 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import ReactDOM from 'react-dom';
 import './studio.css';
+import './booking.css';
+import BookingModal from './BookingModal';
 
 export default function Studio() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
   const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -33,6 +36,14 @@ export default function Studio() {
     setIsModalOpen(true);
     setIsSubmitted(false);
   };
+
+  const handleOpenBookingModal = useCallback(() => {
+    setIsBookingModalOpen(true);
+  }, []);
+
+  const handleCloseBookingModal = useCallback(() => {
+    setIsBookingModalOpen(false);
+  }, []);
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
@@ -207,10 +218,9 @@ export default function Studio() {
 
           {/* Call To Action */}
           <div className="cta-button-container">
-            <a 
-              href="https://mingrowspace.mingrow.cloud/appointly/appointments_public/book" 
-              target="_blank" 
-              rel="noopener noreferrer" 
+            <button 
+              type="button"
+              onClick={handleOpenBookingModal}
               className="hero-cta-btn"
             >
               BOOK YOUR STUDIO
@@ -218,7 +228,7 @@ export default function Studio() {
                 <line x1="5" y1="12" x2="19" y2="12"></line>
                 <polyline points="12 5 19 12 12 19"></polyline>
               </svg>
-            </a>
+            </button>
           </div>
         </div>
       </section>
@@ -803,14 +813,13 @@ export default function Studio() {
                   </a>
                 </li>
                 <li>
-                  <a 
-                    href="https://mingrowspace.mingrow.cloud/appointly/appointments_public/book" 
-                    target="_blank" 
-                    rel="noopener noreferrer" 
+                  <button
+                    type="button"
+                    onClick={handleOpenBookingModal}
                     className="studio-footer-link-btn"
                   >
                     Book Studio Slot
-                  </a>
+                  </button>
                 </li>
                 <li>
                   <a 
@@ -1187,7 +1196,12 @@ export default function Studio() {
         </div>
       )}
 
-      {/* Booking Form Modal */}
+      {/* Full Multi-Step Booking Modal */}
+      {isBookingModalOpen && (
+        <BookingModal onClose={handleCloseBookingModal} />
+      )}
+
+      {/* Legacy simple contact modal (kept for backward compatibility) */}
       {isModalOpen && (
         <div className="studio-modal-overlay" onClick={handleCloseModal}>
           <div className="studio-modal" onClick={(e) => e.stopPropagation()}>

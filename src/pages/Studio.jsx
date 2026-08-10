@@ -1315,11 +1315,11 @@ export default function Studio() {
           onClick={() => {
             window.location.href = '/announcement';
           }}
-          aria-label="Winner Announcement"
+          aria-label="Winners Announcement"
         >
           <span className="winner-btn-icon">🏆</span>
           <div className="winner-btn-text-col">
-            <span className="winner-btn-line1">Winner</span>
+            <span className="winner-btn-line1">Winners</span>
             <span className="winner-btn-line2">Announcement</span>
           </div>
         </button>,

@@ -18,7 +18,7 @@ function App() {
     return <AdminPage />;
   }
 
-  if (path.includes('/announcement') || path.includes('/announcemtn') || host.startsWith('announcement')) {
+  if (path.includes('/announcement') || path.includes('/announcemtn') || path.includes('/winner') || path.includes('/winners') || host.startsWith('announcement')) {
     return <Announcement />;
   }
 

@@ -6,6 +6,7 @@ import Tq1 from './pages/Tq1';
 import Tq2 from './pages/Tq2';
 import Studio from './pages/Studio';
 import Announcement from './pages/Announcement';
+import Affiliate from './pages/Affiliate';
 
 function App() {
   const host = window.location.hostname.toLowerCase();

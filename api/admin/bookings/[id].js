@@ -19,7 +19,7 @@ export default async function handler(req, res) {
   if (req.method === 'GET') {
     try {
       const [rows] = await db.query(
-        SELECT b.*,
+        `SELECT b.*,
                 c.name AS customer_name, c.email AS customer_email,
                 c.phone AS customer_phone, c.company_name, c.website,
                 p.id AS payment_db_id, p.order_id, p.payment_id,
@@ -28,7 +28,7 @@ export default async function handler(req, res) {
          FROM bookings b
          JOIN customers c ON b.customer_id = c.id
          LEFT JOIN payments p ON p.booking_id = b.id
-         WHERE b.id = ?,
+         WHERE b.id = ?`,
         [id]
       );
 

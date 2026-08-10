@@ -1,9 +1,11 @@
+// MUST be the first import: ESM hoists and evaluates all imports before any
+// statement body, so the route modules below (which read process.env at module
+// scope, e.g. new Razorpay({ key_id })) would otherwise see an empty env.
+import 'dotenv/config';
+
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import dotenv from 'dotenv';
-
-dotenv.config();
 
 import bookingsHandler from './api/bookings/index.js';
 import availabilityHandler from './api/bookings/availability.js';

@@ -1,0 +1,23 @@
+# Production override for a VPS sitting behind a reverse proxy.
+#
+#   docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
+#
+# Differences from the base file:
+#   - the API is bound to 127.0.0.1 only, so nginx is the sole public entrypoint
+#   - the database port is not published to the host at all
+#   - TZ is pinned so booking slot filtering matches business hours, not UTC
+
+services:
+  db:
+    ports: !reset []
+    environment:
+      TZ: ${TZ:-Asia/Kolkata}
+
+  api:
+    # !override replaces the base list instead of appending to it — without it
+    # the public "3111:3111" mapping from docker-compose.yml would survive.
+    ports: !override
+      - "127.0.0.1:3111:3111"
+    environment:
+      NODE_ENV: production
+      TZ: ${TZ:-Asia/Kolkata}

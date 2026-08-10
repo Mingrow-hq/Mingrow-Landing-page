@@ -13,7 +13,7 @@ COPY . .
 # nothing in src/ reads import.meta.env, so the image stays credential-free.
 RUN npm run build
 
-# 3000 = Express API + built frontend, 5173 = Vite dev server (dev profile).
-EXPOSE 3000 5173
+# 3111 = Express API + built frontend, 5173 = Vite dev server (dev profile).
+EXPOSE 3111 5173
 
 CMD ["node", "server.js"]

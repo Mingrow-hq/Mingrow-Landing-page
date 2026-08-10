@@ -7,9 +7,9 @@ export default defineConfig({
   server: {
     proxy: {
       // Forward API calls to the Express server during dev.
-      // Host: http://localhost:3000. In Docker: http://api:3000 (see compose).
+      // Host: http://localhost:3111. In Docker: http://api:3111 (see compose).
       '/api': {
-        target: process.env.VITE_API_PROXY_TARGET || 'http://localhost:3000',
+        target: process.env.VITE_API_PROXY_TARGET || 'http://localhost:3111',
         changeOrigin: true
       }
     }

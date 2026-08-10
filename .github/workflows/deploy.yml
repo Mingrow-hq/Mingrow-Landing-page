@@ -1,0 +1,87 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Never let two deploys race on the same box.
+concurrency:
+  group: deploy-vps
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Open SSH connection
+        env:
+          SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          KNOWN_HOSTS: ${{ secrets.VPS_KNOWN_HOSTS }}
+        run: |
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          if [ -n "$KNOWN_HOSTS" ]; then
+            printf '%s\n' "$KNOWN_HOSTS" > ~/.ssh/known_hosts
+          else
+            # Trust-on-first-use fallback. Prefer setting VPS_KNOWN_HOSTS
+            # (output of `ssh-keyscan -H <ip>`) so the host key is pinned.
+            ssh-keyscan -H "$VPS_HOST" > ~/.ssh/known_hosts 2>/dev/null
+          fi
+          chmod 600 ~/.ssh/known_hosts
+
+      - name: Pull and rebuild on the VPS
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+          APP_DIR: ${{ vars.APP_DIR || '/srv/mingrow-studio' }}
+        run: |
+          ssh -i ~/.ssh/deploy_key -o BatchMode=yes \
+              "$VPS_USER@$VPS_HOST" "APP_DIR='$APP_DIR' bash -s" <<'REMOTE'
+          set -euo pipefail
+          cd "$APP_DIR"
+
+          echo "::group::git"
+          git fetch --prune origin
+          git reset --hard origin/main
+          git log -1 --oneline
+          echo "::endgroup::"
+
+          # .env lives only on the server and is never committed, so it
+          # survives the reset above untouched.
+          test -f .env || { echo "ERROR: .env missing in $APP_DIR"; exit 1; }
+
+          echo "::group::compose"
+          docker compose -f docker-compose.yml -f docker-compose.prod.yml \
+            up -d --build --remove-orphans
+          echo "::endgroup::"
+
+          docker image prune -f
+          REMOTE
+
+      - name: Health check
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+        run: |
+          ssh -i ~/.ssh/deploy_key -o BatchMode=yes \
+              "$VPS_USER@$VPS_HOST" 'bash -s' <<'REMOTE'
+          set -euo pipefail
+          for i in $(seq 1 30); do
+            if curl -fsS -o /dev/null http://127.0.0.1:3111/api/bookings/availability; then
+              echo "healthy after ${i}s"
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "ERROR: app did not become healthy on 127.0.0.1:3111"
+          docker compose -f /srv/mingrow-studio/docker-compose.yml logs --tail 50 api || true
+          exit 1
+          REMOTE
+
+      - name: Revoke key
+        if: always()
+        run: rm -f ~/.ssh/deploy_key

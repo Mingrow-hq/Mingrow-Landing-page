@@ -1,6 +1,6 @@
 # Full local stack for the Mingrow Studio booking flow.
 #
-#   docker compose up -d --build     -> app on http://localhost:3000
+#   docker compose up -d --build     -> app on http://localhost:3111
 #   docker compose --profile dev up  -> adds Vite + HMR on http://localhost:5173
 #
 # Credentials come from .env (never baked into the image). The DB container
@@ -42,12 +42,12 @@ services:
       DB_HOST: db
       DB_PORT: "3306"
       DB_SSL: "false"
-      PORT: "3000"
+      PORT: "3111"
     depends_on:
       db:
         condition: service_healthy
     ports:
-      - "3000:3000"
+      - "3111:3111"
 
   # Optional: Vite dev server with hot reload, proxying /api to the api service.
   # Enable with: docker compose --profile dev up
@@ -56,7 +56,7 @@ services:
     profiles: ["dev"]
     command: npx vite --host 0.0.0.0 --port 5173
     environment:
-      VITE_API_PROXY_TARGET: http://api:3000
+      VITE_API_PROXY_TARGET: http://api:3111
     depends_on:
       - api
     ports:

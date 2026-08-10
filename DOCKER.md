@@ -27,7 +27,7 @@ overrides them to reach the `db` service directly.
 docker compose up -d --build
 ```
 
-The app is then on <http://localhost:3000> (Express serves the built frontend,
+The app is then on <http://localhost:3111> (Express serves the built frontend,
 so `/studio` and `/api/*` share one origin and no proxy is involved).
 
 With hot reload instead:
@@ -89,5 +89,5 @@ docker compose exec -T db mysql -umingrowspace -p mingrowspace < database/mysql_
   from `/api/payments/create-order`.
 - `VITE_RAZORPAY_KEY_ID` in `.env` is currently unused for the same reason.
 - The Razorpay webhook needs a public URL, so it cannot reach `localhost`. Use a
-  tunnel (e.g. `cloudflared`, `ngrok`) pointing at port 3000 and set that URL in
+  tunnel (e.g. `cloudflared`, `ngrok`) pointing at port 3111 and set that URL in
   the Razorpay dashboard if you need to test webhooks.

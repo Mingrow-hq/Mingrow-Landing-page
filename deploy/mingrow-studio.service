@@ -1,0 +1,36 @@
+# Only needed if you run Node directly instead of Docker.
+#   sudo cp deploy/mingrow-studio.service /etc/systemd/system/
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable --now mingrow-studio
+#   sudo journalctl -u mingrow-studio -f
+
+[Unit]
+Description=Mingrow Studio booking app
+After=network.target mysql.service mariadb.service
+
+[Service]
+Type=simple
+User=mingrow
+WorkingDirectory=/srv/mingrow-studio
+
+# server.js loads .env itself via dotenv, so no EnvironmentFile is needed —
+# which also avoids systemd's stricter quoting rules for values like passwords.
+Environment=NODE_ENV=production
+Environment=PORT=3111
+# Pin the timezone: slot filtering in api/bookings/availability.js compares
+# slot times against the server clock, so a UTC box would drop IST slots.
+Environment=TZ=Asia/Kolkata
+
+ExecStart=/usr/bin/node server.js
+Restart=on-failure
+RestartSec=5
+
+# Hardening
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/srv/mingrow-studio
+
+[Install]
+WantedBy=multi-user.target

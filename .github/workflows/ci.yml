@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          # vite 8 requires ^20.19.0 || >=22.12.0
+          node-version: '22'
+          cache: npm
+
+      - run: npm ci
+
+      # Non-blocking: src/pages/lp1.jsx has pre-existing rules-of-hooks errors
+      # (component named "landing1"). Drop continue-on-error once those are fixed.
+      - name: Lint
+        run: npm run lint
+        continue-on-error: true
+
+      - name: Build frontend
+        run: npm run build
+
+      - name: Check server and API modules parse
+        run: |
+          node --check server.js
+          find api -name '*.js' -print0 | xargs -0 -n1 node --check
+
+      - name: Validate compose files
+        run: |
+          docker compose -f docker-compose.yml config --quiet
+          docker compose -f docker-compose.yml -f docker-compose.prod.yml config --quiet
+        env:
+          # config only interpolates; a dummy avoids the required-var error.
+          DB_PASSWORD: ci-dummy

@@ -5,10 +5,15 @@ import ThankYou from './pages/ThankYou';
 import Tq1 from './pages/Tq1';
 import Tq2 from './pages/Tq2';
 import Studio from './pages/Studio';
+import Announcement from './pages/Announcement';
 
 function App() {
   const host = window.location.hostname.toLowerCase();
   const path = window.location.pathname.toLowerCase();
+
+  if (path.includes('/announcement') || path.includes('/announcemtn') || host.startsWith('announcement')) {
+    return <Announcement />;
+  }
 
   const isStudio = 
     path.includes('/studio') ||

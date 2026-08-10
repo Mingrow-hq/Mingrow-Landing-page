@@ -4,11 +4,19 @@ import Lp2 from './pages/lp2';
 import ThankYou from './pages/ThankYou';
 import Tq1 from './pages/Tq1';
 import Tq2 from './pages/Tq2';
-import Affiliate from './pages/Affiliate';
+import Studio from './pages/Studio';
 
 function App() {
   const host = window.location.hostname.toLowerCase();
   const path = window.location.pathname.toLowerCase();
+
+  const isStudio = 
+    path.includes('/studio') ||
+    host.startsWith('studio');
+
+  if (isStudio) {
+    return <Studio />;
+  }
 
   const isAffiliate = 
     path.includes('/affiliate') || 

@@ -103,7 +103,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <a href="/" className="aff-logo-link">
             <img src="/images/logo/LOGO light theme.webp" alt="Mingrow Logo" className="aff-logo-img" />
           </a>
-          <a href="https://partners.mingrow.com/become-partner" target="_blank" rel="noopener noreferrer" className="aff-register-btn">
+          <a href="https://partners.mingrow.com/become-partner?step=2&track=affiliate" target="_blank" rel="noopener noreferrer" className="aff-register-btn">
             Join Now
           </a>
         </div>
@@ -137,7 +137,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
           {/* CTA Buttons */}
           <div className="aff-hero-ctas">
-            <a href="https://partners.mingrow.com/become-partner" target="_blank" rel="noopener noreferrer" className="aff-btn-primary">
+            <a href="https://partners.mingrow.com/become-partner?step=2&track=affiliate" target="_blank" rel="noopener noreferrer" className="aff-btn-primary">
               Become a Partner <span className="arr">→</span>
             </a>
           </div>
@@ -713,7 +713,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
               <div className="aff-cta-ref-buttons">
                 <a 
-                  href="https://partners.mingrow.com/become-partner" 
+                  href="https://partners.mingrow.com/become-partner?step=2&track=affiliate" 
                   target="_blank" 
                   rel="noopener noreferrer" 
                   className="aff-btn-white-pill"

@@ -36,16 +36,21 @@ export default async function handler(req, res) {
 
     const booking = rows[0];
 
-    if (booking.status !== 'HELD') {
-      return res.status(400).json({
-        error: booking.status === 'PAID' ? 'This booking is already paid' : 'Booking hold has expired.',
-        code: 'BOOKING_NOT_HELD',
-      });
+    if (booking.status === 'PAID') {
+      return res.status(400).json({ error: 'This booking is already paid', code: 'ALREADY_PAID' });
     }
 
-    if (new Date(booking.held_until) < new Date()) {
-      await db.query("UPDATE bookings SET status = 'EXPIRED' WHERE id = ?", [bookingId]);
-      return res.status(400).json({ error: 'Your session has expired. Please start over.', code: 'HOLD_EXPIRED' });
+    // Check if another customer completed payment for the same slot
+    const [alreadyPaid] = await db.query(
+      "SELECT id FROM bookings WHERE booking_date = ? AND time_slot = ? AND status = 'PAID' AND id != ?",
+      [booking.booking_date, booking.time_slot, booking.id]
+    );
+
+    if (alreadyPaid.length > 0) {
+      return res.status(409).json({
+        error: 'This time slot was just booked and paid by another customer. Please select another slot.',
+        code: 'SLOT_TAKEN',
+      });
     }
 
     const amountPaise = booking.amount;

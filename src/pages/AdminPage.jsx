@@ -68,29 +68,39 @@ function PaymentBadge({ status }) {
 }
 
 // ── Stats Cards ───────────────────────────────────────────────────────
-function StatsCards({ stats }) {
+function StatsCards({ stats, activeFilter, onCardClick }) {
   const cards = [
-    { label: 'Total Bookings', value: stats.totalBookings, icon: '📋', color: '#7c3aed' },
-    { label: 'Paid Bookings', value: stats.paidBookings, icon: '✅', color: '#16a34a' },
-    { label: 'Pending / Held', value: stats.pendingBookings, icon: '⏳', color: '#d97706' },
-    { label: 'Cancelled', value: stats.cancelledBookings, icon: '❌', color: '#ef4444' },
-    { label: 'Total Revenue', value: `₹${(stats.totalRevenue || 0).toLocaleString('en-IN')}`, icon: '💰', color: '#059669' },
-    { label: "Today's Revenue", value: `₹${(stats.todayRevenue || 0).toLocaleString('en-IN')}`, icon: '📅', color: '#2563eb' },
-    { label: 'Upcoming Demos', value: stats.upcomingDemos, icon: '🗓️', color: '#7c3aed' },
-    { label: "Month Revenue", value: `₹${(stats.monthRevenue || 0).toLocaleString('en-IN')}`, icon: '📈', color: '#16a34a' },
+    { id: 'TOTAL', label: 'Total Bookings', value: stats.totalBookings, icon: '📋', color: '#7c3aed', filter: { bookingStatus: 'ALL', paymentStatus: 'ALL', dateFilter: 'ALL' } },
+    { id: 'PAID', label: 'Paid Bookings', value: stats.paidBookings, icon: '✅', color: '#16a34a', filter: { bookingStatus: 'PAID', paymentStatus: 'ALL', dateFilter: 'ALL' } },
+    { id: 'PENDING', label: 'Pending / Held', value: stats.pendingBookings, icon: '⏳', color: '#d97706', filter: { bookingStatus: 'PENDING', paymentStatus: 'ALL', dateFilter: 'ALL' } },
+    { id: 'CANCELLED', label: 'Cancelled', value: stats.cancelledBookings, icon: '❌', color: '#ef4444', filter: { bookingStatus: 'CANCELLED', paymentStatus: 'ALL', dateFilter: 'ALL' } },
+    { id: 'TOTAL_REV', label: 'Total Revenue', value: `₹${(stats.totalRevenue || 0).toLocaleString('en-IN')}`, icon: '💰', color: '#059669', filter: { bookingStatus: 'PAID', paymentStatus: 'ALL', dateFilter: 'ALL' } },
+    { id: 'TODAY_REV', label: "Today's Revenue", value: `₹${(stats.todayRevenue || 0).toLocaleString('en-IN')}`, icon: '📅', color: '#2563eb', filter: { bookingStatus: 'PAID', paymentStatus: 'ALL', dateFilter: 'TODAY' } },
+    { id: 'UPCOMING', label: 'Upcoming Demos', value: stats.upcomingDemos, icon: '🗓️', color: '#7c3aed', filter: { bookingStatus: 'PAID', paymentStatus: 'ALL', dateFilter: 'UPCOMING' } },
+    { id: 'MONTH_REV', label: "Month Revenue", value: `₹${(stats.monthRevenue || 0).toLocaleString('en-IN')}`, icon: '📈', color: '#16a34a', filter: { bookingStatus: 'PAID', paymentStatus: 'ALL', dateFilter: 'THIS_MONTH' } },
   ];
 
   return (
     <div className="adm-stats-grid">
-      {cards.map(card => (
-        <div key={card.label} className="adm-stat-card" style={{ '--accent': card.color }}>
-          <div className="adm-stat-icon">{card.icon}</div>
-          <div className="adm-stat-body">
-            <div className="adm-stat-value">{card.value ?? '—'}</div>
-            <div className="adm-stat-label">{card.label}</div>
+      {cards.map(card => {
+        const isActive = activeFilter === card.id;
+        return (
+          <div 
+            key={card.label} 
+            className={`adm-stat-card ${isActive ? 'adm-stat-card-active' : ''}`} 
+            style={{ '--accent': card.color }}
+            onClick={() => onCardClick && onCardClick(card)}
+            role="button"
+            tabIndex={0}
+          >
+            <div className="adm-stat-icon">{card.icon}</div>
+            <div className="adm-stat-body">
+              <div className="adm-stat-value">{card.value ?? '—'}</div>
+              <div className="adm-stat-label">{card.label}</div>
+            </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }
@@ -295,14 +305,22 @@ export default function AdminPage() {
   const [error, setError] = useState('');
 
   const [search, setSearch] = useState('');
-  const [bookingStatus, setBookingStatus] = useState('PAID');
-
+  const [bookingStatus, setBookingStatus] = useState('ALL');
   const [paymentStatus, setPaymentStatus] = useState('ALL');
   const [dateFilter, setDateFilter] = useState('ALL');
+  const [activeCard, setActiveCard] = useState('TOTAL');
 
   const [selectedBooking, setSelectedBooking] = useState(null);
 
   const key = adminKey;
+
+  const handleCardClick = (card) => {
+    setActiveCard(card.id);
+    setBookingStatus(card.filter.bookingStatus);
+    setPaymentStatus(card.filter.paymentStatus);
+    setDateFilter(card.filter.dateFilter);
+    setPage(1);
+  };
 
   const fetchStats = useCallback(async () => {
     const res = await fetch(`${API_BASE}/admin/stats`, { headers: { 'x-admin-key': key } });
@@ -337,6 +355,14 @@ export default function AdminPage() {
     if (authed) {
       fetchStats();
       fetchBookings();
+
+      // Auto-refresh every 30 seconds so new paid bookings appear without manual reload
+      const interval = setInterval(() => {
+        fetchStats();
+        fetchBookings();
+      }, 30000);
+
+      return () => clearInterval(interval);
     }
   }, [authed, fetchStats, fetchBookings]);
 
@@ -417,7 +443,7 @@ export default function AdminPage() {
 
       <div className="adm-content">
         {/* Stats */}
-        {stats && <StatsCards stats={stats} />}
+        {stats && <StatsCards stats={stats} activeFilter={activeCard} onCardClick={handleCardClick} />}
 
         {/* Bookings Table Section */}
         <div className="adm-table-section">
@@ -448,7 +474,7 @@ export default function AdminPage() {
               <button type="submit">Search</button>
             </form>
 
-            <select value={bookingStatus} onChange={e => { setBookingStatus(e.target.value); setPage(1); }}>
+            <select value={bookingStatus} onChange={e => { setBookingStatus(e.target.value); setActiveCard(null); setPage(1); }}>
               <option value="ALL">All Booking Statuses</option>
               <option value="PAID">Paid</option>
               <option value="HELD">Held</option>
@@ -458,7 +484,7 @@ export default function AdminPage() {
               <option value="REFUNDED">Refunded</option>
             </select>
 
-            <select value={paymentStatus} onChange={e => { setPaymentStatus(e.target.value); setPage(1); }}>
+            <select value={paymentStatus} onChange={e => { setPaymentStatus(e.target.value); setActiveCard(null); setPage(1); }}>
               <option value="ALL">All Payment Statuses</option>
               <option value="SUCCESS">Success</option>
               <option value="PENDING">Pending</option>
@@ -466,10 +492,11 @@ export default function AdminPage() {
               <option value="REFUNDED">Refunded</option>
             </select>
 
-            <select value={dateFilter} onChange={e => { setDateFilter(e.target.value); setPage(1); }}>
+            <select value={dateFilter} onChange={e => { setDateFilter(e.target.value); setActiveCard(null); setPage(1); }}>
               <option value="ALL">All Dates</option>
               <option value="TODAY">Today</option>
               <option value="TOMORROW">Tomorrow</option>
+              <option value="UPCOMING">Upcoming</option>
               <option value="THIS_WEEK">This Week</option>
               <option value="THIS_MONTH">This Month</option>
             </select>
@@ -511,7 +538,12 @@ export default function AdminPage() {
                     const payment = booking.payments?.[0];
                     const customer = booking.customers;
                     return (
-                      <tr key={booking.id} className="adm-table-row">
+                      <tr 
+                        key={booking.id} 
+                        className="adm-table-row"
+                        onClick={() => setSelectedBooking(booking)}
+                        style={{ cursor: 'pointer' }}
+                      >
                         <td className="adm-ref-cell">{booking.booking_reference}</td>
                         <td>
                           <div className="adm-customer-cell">
@@ -530,7 +562,10 @@ export default function AdminPage() {
                         <td>
                           <button
                             className="adm-view-btn"
-                            onClick={() => setSelectedBooking(booking)}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setSelectedBooking(booking);
+                            }}
                           >
                             View
                           </button>

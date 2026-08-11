@@ -28,11 +28,19 @@ export default async function handler(req, res) {
     const maxAdvanceDays = config.max_advance_days || 90;
 
     if (date) {
-      const requestedDate = new Date(date);
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
+      const [year, month, day] = date.split('-').map(Number);
+      const now = new Date();
+      const requestedDate = new Date(year, month - 1, day);
 
-      if (requestedDate < today) {
+      const isToday = (
+        now.getFullYear() === year &&
+        now.getMonth() === (month - 1) &&
+        now.getDate() === day
+      );
+
+      const todayMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+      if (requestedDate < todayMidnight) {
         return res.status(400).json({ error: 'Cannot book past dates' });
       }
 
@@ -49,22 +57,22 @@ export default async function handler(req, res) {
       // Expire held bookings
       await db.query("UPDATE bookings SET status = 'EXPIRED' WHERE status = 'HELD' AND held_until < NOW()");
 
-      // Get active bookings
+      // Get active bookings (only PAID bookings count as reserved slots)
       const [activeBookings] = await db.query(
-        "SELECT time_slot FROM bookings WHERE booking_date = ? AND status IN ('HELD', 'PAID')",
+        "SELECT time_slot FROM bookings WHERE booking_date = ? AND status = 'PAID'",
         [date]
       );
 
       const bookedSlots = new Set(activeBookings.map(b => b.time_slot));
-      const now = new Date();
 
       const availableSlots = allSlots.filter(slot => {
         if (bookedSlots.has(slot)) return false;
-        const [hour, minute] = slot.split(':').map(Number);
-        const slotTime = new Date(requestedDate);
-        slotTime.setHours(hour, minute, 0, 0);
-        if (requestedDate.toDateString() === now.toDateString() && slotTime <= now) {
-          return false;
+        if (isToday) {
+          const [hour, minute] = slot.split(':').map(Number);
+          const slotTime = new Date(year, month - 1, day, hour, minute, 0, 0);
+          if (slotTime <= now) {
+            return false;
+          }
         }
         return true;
       });
@@ -78,25 +86,38 @@ export default async function handler(req, res) {
       });
     }
 
-    // No date: return list of available dates
+    // Helper to format Date to YYYY-MM-DD in local time
+    const formatDateStr = (d) => {
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${y}-${m}-${day}`;
+    };
+
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     const maxDate = new Date(today);
     maxDate.setDate(maxDate.getDate() + parseInt(maxAdvanceDays));
 
+    const todayStr = formatDateStr(today);
+    const maxDateStr = formatDateStr(maxDate);
+
     const [blockedDates] = await db.query('SELECT blocked_date FROM blocked_dates WHERE blocked_date >= ? AND blocked_date <= ?', [
-      today.toISOString().split('T')[0],
-      maxDate.toISOString().split('T')[0]
+      todayStr,
+      maxDateStr
     ]);
 
-    const blockedSet = new Set(blockedDates.map(b => new Date(b.blocked_date).toISOString().split('T')[0]));
+    const blockedSet = new Set(blockedDates.map(b => {
+      const bd = new Date(b.blocked_date);
+      return formatDateStr(bd);
+    }));
+
     const availableDates = [];
     const cursor = new Date(today);
-    cursor.setDate(cursor.getDate() + 1);
 
     while (cursor <= maxDate) {
       const dayOfWeek = cursor.getDay();
-      const dateStr = cursor.toISOString().split('T')[0];
+      const dateStr = formatDateStr(cursor);
       if (workingDays.includes(dayOfWeek) && !blockedSet.has(dateStr)) {
         availableDates.push(dateStr);
       }

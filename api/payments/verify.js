@@ -48,6 +48,19 @@ export default async function handler(req, res) {
       });
     }
 
+    // Double-check no other booking was marked PAID for this date & slot
+    const [alreadyPaid] = await db.query(
+      "SELECT id FROM bookings WHERE booking_date = ? AND time_slot = ? AND status = 'PAID' AND id != ?",
+      [booking.booking_date, booking.time_slot, bookingId]
+    );
+
+    if (alreadyPaid.length > 0) {
+      return res.status(409).json({
+        error: 'This slot was already booked and paid by another customer. Please contact support if payment was deducted.',
+        code: 'SLOT_TAKEN'
+      });
+    }
+
     const paidAt = new Date();
 
     await db.query(

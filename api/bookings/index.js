@@ -26,18 +26,36 @@ export default async function handler(req, res) {
 
     const cleanEmail = email.toLowerCase().trim();
 
+    // Check if past date or past time slot today
+    const [bYear, bMonth, bDay] = bookingDate.split('-').map(Number);
+    const reqDateObj = new Date(bYear, bMonth - 1, bDay);
+    const nowObj = new Date();
+    const todayObj = new Date(nowObj.getFullYear(), nowObj.getMonth(), nowObj.getDate());
+
+    if (reqDateObj < todayObj) {
+      return res.status(400).json({ error: 'Cannot book past dates' });
+    }
+
+    if (reqDateObj.valueOf() === todayObj.valueOf()) {
+      const [sh, sm] = timeSlot.split(':').map(Number);
+      const slotTimeObj = new Date(nowObj.getFullYear(), nowObj.getMonth(), nowObj.getDate(), sh, sm, 0, 0);
+      if (slotTimeObj <= nowObj) {
+        return res.status(400).json({ error: 'Cannot book past time slots' });
+      }
+    }
+
     // Expire stale HELD bookings
     await db.query("UPDATE bookings SET status = 'EXPIRED' WHERE status = 'HELD' AND held_until < NOW()");
 
-    // Check slot availability
+    // Check slot availability (only PAID bookings block creation)
     const [existing] = await db.query(
-      "SELECT id FROM bookings WHERE booking_date = ? AND time_slot = ? AND status IN ('HELD', 'PAID')",
+      "SELECT id FROM bookings WHERE booking_date = ? AND time_slot = ? AND status = 'PAID'",
       [bookingDate, timeSlot]
     );
 
     if (existing.length > 0) {
       return res.status(409).json({
-        error: 'This time slot is no longer available. Please select another slot.',
+        error: 'This time slot is already booked and paid. Please select another slot.',
         code: 'SLOT_TAKEN',
       });
     }

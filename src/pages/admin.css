@@ -178,13 +178,22 @@
   gap: 1rem;
   box-shadow: 0 1px 4px rgba(0,0,0,0.06);
   border: 1px solid #f1f5f9;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
   border-left: 4px solid var(--accent);
+  cursor: pointer;
+  user-select: none;
 }
 
 .adm-stat-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+}
+
+.adm-stat-card-active {
+  background: #fdfcff;
+  border-color: var(--accent);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
 }
 
 .adm-stat-icon {

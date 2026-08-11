@@ -184,9 +184,9 @@ function StepDetails({ formData, onChange, onNext }) {
 // ───────────────────────────────────────────────────────────────────────────
 function StepSchedule({ selectedDate, selectedSlot, onDateChange, onSlotChange, onNext, onBack }) {
   const [availableDates, setAvailableDates] = useState([]);
-  const [availableSlots, setAvailableSlots] = useState([]);
-  const [bookedSlots, setBookedSlots] = useState([]);
   const [allSlots, setAllSlots] = useState([]);
+  const [bookedSlots, setBookedSlots] = useState([]); // PAID slots → show as "Booked"
+  const [pastSlots, setPastSlots] = useState([]);     // Past-time slots for today → greyed out
   const [loadingDates, setLoadingDates] = useState(true);
   const [loadingSlots, setLoadingSlots] = useState(false);
   const [error, setError] = useState('');
@@ -205,14 +205,16 @@ function StepSchedule({ selectedDate, selectedSlot, onDateChange, onSlotChange, 
         setLoadingDates(false);
       })
       .catch(() => {
-        // Fallback: generate Mon–Sat for next 90 days client-side
+        // Fallback: generate Mon–Sat for next 90 days client-side starting today
         const dates = [];
         const cursor = new Date();
-        cursor.setDate(cursor.getDate() + 1);
         for (let i = 0; i < 90; i++) {
           const day = cursor.getDay();
           if (day >= 1 && day <= 6) {
-            dates.push(cursor.toISOString().split('T')[0]);
+            const y = cursor.getFullYear();
+            const m = String(cursor.getMonth() + 1).padStart(2, '0');
+            const d = String(cursor.getDate()).padStart(2, '0');
+            dates.push(`${y}-${m}-${d}`);
           }
           cursor.setDate(cursor.getDate() + 1);
         }
@@ -221,52 +223,131 @@ function StepSchedule({ selectedDate, selectedSlot, onDateChange, onSlotChange, 
       });
   }, []);
 
-  // Load slots when date changes
+  // Load slots when date changes + auto-refresh every 5 seconds to reflect live bookings
   useEffect(() => {
     if (!selectedDate) {
-      setAvailableSlots([]);
-      setBookedSlots([]);
       setAllSlots([]);
+      setBookedSlots([]);
+      setPastSlots([]);
       return;
     }
-    setLoadingSlots(true);
-    setError('');
-    fetch(`${API_BASE}/bookings/availability?date=${selectedDate}`)
-      .then(r => r.json())
-      .then(data => {
-        const defaultSlots = [
-          '09:00','10:00','11:00','12:00','13:00','14:00',
-          '15:00','16:00','17:00','18:00','19:00','20:00','21:00'
-        ];
-        const all = data.allSlots || defaultSlots;
-        const booked = data.bookedSlots || [];
-        const avail = data.slots || [];
 
-        setAllSlots(all);
-        setBookedSlots(booked);
-        setAvailableSlots(avail);
-        setLoadingSlots(false);
+    let isMounted = true;
 
-        if (selectedSlot && booked.includes(selectedSlot)) {
-          onSlotChange('');
-        }
+    const DEFAULT_ALL_SLOTS = [
+      '09:00','10:00','11:00','12:00','13:00','14:00',
+      '15:00','16:00','17:00','18:00','19:00','20:00','21:00'
+    ];
 
-        if (avail.length === 0 && booked.length === 0) {
-          setError('No slots available for this date. Please choose another day.');
+    const computeSlotStates = (all, booked, date) => {
+      const now = new Date();
+      const [sy, sm, sd] = date.split('-').map(Number);
+      const isToday = (
+        now.getFullYear() === sy &&
+        now.getMonth() === (sm - 1) &&
+        now.getDate() === sd
+      );
+
+      const bookedSet = new Set(booked);
+      const past = [];
+
+      // Compute past slots for today only
+      if (isToday) {
+        for (const slot of all) {
+          if (bookedSet.has(slot)) continue; // booked takes priority over past display
+          const [h, min] = slot.split(':').map(Number);
+          const slotTime = new Date(sy, sm - 1, sd, h, min, 0, 0);
+          if (slotTime <= now) {
+            past.push(slot);
+          }
         }
-      })
-      .catch(() => {
-        // Fallback: show all hourly slots 9AM–9PM
-        const slots = [];
-        for (let h = 9; h <= 21; h++) {
-          slots.push(`${h.toString().padStart(2, '0')}:00`);
-        }
-        setAllSlots(slots);
-        setAvailableSlots(slots);
-        setBookedSlots([]);
-        setLoadingSlots(false);
-      });
-  }, [selectedDate]);
+      }
+
+      return { past };
+    };
+
+    const loadSlots = (showLoading = false) => {
+      if (showLoading) setLoadingSlots(true);
+      fetch(`${API_BASE}/bookings/availability?date=${selectedDate}`)
+        .then(r => r.json())
+        .then(data => {
+          if (!isMounted) return;
+
+          const all = data.allSlots || DEFAULT_ALL_SLOTS;
+          // bookedSlots from API are PAID slots only (as per availability.js)
+          const booked = data.bookedSlots || [];
+
+          const { past } = computeSlotStates(all, booked, selectedDate);
+
+          setAllSlots(all);
+          setBookedSlots(booked);
+          setPastSlots(past);
+
+          if (showLoading) setLoadingSlots(false);
+
+          // If previously selected slot is now booked or past, deselect it
+          const bookedSet = new Set(booked);
+          const pastSet = new Set(past);
+          if (selectedSlot && (bookedSet.has(selectedSlot) || pastSet.has(selectedSlot))) {
+            onSlotChange('');
+          }
+
+          // Check if any slots are actually available (not booked, not past)
+          const bookedSetFull = new Set(booked);
+          const pastSetFull = new Set(past);
+          const anyAvailable = all.some(s => !bookedSetFull.has(s) && !pastSetFull.has(s));
+
+          if (!anyAvailable) {
+            setError('No slots available for this date. Please choose another day.');
+          } else {
+            setError('');
+          }
+        })
+        .catch(() => {
+          if (!isMounted) return;
+          // Fallback: generate slots and filter past ones for today
+          const now = new Date();
+          const [sy, sm, sd] = selectedDate.split('-').map(Number);
+          const isToday = new Date(sy, sm - 1, sd).toDateString() === now.toDateString();
+          const past = [];
+
+          const slots = DEFAULT_ALL_SLOTS.filter(slotStr => {
+            const [h] = slotStr.split(':').map(Number);
+            if (isToday) {
+              const slotTime = new Date(sy, sm - 1, sd, h, 0, 0, 0);
+              if (slotTime <= now) {
+                past.push(slotStr);
+                return true; // keep in all, but mark past
+              }
+            }
+            return true;
+          });
+
+          setAllSlots(slots);
+          setBookedSlots([]);
+          setPastSlots(past);
+          if (showLoading) setLoadingSlots(false);
+
+          const anyAvailable = slots.some(s => !past.includes(s));
+          if (!anyAvailable) {
+            setError('No slots available for this date. Please choose another day.');
+          } else {
+            setError('');
+          }
+        });
+    };
+
+    loadSlots(true);
+
+    const interval = setInterval(() => {
+      loadSlots(false);
+    }, 5000);
+
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
+  }, [selectedDate, selectedSlot, onSlotChange]);
 
   // Calendar rendering
   const daysInMonth = (year, month) => new Date(year, month + 1, 0).getDate();
@@ -321,6 +402,10 @@ function StepSchedule({ selectedDate, selectedSlot, onDateChange, onSlotChange, 
   };
 
   const canProceed = selectedDate && selectedSlot;
+
+  // Build slot state sets for rendering
+  const bookedSet = new Set(bookedSlots);
+  const pastSet = new Set(pastSlots);
 
   return (
     <div className="bk-schedule">
@@ -396,7 +481,7 @@ function StepSchedule({ selectedDate, selectedSlot, onDateChange, onSlotChange, 
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" />
             </svg>
-            <span>Available Times — {formatDate(selectedDate)}</span>
+            <span>Time Slots — {formatDate(selectedDate)}</span>
           </div>
 
           {loadingSlots ? (
@@ -404,34 +489,42 @@ function StepSchedule({ selectedDate, selectedSlot, onDateChange, onSlotChange, 
               <div className="bk-spinner" />
               <span>Loading time slots...</span>
             </div>
-          ) : error ? (
-            <p className="bk-slots-error">{error}</p>
+          ) : allSlots.length === 0 ? (
+            <p className="bk-slots-error">No slots configured for this date. Please choose another day.</p>
           ) : (
-            <div className="bk-slots-grid">
-              {(allSlots.length > 0 ? allSlots : availableSlots).map(slot => {
-                const isBooked = bookedSlots.includes(slot);
-                const isAvail = availableSlots.includes(slot) && !isBooked;
-                const isSelected = selectedSlot === slot;
+            <>
+              <div className="bk-slots-grid">
+                {allSlots.map(slot => {
+                  const isBooked = bookedSet.has(slot);
+                  const isPast = pastSet.has(slot);
+                  const isSelected = selectedSlot === slot;
+                  const isDisabled = isBooked || isPast;
 
-                return (
-                  <button
-                    key={slot}
-                    type="button"
-                    className={`bk-slot ${isSelected ? 'selected' : ''} ${isBooked ? 'booked' : ''} ${!isAvail && !isBooked ? 'disabled' : ''}`}
-                    disabled={isBooked || !isAvail}
-                    onClick={() => {
-                      if (!isBooked && isAvail) {
-                        onSlotChange(slot);
-                      }
-                    }}
-                    title={isBooked ? 'This slot has already been booked' : ''}
-                  >
-                    <span className="bk-slot-time">{formatSlot(slot)}</span>
-                    {isBooked && <span className="bk-slot-tag">Booked</span>}
-                  </button>
-                );
-              })}
-            </div>
+                  let slotClass = 'bk-slot';
+                  if (isSelected) slotClass += ' selected';
+                  if (isBooked) slotClass += ' booked';
+                  else if (isPast) slotClass += ' past';
+                  else slotClass += ' available';
+
+                  return (
+                    <button
+                      key={slot}
+                      type="button"
+                      className={slotClass}
+                      onClick={() => !isDisabled && onSlotChange(slot)}
+                      disabled={isDisabled}
+                      title={isBooked ? 'This slot is already booked' : isPast ? 'This time has passed' : `Book ${formatSlot(slot)}`}
+                    >
+                      <span className="bk-slot-time">{formatSlot(slot)}</span>
+                      {isBooked && <span className="bk-slot-status-label">Booked</span>}
+                      {isPast && !isBooked && <span className="bk-slot-status-label">Past</span>}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {error && <p className="bk-slots-error bk-slots-error-inline">{error}</p>}
+            </>
           )}
         </div>
       )}
@@ -725,8 +818,10 @@ export default function BookingModal({ onClose }) {
 
       if (!bookingRes.ok) {
         if (bookingRes.status === 409 || bookingData.code === 'SLOT_TAKEN') {
+          // Slot was just booked by someone else — go back to slot picker
           setSelectedSlot('');
           setStep(2);
+          setLoading(false);
           throw new Error('This time slot is no longer available as it has just been booked. Please pick another slot.');
         }
         throw new Error(bookingData.error || 'Failed to reserve slot');
@@ -745,6 +840,12 @@ export default function BookingModal({ onClose }) {
       const orderData = await safeFetchJson(orderRes);
 
       if (!orderRes.ok) {
+        if (orderRes.status === 409 || orderData.code === 'SLOT_TAKEN') {
+          setSelectedSlot('');
+          setStep(2);
+          setLoading(false);
+          throw new Error('This time slot was just booked by another customer. Please pick another slot.');
+        }
         throw new Error(orderData.error || 'Failed to create payment order');
       }
 
@@ -772,7 +873,7 @@ export default function BookingModal({ onClose }) {
           },
         },
         handler: async (response) => {
-          // Verify payment on backend
+          // Payment completed on Razorpay side — verify on backend
           setLoading(true);
           try {
             const verifyRes = await fetch(`${API_BASE}/payments/verify`, {
@@ -792,6 +893,8 @@ export default function BookingModal({ onClose }) {
               throw new Error(verifyData.error || 'Payment verification failed');
             }
 
+            // Payment verified → slot is now marked PAID on backend
+            // Show success screen with full confirmation details
             setConfirmationData(verifyData);
             setScreenState('success');
           } catch (verifyErr) {
@@ -812,6 +915,7 @@ export default function BookingModal({ onClose }) {
 
     } catch (err) {
       setLoading(false);
+      if (screenState !== 'form') return; // already navigated away
       setPaymentError(err.message || 'Something went wrong. Please try again.');
       setScreenState('failed');
     }

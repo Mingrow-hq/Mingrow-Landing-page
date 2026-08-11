@@ -169,18 +169,26 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 1rem;
+  gap: 0.5rem;
   margin-bottom: 2rem;
+  width: 100%;
+  max-width: 580px;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
 }
 
 .timer-box {
   background: #f8fafc;
   border: 1px solid #e2e8f0;
   border-radius: 16px;
-  padding: 1.2rem 1.5rem;
-  min-width: 90px;
+  padding: 1rem 0.5rem;
+  flex: 1;
+  min-width: 0;
+  max-width: 115px;
   text-align: center;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  box-sizing: border-box;
 }
 
 .timer-box.highlight-sec {
@@ -261,21 +269,23 @@
 
 .top-prizes-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.25rem;
-  margin: 0 auto 3rem;
-  max-width: 900px;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 1.5rem;
+  margin: 2.5rem auto 3.5rem;
+  max-width: 920px;
+  width: 100%;
   align-items: stretch;
+  justify-content: center;
 }
 
 .winner-card {
   background: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 16px;
-  padding: 1.8rem 1.25rem 1.4rem;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 2.2rem 1.4rem 1.6rem;
   text-align: center;
   position: relative;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
   transition: transform 0.25s ease, box-shadow 0.25s ease;
   display: flex;
   flex-direction: column;
@@ -284,53 +294,55 @@
 }
 
 .winner-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.07);
+  transform: translateY(-5px);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.08);
 }
 
 .grand-card {
   background: linear-gradient(180deg, #fffdf0 0%, #ffffff 100%);
   border: 2px solid #f59e0b;
-  box-shadow: 0 12px 30px rgba(245, 158, 11, 0.12);
+  box-shadow: 0 14px 36px rgba(245, 158, 11, 0.15);
 }
 
 .card-top-badge {
   position: absolute;
-  top: -12px;
+  top: -14px;
   left: 50%;
   transform: translateX(-50%);
   background: #f59e0b;
   color: #ffffff;
   font-weight: 800;
-  font-size: 0.7rem;
+  font-size: 0.72rem;
   letter-spacing: 0.8px;
-  padding: 0.25rem 0.9rem;
+  padding: 0.35rem 1.1rem;
   border-radius: 9999px;
   white-space: nowrap;
-  box-shadow: 0 3px 8px rgba(245, 158, 11, 0.25);
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+  text-transform: uppercase;
+  z-index: 2;
 }
 
 .silver-badge {
   background: #475569;
   color: #ffffff;
-  box-shadow: 0 3px 8px rgba(71, 85, 105, 0.25);
+  box-shadow: 0 4px 12px rgba(71, 85, 105, 0.25);
 }
 
 .bronze-badge {
   background: #d97706;
   color: #ffffff;
-  box-shadow: 0 3px 8px rgba(217, 119, 6, 0.25);
+  box-shadow: 0 4px 12px rgba(217, 119, 6, 0.25);
 }
 
 .prize-trophy-icon {
   font-size: 2.2rem;
   line-height: 1;
-  margin-top: 0.2rem;
+  margin-top: 0.4rem;
   margin-bottom: 0.4rem;
 }
 
 .prize-amount-tag {
-  font-size: 2.2rem;
+  font-size: 2.3rem;
   font-weight: 900;
   color: #0f172a;
   line-height: 1.1;
@@ -347,8 +359,9 @@
 .card-desc {
   font-size: 0.85rem;
   color: #64748b;
-  line-height: 1.45;
+  line-height: 1.5;
   margin: 0;
+  text-align: center;
 }
 
 /* Voucher Section Table */

@@ -651,9 +651,9 @@ html, body {
   font-weight: 800;
 }
 
-/* Top 3 Prize Cards Grid */
-/* Top 4 Prize Cards Grid */
-.top-prizes-grid {
+/* Top 4 Prize Cards Grid in Studio */
+.studio-container .top-prizes-grid,
+.studio-page .top-prizes-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr) !important;
   gap: 1rem;
@@ -662,7 +662,8 @@ html, body {
 }
 
 @media (max-width: 768px) {
-  .top-prizes-grid {
+  .studio-container .top-prizes-grid,
+  .studio-page .top-prizes-grid {
     grid-template-columns: repeat(2, 1fr) !important;
   }
 }

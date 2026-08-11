@@ -426,6 +426,8 @@
   justify-content: center;
   gap: 0.6rem;
   padding: 1.5rem;
+  min-height: 120px;
+  box-sizing: border-box;
   color: #64748b;
   font-size: 0.85rem;
 }
@@ -506,17 +508,19 @@
 }
 
 .bk-cal-cell {
-  height: 24px;
-  border: none;
+  height: 26px;
+  border: 1.5px solid transparent;
+  box-sizing: border-box;
   border-radius: 4px;
-  font-size: 0.7rem;
+  font-size: 0.72rem;
   font-family: inherit;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
   display: flex;
   align-items: center;
   justify-content: center;
+  transform: none !important;
 }
 
 .bk-cal-cell.empty {
@@ -538,24 +542,25 @@
 .bk-cal-cell.available:hover {
   background: #7c3aed;
   color: white;
-  transform: scale(1.05);
+  transform: none !important;
 }
 
 .bk-cal-cell.selected {
   background: #7c3aed !important;
   color: white !important;
-  box-shadow: 0 2px 8px rgba(124, 58, 237, 0.4);
-  transform: scale(1.05);
+  box-shadow: 0 2px 6px rgba(124, 58, 237, 0.3);
+  transform: none !important;
 }
 
 .bk-cal-cell.today {
-  outline: 2px solid #7c3aed;
-  outline-offset: 1px;
+  border-color: #7c3aed;
+  outline: none;
 }
 
 /* ── Time Slots ── */
 .bk-slots-section {
   margin-bottom: 0.5rem;
+  min-height: 160px;
 }
 
 .bk-slots-header {
@@ -577,7 +582,7 @@
 }
 
 .bk-slot {
-  padding: 0.45rem 0.3rem;
+  padding: 0.5rem 0.3rem 0.4rem;
   border: 1.5px solid #e2e8f0;
   border-radius: 8px;
   font-size: 0.78rem;
@@ -589,9 +594,13 @@
   transition: all 0.15s ease;
   text-align: center;
   white-space: nowrap;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
 }
 
-.bk-slot:hover {
+.bk-slot.available:hover:not(:disabled) {
   border-color: #7c3aed;
   background: rgba(124, 58, 237, 0.06);
   color: #7c3aed;
@@ -605,14 +614,12 @@
   box-shadow: 0 2px 8px rgba(124, 58, 237, 0.35);
 }
 
-.bk-slot.booked,
-.bk-slot.disabled,
-.bk-slot:disabled {
-  background: #f1f5f9;
-  border-color: #e2e8f0;
-  color: #94a3b8;
+/* BOOKED slot — red / occupied */
+.bk-slot.booked {
+  background: #fff0f0;
+  border-color: #fca5a5;
+  color: #b91c1c;
   cursor: not-allowed;
-  opacity: 0.65;
   pointer-events: none;
   transform: none !important;
   box-shadow: none !important;
@@ -620,8 +627,48 @@
 
 .bk-slot.booked .bk-slot-time {
   text-decoration: line-through;
+  opacity: 0.7;
 }
 
+/* PAST slot — greyed out */
+.bk-slot.past {
+  background: #f8fafc;
+  border-color: #e2e8f0;
+  color: #94a3b8;
+  cursor: not-allowed;
+  pointer-events: none;
+  transform: none !important;
+  box-shadow: none !important;
+  opacity: 0.55;
+}
+
+/* Generic disabled */
+.bk-slot:disabled {
+  cursor: not-allowed;
+  pointer-events: none;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* Status label inside each slot */
+.bk-slot-status-label {
+  display: block;
+  font-size: 0.58rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  line-height: 1;
+}
+
+.bk-slot.booked .bk-slot-status-label {
+  color: #ef4444;
+}
+
+.bk-slot.past .bk-slot-status-label {
+  color: #94a3b8;
+}
+
+/* Deprecated: legacy tag */
 .bk-slot-tag {
   display: block;
   font-size: 0.65rem;
@@ -632,6 +679,34 @@
   margin-top: 2px;
 }
 
+/* Slot legend */
+.bk-slots-legend {
+  display: flex;
+  gap: 0.85rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.6rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.bk-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.bk-legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+.bk-legend-available .bk-legend-dot { background: #f0fdf4; border: 1.5px solid #16a34a; }
+.bk-legend-booked   .bk-legend-dot { background: #fff0f0; border: 1.5px solid #fca5a5; }
+.bk-legend-past     .bk-legend-dot { background: #f8fafc; border: 1.5px solid #e2e8f0; }
+
 .bk-slots-error {
   font-size: 0.85rem;
   color: #ef4444;
@@ -639,6 +714,10 @@
   background: #fff5f5;
   border-radius: 8px;
   border: 1px solid #fecaca;
+}
+
+.bk-slots-error-inline {
+  margin-top: 0.5rem;
 }
 
 /* ── Review Card ── */

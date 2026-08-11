@@ -41,6 +41,21 @@ export default async function handler(req, res) {
         tomorrow.setDate(tomorrow.getDate() + 1);
         whereClause += ' AND b.booking_date = ?';
         params.push(tomorrow.toISOString().split('T')[0]);
+      } else if (dateFilter === 'UPCOMING') {
+        whereClause += ' AND b.booking_date >= ?';
+        params.push(todayStr);
+      } else if (dateFilter === 'THIS_WEEK') {
+        const startOfWeek = new Date(now);
+        startOfWeek.setDate(now.getDate() - now.getDay());
+        const endOfWeek = new Date(startOfWeek);
+        endOfWeek.setDate(startOfWeek.getDate() + 6);
+        whereClause += ' AND b.booking_date >= ? AND b.booking_date <= ?';
+        params.push(startOfWeek.toISOString().split('T')[0], endOfWeek.toISOString().split('T')[0]);
+      } else if (dateFilter === 'THIS_MONTH') {
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        whereClause += ' AND b.booking_date LIKE ?';
+        params.push(`${year}-${month}-%`);
       }
     }
 
@@ -59,7 +74,8 @@ export default async function handler(req, res) {
 
     const [rows] = await db.query(
       `SELECT b.*, c.name AS customer_name, c.email AS customer_email, c.phone AS customer_phone, c.company_name, c.website,
-              p.id AS payment_db_id, p.order_id, p.payment_id, p.status AS payment_status, p.payment_method
+              p.id AS payment_db_id, p.order_id, p.payment_id, p.status AS payment_status, p.payment_method,
+              p.amount AS payment_amount, p.currency AS payment_currency, p.provider AS payment_provider, p.webhook_verified AS payment_webhook_verified
        FROM bookings b 
        JOIN customers c ON b.customer_id = c.id 
        LEFT JOIN payments p ON p.booking_id = b.id 
@@ -92,7 +108,11 @@ export default async function handler(req, res) {
         order_id: r.order_id,
         payment_id: r.payment_id,
         status: r.payment_status,
-        payment_method: r.payment_method
+        payment_method: r.payment_method,
+        amount: r.payment_amount,
+        currency: r.payment_currency,
+        provider: r.payment_provider,
+        webhook_verified: r.payment_webhook_verified
       }] : []
     }));
 

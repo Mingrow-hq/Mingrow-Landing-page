@@ -6,13 +6,17 @@ const API_BASE = import.meta.env.VITE_API_BASE || '/api';
 // ── Helpers ──────────────────────────────────────────────────────────
 function formatDate(dateStr) {
   if (!dateStr) return '—';
-  const d = new Date(dateStr + 'T00:00:00');
+  // Handle ISO YYYY-MM-DD or full ISO strings
+  const cleanStr = typeof dateStr === 'string' && dateStr.includes('T') ? dateStr : `${dateStr}T00:00:00`;
+  const d = new Date(cleanStr);
+  if (isNaN(d.getTime())) return '—';
   return d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
 }
 
 function formatDateTime(dtStr) {
   if (!dtStr) return '—';
   const d = new Date(dtStr);
+  if (isNaN(d.getTime())) return '—';
   return d.toLocaleString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
 }
 
@@ -30,17 +34,46 @@ function formatAmount(paise) {
 }
 
 function useAdminKey() {
-  const [adminKey, setAdminKey] = useState(() => sessionStorage.getItem('admin_key') || '');
+  const [adminKey, setAdminKey] = useState(() => sessionStorage.getItem('admin_key') || localStorage.getItem('admin_key') || '');
   const [authed, setAuthed] = useState(false);
+  const [checkingAuth, setCheckingAuth] = useState(true);
 
-  const tryAuth = async (key) => {
-    const res = await fetch(`${API_BASE}/admin/stats`, {
-      headers: { 'x-admin-key': key },
-    });
-    return res.ok;
-  };
+  const tryAuth = useCallback(async (key) => {
+    if (!key) return false;
+    try {
+      const res = await fetch(`${API_BASE}/admin/stats`, {
+        headers: { 'x-admin-key': key },
+      });
+      return res.ok;
+    } catch {
+      return false;
+    }
+  }, []);
 
-  return { adminKey, setAdminKey, authed, setAuthed, tryAuth };
+  useEffect(() => {
+    let isMounted = true;
+    const storedKey = sessionStorage.getItem('admin_key') || localStorage.getItem('admin_key');
+    if (storedKey) {
+      tryAuth(storedKey).then((ok) => {
+        if (isMounted) {
+          if (ok) {
+            setAdminKey(storedKey);
+            setAuthed(true);
+          } else {
+            sessionStorage.removeItem('admin_key');
+            localStorage.removeItem('admin_key');
+            setAdminKey('');
+            setAuthed(false);
+          }
+          setCheckingAuth(false);
+        }
+      });
+    } else {
+      setCheckingAuth(false);
+    }
+  }, [tryAuth]);
+
+  return { adminKey, setAdminKey, authed, setAuthed, tryAuth, checkingAuth };
 }
 
 // ── Status Badges ─────────────────────────────────────────────────────
@@ -291,7 +324,7 @@ function BookingDetailModal({ booking, onClose, onCancel }) {
 
 // ── Main Admin Page ────────────────────────────────────────────────────
 export default function AdminPage() {
-  const { adminKey, setAdminKey, authed, setAuthed, tryAuth } = useAdminKey();
+  const { adminKey, setAdminKey, authed, setAuthed, tryAuth, checkingAuth } = useAdminKey();
   const [loginKey, setLoginKey] = useState('');
   const [loginError, setLoginError] = useState('');
   const [loginLoading, setLoginLoading] = useState(false);
@@ -300,6 +333,7 @@ export default function AdminPage() {
   const [bookings, setBookings] = useState([]);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -333,7 +367,7 @@ export default function AdminPage() {
   const fetchBookings = useCallback(async () => {
     setLoading(true);
     setError('');
-    const params = new URLSearchParams({ page, limit: 15 });
+    const params = new URLSearchParams({ page, limit });
     if (search) params.set('search', search);
     if (bookingStatus !== 'ALL') params.set('bookingStatus', bookingStatus);
     if (paymentStatus !== 'ALL') params.set('paymentStatus', paymentStatus);
@@ -349,7 +383,7 @@ export default function AdminPage() {
       setError('Failed to fetch bookings');
     }
     setLoading(false);
-  }, [key, page, search, bookingStatus, paymentStatus, dateFilter]);
+  }, [key, page, limit, search, bookingStatus, paymentStatus, dateFilter]);
 
   useEffect(() => {
     if (authed) {
@@ -373,6 +407,7 @@ export default function AdminPage() {
     const ok = await tryAuth(loginKey);
     if (ok) {
       sessionStorage.setItem('admin_key', loginKey);
+      localStorage.setItem('admin_key', loginKey);
       setAdminKey(loginKey);
       setAuthed(true);
     } else {
@@ -391,6 +426,21 @@ export default function AdminPage() {
     setBookings(prev => prev.map(b => b.id === id ? { ...b, status: 'CANCELLED' } : b));
     fetchStats();
   };
+
+  // Auth checking screen
+  if (checkingAuth) {
+    return (
+      <div className="adm-login-screen">
+        <div className="adm-login-card">
+          <div className="adm-login-logo">
+            <span className="adm-logo-m">M</span>
+            <span>Mingrow Admin</span>
+          </div>
+          <p>Verifying session...</p>
+        </div>
+      </div>
+    );
+  }
 
   // Login screen
   if (!authed) {
@@ -435,7 +485,12 @@ export default function AdminPage() {
         </div>
         <button
           className="adm-btn-secondary"
-          onClick={() => { sessionStorage.removeItem('admin_key'); setAuthed(false); }}
+          onClick={() => {
+            sessionStorage.removeItem('admin_key');
+            localStorage.removeItem('admin_key');
+            setAdminKey('');
+            setAuthed(false);
+          }}
         >
           Sign Out
         </button>
@@ -500,6 +555,23 @@ export default function AdminPage() {
               <option value="THIS_WEEK">This Week</option>
               <option value="THIS_MONTH">This Month</option>
             </select>
+
+            <div className="adm-limit-selector">
+              <label htmlFor="limit-select">Show per page:</label>
+              <select
+                id="limit-select"
+                value={limit}
+                onChange={e => {
+                  setLimit(Number(e.target.value));
+                  setPage(1);
+                }}
+              >
+                <option value={10}>10 per page</option>
+                <option value={25}>25 per page</option>
+                <option value={50}>50 per page</option>
+                <option value={100}>100 per page</option>
+              </select>
+            </div>
           </div>
 
           {/* Table */}
@@ -531,7 +603,29 @@ export default function AdminPage() {
                   </tr>
                 ) : bookings.length === 0 ? (
                   <tr>
-                    <td colSpan={10} className="adm-table-empty">No bookings found</td>
+                    <td colSpan={10}>
+                      <div className="adm-no-data-card">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="adm-no-data-icon">
+                          <circle cx="12" cy="12" r="10"/>
+                          <line x1="8" y1="12" x2="16" y2="12"/>
+                        </svg>
+                        <h3>No Data Visible</h3>
+                        <p>No bookings match your current filter and search criteria.</p>
+                        <button
+                          className="adm-btn-secondary"
+                          onClick={() => {
+                            setSearch('');
+                            setBookingStatus('ALL');
+                            setPaymentStatus('ALL');
+                            setDateFilter('ALL');
+                            setActiveCard('TOTAL');
+                            setPage(1);
+                          }}
+                        >
+                          Reset Filters
+                        </button>
+                      </div>
+                    </td>
                   </tr>
                 ) : (
                   bookings.map(booking => {
@@ -579,8 +673,11 @@ export default function AdminPage() {
           </div>
 
           {/* Pagination */}
-          {totalPages > 1 && (
-            <div className="adm-pagination">
+          <div className="adm-pagination">
+            <span className="adm-pagination-info">
+              Showing {total > 0 ? (page - 1) * limit + 1 : 0} - {Math.min(page * limit, total)} of {total} items
+            </span>
+            <div className="adm-pagination-controls">
               <button
                 className="adm-btn-secondary"
                 disabled={page <= 1}
@@ -588,7 +685,7 @@ export default function AdminPage() {
               >
                 ← Prev
               </button>
-              <span>Page {page} of {totalPages}</span>
+              <span>Page {page} of {totalPages || 1}</span>
               <button
                 className="adm-btn-secondary"
                 disabled={page >= totalPages}
@@ -597,7 +694,7 @@ export default function AdminPage() {
                 Next →
               </button>
             </div>
-          )}
+          </div>
         </div>
       </div>
 

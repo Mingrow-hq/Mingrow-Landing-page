@@ -3,7 +3,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 // ───────────────────────────────────────────────────────────────────────────
 // CONFIGURATION
 // ───────────────────────────────────────────────────────────────────────────
-const API_BASE = '/api';
+const API_BASE = import.meta.env.VITE_API_BASE || '/api';
 
 // ───────────────────────────────────────────────────────────────────────────
 // HELPERS
@@ -710,6 +710,10 @@ export default function BookingModal({ onClose }) {
 
       const safeFetchJson = async (res) => {
         const text = await res.text();
+        const contentType = res.headers.get('content-type') || '';
+        if (contentType.includes('text/html') || text.trim().startsWith('<')) {
+          throw new Error(`API endpoint returned HTML (200 OK index page) instead of JSON. Ensure the backend API server/serverless functions are deployed and VITE_API_BASE is configured.`);
+        }
         try {
           return text ? JSON.parse(text) : {};
         } catch {

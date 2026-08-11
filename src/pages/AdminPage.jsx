@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import './admin.css';
 
-const API_BASE = '/api';
+const API_BASE = import.meta.env.VITE_API_BASE || '/api';
 
 // ── Helpers ──────────────────────────────────────────────────────────
 function formatDate(dateStr) {

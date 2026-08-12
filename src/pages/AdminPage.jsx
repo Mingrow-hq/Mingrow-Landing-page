@@ -349,6 +349,7 @@ export default function AdminPage() {
   const key = adminKey;
 
   const handleCardClick = (card) => {
+    if (activeCard === card.id) return;
     setActiveCard(card.id);
     setBookingStatus(card.filter.bookingStatus);
     setPaymentStatus(card.filter.paymentStatus);
@@ -549,6 +550,7 @@ export default function AdminPage() {
             <h2 className="adm-table-title">
               All Bookings
               <span className="adm-count-badge">{total}</span>
+              {loading && <div className="adm-spinner adm-spinner-sm" style={{ marginLeft: '8px' }} title="Loading..." />}
             </h2>
             <button className="adm-btn-icon" onClick={() => { fetchStats(); fetchBookings(); }} title="Refresh">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -637,8 +639,8 @@ export default function AdminPage() {
                   <th>Delete</th>
                 </tr>
               </thead>
-              <tbody>
-                {loading ? (
+              <tbody className={loading && bookings.length > 0 ? "adm-tbody-loading" : ""}>
+                {loading && bookings.length === 0 ? (
                   <tr>
                     <td colSpan={11} className="adm-table-loading">
                       <div className="adm-spinner" />

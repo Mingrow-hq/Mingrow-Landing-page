@@ -1031,3 +1031,477 @@
     font-size: 1.1rem;
   }
 }
+
+/* ── Header Nav Tabs ── */
+.adm-nav-tabs {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-left: 1rem;
+  border-left: 1px solid #e2e8f0;
+}
+
+.adm-nav-tab {
+  background: transparent;
+  border: 1px solid transparent;
+  padding: 0.45rem 0.9rem;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.adm-nav-tab:hover {
+  background: #f8fafc;
+  color: #0f172a;
+}
+
+.adm-nav-tab.active {
+  background: #ede9fe;
+  color: #7c3aed;
+  border-color: #ddd6fe;
+  font-weight: 700;
+}
+
+/* ── Coupon Settings Module ── */
+.adm-coupon-module {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.adm-coupon-layout {
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+@media (max-width: 1080px) {
+  .adm-coupon-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.adm-card {
+  background: white;
+  border-radius: 16px;
+  border: 1px solid #f1f5f9;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.adm-generator-card {
+  padding: 1.5rem;
+}
+
+.adm-card-header {
+  margin-bottom: 1.25rem;
+}
+
+.adm-card-header h3 {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 0.3rem;
+}
+
+.adm-card-header p {
+  font-size: 0.82rem;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.adm-alert-success {
+  background: #dcfce7;
+  color: #15803d;
+  border: 1px solid #bbf7d0;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 1.25rem;
+}
+
+.adm-generator-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.adm-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.adm-form-group label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #334155;
+}
+
+.adm-form-group input[type="text"],
+.adm-form-group input[type="number"],
+.adm-form-group input[type="date"],
+.adm-form-group select {
+  padding: 0.65rem 0.85rem;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 0.88rem;
+  font-family: inherit;
+  outline: none;
+  background: #f8fafc;
+  color: #0f172a;
+  transition: border-color 0.2s ease;
+}
+
+.adm-form-group input:focus,
+.adm-form-group select:focus {
+  border-color: #7c3aed;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+}
+
+.adm-form-hint {
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+.adm-input-btn-group {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.adm-input-btn-group input {
+  flex: 1;
+  font-family: 'Courier New', monospace;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.adm-btn-generator {
+  background: linear-gradient(135deg, #7c3aed, #6d28d9);
+  color: white;
+  border: none;
+  padding: 0 1rem;
+  border-radius: 10px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: transform 0.15s ease;
+}
+
+.adm-btn-generator:hover {
+  transform: scale(1.02);
+}
+
+.adm-prefix-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.2rem;
+  font-size: 0.78rem;
+  color: #64748b;
+}
+
+.adm-prefix-select {
+  padding: 0.25rem 0.5rem !important;
+  font-size: 0.78rem !important;
+}
+
+.adm-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.85rem;
+}
+
+/* Switch Toggle Styling */
+.adm-checkbox-group {
+  margin-top: 0.25rem;
+}
+
+.adm-switch-label {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.adm-switch-label input[type="checkbox"] {
+  display: none;
+}
+
+.adm-switch-slider {
+  width: 42px;
+  height: 24px;
+  background: #cbd5e1;
+  border-radius: 99px;
+  position: relative;
+  transition: background 0.2s ease;
+  flex-shrink: 0;
+}
+
+.adm-switch-slider::before {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 18px;
+  height: 18px;
+  background: white;
+  border-radius: 50%;
+  transition: transform 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+.adm-switch-label input:checked + .adm-switch-slider {
+  background: #16a34a;
+}
+
+.adm-switch-label input:checked + .adm-switch-slider::before {
+  transform: translateX(18px);
+}
+
+.adm-switch-text {
+  font-size: 0.82rem;
+  color: #334155;
+  font-weight: 600;
+}
+
+.adm-switch-label-sm {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.adm-switch-label-sm input[type="checkbox"] {
+  display: none;
+}
+
+.adm-switch-slider-sm {
+  width: 34px;
+  height: 20px;
+  background: #cbd5e1;
+  border-radius: 99px;
+  position: relative;
+  transition: background 0.2s ease;
+}
+
+.adm-switch-slider-sm::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  background: white;
+  border-radius: 50%;
+  transition: transform 0.2s ease;
+}
+
+.adm-switch-label-sm input:checked + .adm-switch-slider-sm {
+  background: #16a34a;
+}
+
+.adm-switch-label-sm input:checked + .adm-switch-slider-sm::before {
+  transform: translateX(14px);
+}
+
+.adm-btn-primary {
+  background: linear-gradient(135deg, #5b21b6, #7c3aed);
+  color: white;
+  border: none;
+  padding: 0.8rem 1.25rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+  width: 100%;
+}
+
+.adm-btn-primary:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.adm-btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Coupon Table Elements */
+.adm-code-badge-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.adm-coupon-code {
+  font-family: 'Courier New', monospace;
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #7c3aed;
+  background: #f3e8ff;
+  padding: 0.25rem 0.55rem;
+  border-radius: 6px;
+  border: 1px solid #e9d5ff;
+}
+
+.adm-copy-btn {
+  background: transparent;
+  border: 1px solid #cbd5e1;
+  padding: 0.2rem 0.45rem;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.adm-copy-btn:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.adm-discount-text {
+  color: #059669;
+  font-size: 0.88rem;
+}
+
+.adm-usage-box {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 110px;
+}
+
+.adm-usage-text {
+  font-size: 0.78rem;
+  color: #64748b;
+}
+
+.adm-progress-bar {
+  height: 6px;
+  width: 100%;
+  background: #e2e8f0;
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.adm-progress-fill {
+  height: 100%;
+  border-radius: 99px;
+  transition: width 0.3s ease;
+}
+
+.adm-action-btns {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* ── Calendar Expiry Settings Box ── */
+.adm-calendar-settings-card {
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.adm-calendar-settings-title {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #1e293b;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.adm-calendar-presets-label {
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.adm-calendar-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.adm-preset-btn {
+  background: white;
+  border: 1px solid #cbd5e1;
+  color: #475569;
+  padding: 0.3rem 0.65rem;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s ease;
+}
+
+.adm-preset-btn:hover {
+  background: #ede9fe;
+  color: #7c3aed;
+  border-color: #ddd6fe;
+  transform: translateY(-1px);
+}
+
+/* Interactive Calendar Group */
+.adm-input-calendar-group {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  cursor: pointer;
+}
+
+.adm-input-calendar-group input[type="date"] {
+  width: 100%;
+  padding-right: 2.8rem;
+  cursor: pointer;
+}
+
+.adm-calendar-icon-btn {
+  position: absolute;
+  right: 8px;
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.adm-calendar-icon-btn:hover {
+  background: #ede9fe;
+  border-color: #7c3aed;
+  transform: scale(1.05);
+}
+
+

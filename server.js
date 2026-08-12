@@ -15,6 +15,9 @@ import webhookHandler from './api/payments/webhook.js';
 import adminBookingsHandler from './api/admin/bookings/index.js';
 import adminBookingByIdHandler from './api/admin/bookings/[id].js';
 import adminStatsHandler from './api/admin/stats.js';
+import adminCouponsHandler from './api/admin/coupons/index.js';
+import adminCouponByIdHandler from './api/admin/coupons/[id].js';
+import verifyCouponHandler from './api/coupons/verify.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -53,6 +56,12 @@ app.all('/api/admin/bookings/:id', (req, res) => {
   adminBookingByIdHandler(req, res);
 });
 app.all('/api/admin/stats', (req, res) => adminStatsHandler(req, res));
+app.all('/api/coupons/verify', (req, res) => verifyCouponHandler(req, res));
+app.all('/api/admin/coupons', (req, res) => adminCouponsHandler(req, res));
+app.all('/api/admin/coupons/:id', (req, res) => {
+  req.query.id = req.params.id;
+  adminCouponByIdHandler(req, res);
+});
 
 // -- Serve React Frontend --------------------------------------
 app.use(express.static(path.join(__dirname, 'dist')));

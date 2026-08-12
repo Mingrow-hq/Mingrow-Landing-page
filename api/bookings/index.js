@@ -80,7 +80,30 @@ export default async function handler(req, res) {
 
     // Fetch fee config
     const [feeConfig] = await db.query("SELECT config_value FROM availability_config WHERE config_key = 'booking_fee_paise'");
-    const amountPaise = feeConfig.length > 0 ? (typeof feeConfig[0].config_value === 'string' ? parseInt(JSON.parse(feeConfig[0].config_value)) : parseInt(feeConfig[0].config_value)) : 250000;
+    let amountPaise = feeConfig.length > 0 ? (typeof feeConfig[0].config_value === 'string' ? parseInt(JSON.parse(feeConfig[0].config_value)) : parseInt(feeConfig[0].config_value)) : 250000;
+    
+    // Check coupon discount server side if couponCode provided or amount passed
+    if (req.body.couponCode) {
+      try {
+        const cleanCouponCode = String(req.body.couponCode).trim().toUpperCase();
+        const [cRows] = await db.query('SELECT * FROM coupons WHERE UPPER(code) = ? AND is_active = 1', [cleanCouponCode]);
+        if (cRows && cRows.length > 0) {
+          const discountVal = parseInt(cRows[0].discount_value, 10);
+          if (discountVal > 0) {
+            const discPaise = Math.round((amountPaise * discountVal) / 100);
+            amountPaise = Math.max(0, amountPaise - discPaise);
+          }
+        } else if (req.body.amount !== undefined && req.body.amount !== null && !isNaN(req.body.amount)) {
+          amountPaise = parseInt(req.body.amount, 10);
+        }
+      } catch (cErr) {
+        if (req.body.amount !== undefined && req.body.amount !== null && !isNaN(req.body.amount)) {
+          amountPaise = parseInt(req.body.amount, 10);
+        }
+      }
+    } else if (req.body.amount !== undefined && req.body.amount !== null && !isNaN(req.body.amount)) {
+      amountPaise = parseInt(req.body.amount, 10);
+    }
 
     const holdUntil = new Date(Date.now() + 10 * 60 * 1000);
     const bookingId = uuidv4();

@@ -16,7 +16,7 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   try {
-    const { bookingId } = req.body;
+    const { bookingId, amount: requestedAmount } = req.body;
 
     if (!bookingId) {
       return res.status(400).json({ error: 'bookingId is required' });
@@ -53,7 +53,16 @@ export default async function handler(req, res) {
       });
     }
 
-    const amountPaise = booking.amount;
+    // Use the discounted amount if explicitly passed from frontend (coupon applied),
+    // otherwise fall back to whatever is stored in the booking record.
+    const amountPaise = (requestedAmount !== undefined && requestedAmount !== null && !isNaN(requestedAmount))
+      ? parseInt(requestedAmount, 10)
+      : booking.amount;
+
+    // Update booking amount in DB so booking record reflects final paid fee
+    if (amountPaise !== booking.amount) {
+      await db.query('UPDATE bookings SET amount = ? WHERE id = ?', [amountPaise, booking.id]);
+    }
 
     const order = await razorpay.orders.create({
       amount: amountPaise,

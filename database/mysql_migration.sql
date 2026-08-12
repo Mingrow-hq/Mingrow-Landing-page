@@ -62,6 +62,19 @@ CREATE TABLE IF NOT EXISTS `blocked_dates` (
   `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE IF NOT EXISTS `coupons` (
+  `id` VARCHAR(36) NOT NULL PRIMARY KEY,
+  `code` VARCHAR(50) NOT NULL UNIQUE,
+  `discount_type` ENUM('PERCENTAGE', 'FIXED') NOT NULL DEFAULT 'PERCENTAGE',
+  `discount_value` INT NOT NULL,
+  `max_uses` INT NOT NULL DEFAULT 1,
+  `used_count` INT NOT NULL DEFAULT 0,
+  `expiry_date` DATETIME NOT NULL,
+  `is_active` TINYINT(1) NOT NULL DEFAULT 1,
+  `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 -- Seed default configuration
 INSERT INTO `availability_config` (`id`, `config_key`, `config_value`) VALUES
   (UUID(), 'working_days', '[1,2,3,4,5,6]'),

@@ -17,12 +17,12 @@ export default async function handler(req, res) {
     const todayStr = new Date().toISOString().split('T')[0];
     const monthStart = new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString().split('T')[0];
 
-    const [[{ totalBookings }]] = await db.query("SELECT COUNT(*) AS totalBookings FROM bookings");
+    const [[{ totalBookings }]] = await db.query("SELECT COUNT(*) AS totalBookings FROM bookings WHERE status = 'PAID'");
     const [[{ paidBookings }]] = await db.query("SELECT COUNT(*) AS paidBookings FROM bookings WHERE status = 'PAID'");
     const [[{ pendingBookings }]] = await db.query("SELECT COUNT(*) AS pendingBookings FROM bookings WHERE status IN ('PENDING', 'HELD')");
     const [[{ cancelledBookings }]] = await db.query("SELECT COUNT(*) AS cancelledBookings FROM bookings WHERE status IN ('CANCELLED', 'EXPIRED', 'REFUNDED')");
     const [[{ totalRevenue }]] = await db.query("SELECT COALESCE(SUM(amount), 0) AS totalRevenue FROM bookings WHERE status = 'PAID'");
-    const [[{ todayBookings }]] = await db.query("SELECT COUNT(*) AS todayBookings FROM bookings WHERE booking_date = ?", [todayStr]);
+    const [[{ todayBookings }]] = await db.query("SELECT COUNT(*) AS todayBookings FROM bookings WHERE status = 'PAID' AND booking_date = ?", [todayStr]);
     const [[{ todayRevenue }]] = await db.query("SELECT COALESCE(SUM(amount), 0) AS todayRevenue FROM bookings WHERE status = 'PAID' AND booking_date = ?", [todayStr]);
     const [[{ monthRevenue }]] = await db.query("SELECT COALESCE(SUM(amount), 0) AS monthRevenue FROM bookings WHERE status = 'PAID' AND booking_date >= ?", [monthStart]);
     const [[{ upcomingDemos }]] = await db.query("SELECT COUNT(*) AS upcomingDemos FROM bookings WHERE status = 'PAID' AND booking_date >= ?", [todayStr]);

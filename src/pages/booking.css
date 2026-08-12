@@ -799,9 +799,119 @@
   display: block;
 }
 
+.bk-price-discount-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.bk-price-strike-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.bk-original-price-strike {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #94a3b8;
+  text-decoration: line-through;
+}
+
+.bk-coupon-tag-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  background: #dcfce7;
+  color: #15803d;
+  padding: 0.15rem 0.45rem;
+  border-radius: 6px;
+  border: 1px solid #bbf7d0;
+}
+
+.bk-discounted-price {
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: #16a34a !important;
+}
+
 .bk-review-gst {
   font-size: 0.72rem;
   color: #94a3b8;
+}
+
+/* ── Step 1 Coupon Section Styles ── */
+.bk-coupon-section {
+  margin-top: 0.2rem;
+}
+
+.bk-coupon-input-group {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.bk-coupon-input-group input {
+  flex: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 700;
+}
+
+.bk-coupon-apply-btn {
+  padding: 0.7rem 1.1rem;
+  background: #7c3aed;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease;
+  white-space: nowrap;
+}
+
+.bk-coupon-apply-btn:hover:not(:disabled) {
+  background: #6d28d9;
+  transform: translateY(-1px);
+}
+
+.bk-coupon-apply-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.bk-coupon-applied-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f0fdf4;
+  border: 1.5px dashed #22c55e;
+  border-radius: 10px;
+  padding: 0.65rem 0.85rem;
+}
+
+.bk-coupon-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.85rem;
+  color: #15803d;
+}
+
+.bk-coupon-remove-btn {
+  background: transparent;
+  border: none;
+  color: #ef4444;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  transition: background 0.15s ease;
+}
+
+.bk-coupon-remove-btn:hover {
+  background: #fee2e2;
 }
 
 .bk-hold-notice {

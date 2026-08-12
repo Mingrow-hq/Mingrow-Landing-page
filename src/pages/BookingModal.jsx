@@ -81,8 +81,11 @@ function StepIndicator({ currentStep }) {
 // ───────────────────────────────────────────────────────────────────────────
 // STEP 1 — CUSTOMER DETAILS
 // ───────────────────────────────────────────────────────────────────────────
-function StepDetails({ formData, onChange, onNext }) {
+function StepDetails({ formData, onChange, onNext, appliedCoupon, onApplyCoupon, onRemoveCoupon }) {
   const [errors, setErrors] = useState({});
+  const [couponInput, setCouponInput] = useState('');
+  const [couponLoading, setCouponLoading] = useState(false);
+  const [couponErr, setCouponErr] = useState('');
 
   const validate = () => {
     const errs = {};
@@ -107,6 +110,77 @@ function StepDetails({ formData, onChange, onNext }) {
   const handleChange = (field, value) => {
     onChange(field, value);
     if (errors[field]) setErrors(prev => ({ ...prev, [field]: undefined }));
+  };
+
+  const handleApplyCoupon = async () => {
+    const codeToTest = couponInput.trim();
+    if (!codeToTest) {
+      setCouponErr('Please enter a coupon code');
+      return;
+    }
+    setCouponLoading(true);
+    setCouponErr('');
+
+    try {
+      // 1. Try server API verify endpoint
+      const res = await fetch(`${API_BASE}/coupons/verify`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code: codeToTest }),
+      });
+      
+      const data = await res.json();
+      if (res.ok && data.valid && data.coupon) {
+        onApplyCoupon(data.coupon);
+        setCouponInput('');
+        setCouponLoading(false);
+        return;
+      }
+
+      // 2. Client-side fallback to admin coupons saved in localStorage if API server fails or offline
+      const localCoupons = JSON.parse(localStorage.getItem('mingrow_admin_coupons') || '[]');
+      const matched = localCoupons.find(c => c.code.toUpperCase() === codeToTest.toUpperCase());
+      
+      if (matched) {
+        if (!matched.is_active) {
+          setCouponErr('This coupon is no longer active');
+        } else if (matched.expiry_date && new Date(matched.expiry_date) < new Date()) {
+          setCouponErr('This coupon has expired');
+        } else if (matched.max_uses && matched.used_count >= matched.max_uses) {
+          setCouponErr('Coupon usage limit reached');
+        } else {
+          onApplyCoupon({
+            id: matched.id,
+            code: matched.code,
+            discount_type: matched.discount_type || 'PERCENTAGE',
+            discount_value: parseInt(matched.discount_value, 10),
+          });
+          setCouponInput('');
+          setCouponErr('');
+        }
+      } else {
+        setCouponErr(data.error || 'Invalid coupon code');
+      }
+    } catch (err) {
+      // Fallback check against localStorage in case of network issue
+      const localCoupons = JSON.parse(localStorage.getItem('mingrow_admin_coupons') || '[]');
+      const matched = localCoupons.find(c => c.code.toUpperCase() === codeToTest.toUpperCase());
+      
+      if (matched && matched.is_active) {
+        onApplyCoupon({
+          id: matched.id,
+          code: matched.code,
+          discount_type: matched.discount_type || 'PERCENTAGE',
+          discount_value: parseInt(matched.discount_value, 10),
+        });
+        setCouponInput('');
+        setCouponErr('');
+      } else {
+        setCouponErr('Invalid or expired coupon code');
+      }
+    } finally {
+      setCouponLoading(false);
+    }
   };
 
   return (
@@ -156,6 +230,52 @@ function StepDetails({ formData, onChange, onNext }) {
           {errors.phone && <span className="bk-error-msg">{errors.phone}</span>}
         </div>
 
+        {/* ── Coupon Code Section (Step 1 - After Mobile Number) ── */}
+        <div className="bk-field bk-coupon-section">
+          <label htmlFor="bk-coupon">Coupon Code <span className="optional">(optional)</span></label>
+          
+          {appliedCoupon ? (
+            <div className="bk-coupon-applied-box">
+              <div className="bk-coupon-badge">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
+                  <line x1="7" y1="7" x2="7.01" y2="7"/>
+                </svg>
+                <span><strong>{appliedCoupon.code}</strong> ({appliedCoupon.discount_value}% OFF applied)</span>
+              </div>
+              <button
+                type="button"
+                className="bk-coupon-remove-btn"
+                onClick={onRemoveCoupon}
+              >
+                Remove
+              </button>
+            </div>
+          ) : (
+            <div className="bk-coupon-input-group">
+              <input
+                type="text"
+                id="bk-coupon"
+                placeholder="Enter coupon code (e.g. MINGROW20)"
+                value={couponInput}
+                onChange={e => {
+                  setCouponInput(e.target.value.toUpperCase());
+                  setCouponErr('');
+                }}
+              />
+              <button
+                type="button"
+                className="bk-coupon-apply-btn"
+                onClick={handleApplyCoupon}
+                disabled={couponLoading || !couponInput.trim()}
+              >
+                {couponLoading ? 'Checking...' : 'Apply'}
+              </button>
+            </div>
+          )}
+
+          {couponErr && <span className="bk-error-msg">{couponErr}</span>}
+        </div>
 
         <div className="bk-field">
           <label htmlFor="bk-notes">Additional Requirements <span className="optional">(optional)</span></label>
@@ -552,11 +672,49 @@ function StepSchedule({ selectedDate, selectedSlot, onDateChange, onSlotChange, 
   );
 }
 
+// Centralized price calculation helper used across StepReview & Payment gateway order creation
+const BASE_STUDIO_FEE_PAISE = 250000;
+
+function computeFinalAmount(coupon) {
+  if (!coupon || !coupon.discount_value || coupon.discount_value <= 0) {
+    return {
+      basePaise: BASE_STUDIO_FEE_PAISE,
+      finalPaise: BASE_STUDIO_FEE_PAISE,
+      discountLabel: '',
+      isDiscounted: false,
+    };
+  }
+
+  let finalPaise = BASE_STUDIO_FEE_PAISE;
+  let discountLabel = '';
+
+  if (coupon.discount_type === 'FIXED') {
+    const fixedPaise = coupon.discount_value * 100;
+    finalPaise = Math.max(0, BASE_STUDIO_FEE_PAISE - fixedPaise);
+    discountLabel = `-₹${coupon.discount_value} OFF`;
+  } else {
+    // Default: PERCENTAGE
+    const pct = coupon.discount_value;
+    const discountPaise = Math.round((BASE_STUDIO_FEE_PAISE * pct) / 100);
+    finalPaise = Math.max(0, BASE_STUDIO_FEE_PAISE - discountPaise);
+    discountLabel = `-${pct}% OFF`;
+  }
+
+  return {
+    basePaise: BASE_STUDIO_FEE_PAISE,
+    finalPaise,
+    discountLabel,
+    isDiscounted: true,
+  };
+}
+
 // ───────────────────────────────────────────────────────────────────────────
 // STEP 3 — REVIEW BOOKING
 // ───────────────────────────────────────────────────────────────────────────
-function StepReview({ formData, selectedDate, selectedSlot, onBack, onProceed, loading }) {
-  const DEMO_FEE_PAISE = 250000;
+function StepReview({ formData, selectedDate, selectedSlot, appliedCoupon, onBack, onProceed, loading }) {
+  const priceInfo = computeFinalAmount(appliedCoupon);
+  const finalFeePaise = priceInfo.finalPaise;
+  const discountLabel = priceInfo.discountLabel;
 
   return (
     <div className="bk-review">
@@ -602,7 +760,17 @@ function StepReview({ formData, selectedDate, selectedSlot, onBack, onProceed, l
         <div className="bk-review-amount">
           <span>Studio Booking Fee</span>
           <div className="bk-review-price">
-            <strong>{formatAmount(DEMO_FEE_PAISE)}</strong>
+            {appliedCoupon ? (
+              <div className="bk-price-discount-container">
+                <div className="bk-price-strike-row">
+                  <span className="bk-original-price-strike">{formatAmount(priceInfo.basePaise)}</span>
+                  <span className="bk-coupon-tag-badge">{discountLabel}</span>
+                </div>
+                <strong className="bk-discounted-price">{formatAmount(finalFeePaise)}</strong>
+              </div>
+            ) : (
+              <strong>{formatAmount(priceInfo.basePaise)}</strong>
+            )}
             <span className="bk-review-gst">+ GST (if applicable)</span>
           </div>
         </div>
@@ -622,7 +790,7 @@ function StepReview({ formData, selectedDate, selectedSlot, onBack, onProceed, l
           </svg>
           Back
         </button>
-        <button type="button" className="bk-btn-primary bk-btn-pay" onClick={onProceed} disabled={loading}>
+        <button type="button" className="bk-btn-primary bk-btn-pay" onClick={() => onProceed(finalFeePaise)} disabled={loading}>
           {loading ? (
             <>
               <div className="bk-spinner small" />
@@ -633,7 +801,7 @@ function StepReview({ formData, selectedDate, selectedSlot, onBack, onProceed, l
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/>
               </svg>
-              Pay {formatAmount(DEMO_FEE_PAISE)}
+              Pay {formatAmount(finalFeePaise)}
             </>
           )}
         </button>
@@ -753,6 +921,7 @@ export default function BookingModal({ onClose }) {
     website: '',
     notes: '',
   });
+  const [appliedCoupon, setAppliedCoupon] = useState(null); // { id, code, discount_type, discount_value }
   const [selectedDate, setSelectedDate] = useState('');
   const [selectedSlot, setSelectedSlot] = useState('');
   const [loading, setLoading] = useState(false);
@@ -780,9 +949,13 @@ export default function BookingModal({ onClose }) {
     return () => { document.body.style.overflow = ''; };
   }, []);
 
-  const handleProceedToPayment = async () => {
+  const handleProceedToPayment = async (customAmountPaise) => {
     setLoading(true);
     setPaymentError('');
+
+    // Single source of truth for final payment amount
+    const priceCalculation = computeFinalAmount(appliedCoupon);
+    const finalAmountToPayPaise = customAmountPaise || priceCalculation.finalPaise;
 
     try {
       // Step 1: Create booking (slot reservation)
@@ -798,6 +971,8 @@ export default function BookingModal({ onClose }) {
           notes: formData.notes.trim() || undefined,
           bookingDate: selectedDate,
           timeSlot: selectedSlot,
+          couponCode: appliedCoupon ? appliedCoupon.code : undefined,
+          amount: finalAmountToPayPaise,
         }),
       });
 
@@ -830,11 +1005,11 @@ export default function BookingModal({ onClose }) {
       const currentBookingId = bookingData.bookingId;
       setBookingId(currentBookingId);
 
-      // Step 2: Create Razorpay order
+      // Step 2: Create Razorpay order (pass exact single-source final amount)
       const orderRes = await fetch(`${API_BASE}/payments/create-order`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ bookingId: currentBookingId }),
+        body: JSON.stringify({ bookingId: currentBookingId, amount: finalAmountToPayPaise }),
       });
 
       const orderData = await safeFetchJson(orderRes);
@@ -859,7 +1034,7 @@ export default function BookingModal({ onClose }) {
 
       const rzpOptions = {
         key: orderData.keyId,
-        amount: orderData.amount,
+        amount: orderData.amount || finalAmountToPayPaise,
         currency: orderData.currency,
         name: 'Mingrow Studio',
         description: `Studio Booking — ${formatDate(selectedDate)} ${formatSlot(selectedSlot)}`,
@@ -974,6 +1149,9 @@ export default function BookingModal({ onClose }) {
                   formData={formData}
                   onChange={handleFieldChange}
                   onNext={() => setStep(2)}
+                  appliedCoupon={appliedCoupon}
+                  onApplyCoupon={c => setAppliedCoupon(c)}
+                  onRemoveCoupon={() => setAppliedCoupon(null)}
                 />
               )}
               {step === 2 && (
@@ -991,6 +1169,7 @@ export default function BookingModal({ onClose }) {
                   formData={formData}
                   selectedDate={selectedDate}
                   selectedSlot={selectedSlot}
+                  appliedCoupon={appliedCoupon}
                   onBack={() => setStep(2)}
                   onProceed={handleProceedToPayment}
                   loading={loading}

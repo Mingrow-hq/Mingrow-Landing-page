@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import CouponSettingsModule from './CouponSettingsModule.jsx';
 import './admin.css';
 
 const API_BASE = import.meta.env.VITE_API_BASE || '/api';
@@ -344,6 +345,7 @@ export default function AdminPage() {
   const [dateFilter, setDateFilter] = useState('ALL');
   const [activeCard, setActiveCard] = useState('TOTAL');
 
+  const [activeModule, setActiveModule] = useState('bookings'); // 'bookings' | 'coupons'
   const [selectedBooking, setSelectedBooking] = useState(null);
 
   const key = adminKey;
@@ -521,11 +523,29 @@ export default function AdminPage() {
       {/* Header */}
       <div className="adm-header">
         <div className="adm-header-left">
-          <div className="adm-logo">
+          <div 
+            className="adm-logo"
+            onClick={() => setActiveModule('bookings')}
+            style={{ cursor: 'pointer' }}
+            title="Go to Bookings Dashboard"
+          >
             <span className="adm-logo-m">M</span>
             <span className="adm-logo-text">Mingrow Admin</span>
           </div>
-          <span className="adm-header-title">Bookings Dashboard</span>
+          <div className="adm-nav-tabs">
+            <button
+              className={`adm-nav-tab ${activeModule === 'bookings' ? 'active' : ''}`}
+              onClick={() => setActiveModule('bookings')}
+            >
+              📋 Bookings Dashboard
+            </button>
+            <button
+              className={`adm-nav-tab ${activeModule === 'coupons' ? 'active' : ''}`}
+              onClick={() => setActiveModule('coupons')}
+            >
+              🏷️ Coupon Settings
+            </button>
+          </div>
         </div>
         <button
           className="adm-btn-secondary"
@@ -541,8 +561,12 @@ export default function AdminPage() {
       </div>
 
       <div className="adm-content">
-        {/* Stats */}
-        {stats && <StatsCards stats={stats} activeFilter={activeCard} onCardClick={handleCardClick} />}
+        {activeModule === 'coupons' ? (
+          <CouponSettingsModule adminKey={key} />
+        ) : (
+          <>
+            {/* Stats */}
+            {stats && <StatsCards stats={stats} activeFilter={activeCard} onCardClick={handleCardClick} />}
 
         {/* Bookings Table Section */}
         <div className="adm-table-section">
@@ -751,6 +775,8 @@ export default function AdminPage() {
             </div>
           </div>
         </div>
+        </>
+        )}
       </div>
 
       {/* Booking Detail Modal */}

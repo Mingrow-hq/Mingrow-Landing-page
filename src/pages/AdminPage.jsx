@@ -109,7 +109,7 @@ function StatsCards({ stats, activeFilter, onCardClick }) {
     { id: 'CANCELLED', label: 'Cancelled', value: stats.cancelledBookings, icon: '❌', color: '#ef4444', filter: { bookingStatus: 'CANCELLED', paymentStatus: 'ALL', dateFilter: 'ALL' } },
     { id: 'TOTAL_REV', label: 'Total Revenue', value: `₹${(stats.totalRevenue || 0).toLocaleString('en-IN')}`, icon: '💰', color: '#059669', filter: { bookingStatus: 'PAID', paymentStatus: 'ALL', dateFilter: 'ALL' } },
     { id: 'TODAY_REV', label: "Today's Revenue", value: `₹${(stats.todayRevenue || 0).toLocaleString('en-IN')}`, icon: '📅', color: '#2563eb', filter: { bookingStatus: 'PAID', paymentStatus: 'ALL', dateFilter: 'TODAY' } },
-    { id: 'UPCOMING', label: 'Upcoming Demos', value: stats.upcomingDemos, icon: '🗓️', color: '#7c3aed', filter: { bookingStatus: 'PAID', paymentStatus: 'ALL', dateFilter: 'UPCOMING' } },
+    { id: 'UPCOMING', label: 'Upcoming Bookings', value: stats.upcomingDemos, icon: '🗓️', color: '#7c3aed', filter: { bookingStatus: 'PAID', paymentStatus: 'ALL', dateFilter: 'UPCOMING' } },
     { id: 'MONTH_REV', label: "Month Revenue", value: `₹${(stats.monthRevenue || 0).toLocaleString('en-IN')}`, icon: '📈', color: '#16a34a', filter: { bookingStatus: 'PAID', paymentStatus: 'ALL', dateFilter: 'THIS_MONTH' } },
   ];
 

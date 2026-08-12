@@ -422,6 +422,49 @@ export default function AdminPage() {
     fetchBookings();
   };
 
+  const [deletingId, setDeletingId] = useState(null);
+
+  const handleDeleteBooking = async (e, booking) => {
+    e.stopPropagation();
+    const refStr = booking.booking_reference || `ID #${booking.id}`;
+    if (!window.confirm(`Are you sure you want to delete booking ${refStr}? This action cannot be undone.`)) {
+      return;
+    }
+
+    const currentKey = key || sessionStorage.getItem('admin_key') || localStorage.getItem('admin_key') || '';
+    setDeletingId(booking.id);
+    try {
+      // 1. Try DELETE method
+      let res = await fetch(`${API_BASE}/admin/bookings/${booking.id}`, {
+        method: 'DELETE',
+        headers: { 'x-admin-key': currentKey },
+      });
+
+      // 2. If DELETE method returned 405 or non-ok status, retry with PATCH action: DELETE
+      if (!res.ok) {
+        res = await fetch(`${API_BASE}/admin/bookings/${booking.id}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json', 'x-admin-key': currentKey },
+          body: JSON.stringify({ action: 'DELETE' }),
+        });
+      }
+
+      if (res.ok) {
+        setBookings(prev => prev.filter(b => b.id !== booking.id));
+        setTotal(prev => Math.max(0, prev - 1));
+        fetchStats();
+      } else {
+        const data = await res.json().catch(() => ({}));
+        alert(`Could not delete from database: ${data.error || 'Server error (' + res.status + ')'}`);
+      }
+    } catch (err) {
+      console.error('Error deleting booking:', err);
+      alert('Failed to connect to backend server to delete booking.');
+    } finally {
+      setDeletingId(null);
+    }
+  };
+
   const handleCancelSuccess = (id) => {
     setBookings(prev => prev.map(b => b.id === id ? { ...b, status: 'CANCELLED' } : b));
     fetchStats();
@@ -590,20 +633,21 @@ export default function AdminPage() {
                   <th>Payment</th>
                   <th>Status</th>
                   <th>Created</th>
-                  <th></th>
+                  <th>Action</th>
+                  <th>Delete</th>
                 </tr>
               </thead>
               <tbody>
                 {loading ? (
                   <tr>
-                    <td colSpan={10} className="adm-table-loading">
+                    <td colSpan={11} className="adm-table-loading">
                       <div className="adm-spinner" />
                       Loading...
                     </td>
                   </tr>
                 ) : bookings.length === 0 ? (
                   <tr>
-                    <td colSpan={10}>
+                    <td colSpan={11}>
                       <div className="adm-no-data-card">
                         <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="adm-no-data-icon">
                           <circle cx="12" cy="12" r="10"/>
@@ -662,6 +706,15 @@ export default function AdminPage() {
                             }}
                           >
                             View
+                          </button>
+                        </td>
+                        <td>
+                          <button
+                            className="adm-delete-btn"
+                            disabled={deletingId === booking.id}
+                            onClick={(e) => handleDeleteBooking(e, booking)}
+                          >
+                            {deletingId === booking.id ? 'Deleting...' : 'Delete'}
                           </button>
                         </td>
                       </tr>

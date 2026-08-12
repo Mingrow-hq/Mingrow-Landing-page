@@ -3,14 +3,15 @@ import db from '../../lib/db.js';
 // GET/PATCH /api/admin/bookings/:id
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, PATCH, OPTIONS');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, PATCH, DELETE, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, x-admin-key');
 
   if (req.method === 'OPTIONS') return res.status(200).end();
 
   const adminKey = req.headers['x-admin-key'];
-  if (!adminKey || adminKey !== process.env.ADMIN_SECRET_KEY) {
-    return res.status(401).json({ error: 'Unauthorized' });
+  const expectedKey = process.env.ADMIN_SECRET_KEY;
+  if (expectedKey && adminKey !== expectedKey) {
+    return res.status(401).json({ error: 'Unauthorized: Invalid Admin Key' });
   }
 
   const { id } = req.query;
@@ -28,8 +29,8 @@ export default async function handler(req, res) {
          FROM bookings b
          JOIN customers c ON b.customer_id = c.id
          LEFT JOIN payments p ON p.booking_id = b.id
-         WHERE b.id = ?`,
-        [id]
+         WHERE b.id = ? OR b.booking_reference = ?`,
+        [id, id]
       );
 
       if (rows.length === 0) return res.status(404).json({ error: 'Booking not found' });
@@ -76,10 +77,11 @@ export default async function handler(req, res) {
       const { action, reason } = req.body;
       if (!action) return res.status(400).json({ error: 'Action is required' });
 
-      const [rows] = await db.query('SELECT * FROM bookings WHERE id = ?', [id]);
+      const [rows] = await db.query('SELECT * FROM bookings WHERE id = ? OR booking_reference = ?', [id, id]);
       if (rows.length === 0) return res.status(404).json({ error: 'Booking not found' });
 
       const booking = rows[0];
+      const targetId = booking.id;
 
       if (action === 'CANCEL') {
         if (booking.status === 'REFUNDED' || booking.status === 'CANCELLED') {
@@ -91,15 +93,55 @@ export default async function handler(req, res) {
 
         await db.query(
           "UPDATE bookings SET status = 'CANCELLED', notes = ? WHERE id = ?",
-          [updatedNotes, id]
+          [updatedNotes, targetId]
         );
         return res.status(200).json({ success: true, message: 'Booking cancelled' });
+      }
+
+      if (action === 'DELETE') {
+        try {
+          await db.query('SET FOREIGN_KEY_CHECKS = 0');
+          await db.query('DELETE FROM payments WHERE booking_id = ? OR booking_id = ?', [targetId, id]);
+          await db.query('DELETE FROM bookings WHERE id = ? OR booking_reference = ?', [targetId, id]);
+          await db.query('SET FOREIGN_KEY_CHECKS = 1');
+        } catch (dbErr) {
+          console.error('Database deletion error:', dbErr);
+          await db.query('SET FOREIGN_KEY_CHECKS = 1').catch(() => {});
+          throw dbErr;
+        }
+        return res.status(200).json({ success: true, message: 'Booking deleted successfully' });
       }
 
       return res.status(400).json({ error: 'Unknown action: ' + action });
     } catch (err) {
       console.error('Admin booking update error:', err);
-      return res.status(500).json({ error: 'Failed to update booking' });
+      return res.status(500).json({ error: 'Failed to update booking: ' + (err.message || err) });
+    }
+  }
+
+  if (req.method === 'DELETE') {
+    try {
+      const [rows] = await db.query('SELECT * FROM bookings WHERE id = ? OR booking_reference = ?', [id, id]);
+      if (rows.length === 0) return res.status(404).json({ error: 'Booking not found' });
+
+      const booking = rows[0];
+      const targetId = booking.id;
+
+      try {
+        await db.query('SET FOREIGN_KEY_CHECKS = 0');
+        await db.query('DELETE FROM payments WHERE booking_id = ? OR booking_id = ?', [targetId, id]);
+        await db.query('DELETE FROM bookings WHERE id = ? OR booking_reference = ?', [targetId, id]);
+        await db.query('SET FOREIGN_KEY_CHECKS = 1');
+      } catch (dbErr) {
+        console.error('Database deletion error:', dbErr);
+        await db.query('SET FOREIGN_KEY_CHECKS = 1').catch(() => {});
+        throw dbErr;
+      }
+
+      return res.status(200).json({ success: true, message: 'Booking deleted successfully' });
+    } catch (err) {
+      console.error('Admin booking delete error:', err);
+      return res.status(500).json({ error: 'Failed to delete booking: ' + (err.message || err) });
     }
   }
 

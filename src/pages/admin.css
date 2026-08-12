@@ -325,6 +325,28 @@
 .adm-table-wrapper {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 #f8fafc;
+}
+
+.adm-table-wrapper::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+
+.adm-table-wrapper::-webkit-scrollbar-track {
+  background: #f8fafc;
+  border-radius: 4px;
+}
+
+.adm-table-wrapper::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+  border: 2px solid #f8fafc;
+}
+
+.adm-table-wrapper::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
 }
 
 .adm-table {
@@ -594,6 +616,25 @@
   flex-direction: column;
   gap: 1.25rem;
   scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 #f8fafc;
+}
+
+.adm-detail-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.adm-detail-body::-webkit-scrollbar-track {
+  background: #f8fafc;
+  border-radius: 4px;
+}
+
+.adm-detail-body::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.adm-detail-body::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
 }
 
 .adm-detail-section {
@@ -875,6 +916,30 @@
 .adm-view-btn:hover {
   background: #7c3aed;
   color: white;
+}
+
+.adm-delete-btn {
+  padding: 0.35rem 0.75rem;
+  background: #fee2e2;
+  color: #ef4444;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.adm-delete-btn:hover {
+  background: #ef4444;
+  color: white;
+}
+
+.adm-delete-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 /* ── Spinner ── */

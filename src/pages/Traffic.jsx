@@ -39,6 +39,18 @@ export default function Traffic() {
 
   useEffect(() => {
     document.title = "Mingrow — The AI Business OS";
+    
+    // Track GTM page view on /traffic route
+    if (typeof window !== 'undefined') {
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+        event: 'page_view',
+        page_title: 'Mingrow — The AI Business OS',
+        page_location: window.location.href,
+        page_path: window.location.pathname
+      });
+    }
+
     const handleScroll = () => {
       if (window.scrollY > 40) {
         setScrolled(true);

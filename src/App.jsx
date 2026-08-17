@@ -8,6 +8,7 @@ import Studio from './pages/Studio';
 import Announcement from './pages/Announcement';
 import Affiliate from './pages/Affiliate';
 import AdminPage from './pages/AdminPage';
+import Traffic from './pages/Traffic';
 
 function App() {
   const host = window.location.hostname.toLowerCase();
@@ -16,6 +17,11 @@ function App() {
   // Admin portal route
   if (path.startsWith('/admin')) {
     return <AdminPage />;
+  }
+
+  // Traffic page route
+  if (path.includes('/traffic') || host.startsWith('traffic')) {
+    return <Traffic />;
   }
 
   if (path.includes('/announcement') || path.includes('/announcemtn') || path.includes('/winner') || path.includes('/winners') || host.startsWith('announcement')) {
@@ -71,3 +77,4 @@ function App() {
 }
 
 export default App;
+

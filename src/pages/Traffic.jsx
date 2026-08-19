@@ -40,7 +40,7 @@ export default function Traffic() {
   useEffect(() => {
     document.title = "Mingrow — The AI Business OS";
     
-    // Track GTM page view on /traffic route
+    // Track GTM & Meta Pixel page view on /traffic route
     if (typeof window !== 'undefined') {
       window.dataLayer = window.dataLayer || [];
       window.dataLayer.push({
@@ -49,6 +49,9 @@ export default function Traffic() {
         page_location: window.location.href,
         page_path: window.location.pathname
       });
+      if (typeof window.fbq === 'function') {
+        window.fbq('track', 'PageView');
+      }
     }
 
     const handleScroll = () => {
@@ -177,10 +180,10 @@ export default function Traffic() {
       <section className="traffic-demo-section" id="traffic-demo">
         <div className="traffic-demo-container">
           <div className="traffic-demo-header">
-            <span className="traffic-demo-badge">PLATFORM DEMO</span>
-            <h2 className="traffic-demo-title">See Mingrow AI in Action</h2>
+            <span className="traffic-demo-badge">WHAT IS MINGROW</span>
+            <h2 className="traffic-demo-title">What is Mingrow?</h2>
             <p className="traffic-demo-subtitle">
-              Watch how our intelligent agents seamlessly handle workflows, automate client interactions, and scale your business operations.
+              Mingrow is an all-in-one AI Business Operating System that unifies Sales, Marketing, Finance, HR, and Operations — powered by intelligent AI agents that automate workflows and scale your business effortlessly.
             </p>
           </div>
           
@@ -191,19 +194,16 @@ export default function Traffic() {
                 <span className="dot dot-yellow"></span>
                 <span className="dot dot-green"></span>
               </div>
-              <div className="traffic-window-title">mingrow-demo.mp4</div>
+              <div className="traffic-window-title">what-is-mingrow.mp4</div>
             </div>
             <div className="traffic-blank-video-content">
-              <div className="traffic-video-placeholder">
-                <div className="play-button-outer">
-                  <div className="play-button-inner">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                      <polygon points="5 3 19 12 5 21 5 3"></polygon>
-                    </svg>
-                  </div>
-                </div>
-                <span className="video-placeholder-text">Video Demo Frame</span>
-              </div>
+              <iframe
+                className="traffic-video-iframe"
+                src="https://www.youtube.com/embed/AI4WYg50qxU"
+                title="What is Mingrow"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+              ></iframe>
             </div>
           </div>
         </div>

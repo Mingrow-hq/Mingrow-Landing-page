@@ -199,9 +199,10 @@ export default function Traffic() {
             <div className="traffic-blank-video-content">
               <iframe
                 className="traffic-video-iframe"
-                src="https://www.youtube.com/embed/AI4WYg50qxU"
+                src="https://www.youtube-nocookie.com/embed/AI4WYg50qxU"
                 title="What is Mingrow"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerPolicy="strict-origin-when-cross-origin"
                 allowFullScreen
               ></iframe>
             </div>

@@ -253,28 +253,26 @@ function EarlyAccessNotification({ onNotificationShown }) {
       </button>
     </div>
   );
-}
-
-
-export default function landing1() {
+}export default function Lp1() {
   useEffect(() => {
-    // Inject Google tag (gtag.js) in <head>
-    if (!document.getElementById('gtag-g-fkf4fbwqg1-src')) {
-      const gtagSrc = document.createElement('script');
-      gtagSrc.id = 'gtag-g-fkf4fbwqg1-src';
-      gtagSrc.async = true;
-      gtagSrc.src = 'https://www.googletagmanager.com/gtag/js?id=G-FKF4FBWQG1';
-      document.head.appendChild(gtagSrc);
+    // Inject Google Tag Manager (GTM-KZNCHHFT) in <head>
+    if (!document.getElementById('gtm-kznchhft')) {
+      const gtmScript = document.createElement('script');
+      gtmScript.id = 'gtm-kznchhft';
+      gtmScript.text = `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-KZNCHHFT');`;
+      document.head.appendChild(gtmScript);
     }
 
-    if (!document.getElementById('gtag-g-fkf4fbwqg1-inline')) {
-      const gtagInline = document.createElement('script');
-      gtagInline.id = 'gtag-g-fkf4fbwqg1-inline';
-      gtagInline.text = `window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', 'G-FKF4FBWQG1');`;
-      document.head.appendChild(gtagInline);
+    // Inject Google Tag Manager (noscript) in <body>
+    if (!document.getElementById('gtm-noscript-kznchhft')) {
+      const gtmNoscript = document.createElement('noscript');
+      gtmNoscript.id = 'gtm-noscript-kznchhft';
+      gtmNoscript.innerHTML = `<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KZNCHHFT" height="0" width="0" style="display:none;visibility:hidden"></iframe>`;
+      document.body.appendChild(gtmNoscript);
     }
   }, []);
 
